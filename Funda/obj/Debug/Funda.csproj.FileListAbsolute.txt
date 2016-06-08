@@ -1,0 +1,14 @@
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\Funda.dll
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\Funda.pdb
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\WebDriver.dll
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\WebDriver.Support.dll
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\WebDriver.xml
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\WebDriver.Support.xml
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.csprojResolveAssemblyReference.cache
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.dll
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.pdb
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\Funda.dll.config
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\EntityFramework.dll
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\EntityFramework.SqlServer.dll
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\EntityFramework.xml
+c:\users\liufa\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\EntityFramework.SqlServer.xml
