@@ -13,9 +13,10 @@ namespace WebAnalyzer.Controllers
             var crawler = new Funda.Crawler();
 
             for (int i = 0; i < 10; i++)
-            {
-                crawler.Navigate(new Funda.Crawler.Search { SaleOrRent = "sale", MaxRooms = 3, MinRooms = 1, PaginationNumber = i });
-              var results =  crawler.Process();
+                {
+                var search = new Funda.Crawler.Search { SaleOrRent = "sale", MaxRooms = 3, MinRooms = 1, PaginationNumber = i, PriceMax = 125000 };
+                crawler.Navigate(search);
+              var results =  crawler.Process(search);
             }
 
             return View();

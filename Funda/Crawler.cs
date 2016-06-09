@@ -23,14 +23,15 @@ namespace Funda
             this.Driver.Navigate();
         }
 
-        public List<Rent> Process()
+        public List<Sale> Process(Search search)
         {
-            var list = new List<Rent>();
-            var adds = this.Driver.FindElementsByCssSelector(".search-result");
-            foreach (var advert in adds)
-            {
-                list.Add(this.GetRent(advert));
-            }
+
+                var list = new List<Sale>();
+                var adds = this.Driver.FindElementsByCssSelector(".search-result");
+                foreach (var advert in adds)
+                {
+                    list.Add(this.GetSale(advert));
+                }
 
             return list;
         }
@@ -53,14 +54,26 @@ namespace Funda
                     string url = "http://www.funda.nl/";
                     url += SaleOrRent == "sale" ? "koop" : "huur";
                     url += "/";
-                    if (this.MinRooms.HasValue || this.MaxRooms.HasValue)
-                    {
-                        var maxString = !this.MaxRooms.HasValue ? "+kamers" : string.Format("-{0}-kamers", this.MaxRooms.Value);
-                        if (!this.MinRooms.HasValue) { this.MinRooms = 0; }
-                        url += this.MinRooms.ToString();
-                        url += maxString;
-                        url += "/";
-                    }
+                    if (this.MinRooms.HasValue || this.MaxRooms.HasValue) // jei minRooms turi reiksme ARBA maxRooms turi reiksme tada varyt per koda kur tarp {}
+                        {
+                            var maxString = !this.MaxRooms.HasValue ? "+kamers" : string.Format("-{0}-kamers", this.MaxRooms.Value);
+                            if (!this.MinRooms.HasValue) { this.MinRooms = 0; }
+                            url += this.MinRooms.ToString();
+                            url += maxString;
+                            url += "/";
+                        }
+
+                    if (this.PriceMin.HasValue || this.PriceMax.HasValue)
+                   {
+                          var maxString = !this.PriceMax.HasValue ? "+" : string.Format("-{0}", this.PriceMax.Value);
+                          if (!this.PriceMin.HasValue) { this.PriceMin = 0; }
+                          url += this.PriceMin.ToString();
+                          url += maxString;
+                          url += "/";
+                  }
+
+                     
+                       
 
                   //s  return "http://www.funda.nl/huur/rotterdam/1-4-kamers/sorteer-datum-af/p2/";
                     url += this.Sorting;
@@ -69,9 +82,15 @@ namespace Funda
             }
         }
 
-        public object GetSale()
+        public Sale GetSale(IWebElement element)
         {
-            throw new NotImplementedException();
+        var url = element.FindElements(By.CssSelector("a"));
+        var title = element.FindElement(By.CssSelector(".search-result-title"));
+        var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
+        var price = element.FindElement(By.CssSelector(".search-result-price"));
+        var livingArea = element.FindElement(By.CssSelector("[title='Woonoppervlakte']"));
+
+        throw new NotImplementedException();
         }
 
         public Rent GetRent(IWebElement element)
