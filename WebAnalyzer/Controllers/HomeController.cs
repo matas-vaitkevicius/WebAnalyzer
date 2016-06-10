@@ -1,6 +1,7 @@
 ﻿using Funda;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using System.Linq;
 
 namespace WebAnalyzer.Controllers
 {
@@ -27,6 +28,11 @@ namespace WebAnalyzer.Controllers
 
         public ActionResult Index()
         {
+            return View();
+        }
+
+        public ActionResult CollectNew()
+        {
             var crawler = new Funda.Crawler();
             using (var db = new Funda.WebAnalyzerEntities())
             {
@@ -39,15 +45,13 @@ namespace WebAnalyzer.Controllers
 
                         if (search.IsSale)
                         {
-
-                            var adverts = crawler.AddNewSales(search).ExceptWhere(db.Sale, o => o.Url);
+                            var adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
 
                             db.Sale.AddRange(adverts);
                         }
                         else
                         {
-
-                            var adverts = crawler.AddNewRents(search).ExceptWhere(db.Rent, o => o.Url);
+                            var adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
                             db.Rent.AddRange(adverts);
 
                         }
@@ -57,20 +61,42 @@ namespace WebAnalyzer.Controllers
                 }
             }
 
-            return View();
+            return View("Index");
+        }
+
+        public ActionResult UpdateExisting()
+        {
+            var crawler = new Crawler();
+            using (var db = new Funda.WebAnalyzerEntities())
+            {
+                foreach (var rent in db.Rent.Where(o => o.DateRemoved == null))
+                {
+                    try
+                    {
+                        crawler.Navigate(rent.Url);
+                        var dates = crawler.GetRecordDates();
+                        rent.DateAdded = dates.Item1;
+                        rent.DateRemoved = dates.Item2;
+
+                        db.SaveChanges();
+                    }
+                    catch { }
+                }
+
+            }
+
+            return View("Index");
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }

@@ -3,6 +3,7 @@ using OpenQA.Selenium.Chrome;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Funda
 {
@@ -11,12 +12,16 @@ namespace Funda
         public Crawler()
         {
             this.Driver = new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Driver\"));
-
         }
 
         public void Navigate(Search search)
         {
-            this.Driver.Url = search.Url;
+            Navigate(search.Url);
+        }
+
+        public void Navigate(string url)
+        {
+            this.Driver.Url = url;
             this.Driver.Navigate();
         }
 
@@ -94,6 +99,35 @@ namespace Funda
             }
         }
 
+        public Tuple<DateTime?, DateTime?> GetRecordDates()
+        {
+            DateTime? dateAdded = null;
+            var dateRegex = new Regex("([0-9]{1,2}) ([a-zA-Z]*) 2016");
+            var dateAddedElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => dateRegex.IsMatch(o.Text));
+
+            if (dateAddedElement != null)
+            {
+                System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("nl-NL");
+                dateAdded = DateTime.Parse(dateAddedElement.Text, cultureinfo);
+            }
+            else
+            {
+                dateAdded = DateTime.Now;
+            }
+
+            DateTime? dateRemoved;
+            try
+            {
+                var dateRemovedElement = this.Driver.FindElementByCssSelector(".label -transactie-voorbehoud");
+                dateRemoved = DateTime.Now;
+            }
+            catch {
+                dateRemoved = null;
+            }
+
+            return new Tuple<DateTime?, DateTime?>(dateAdded, dateRemoved);
+        }
+
         public Sale GetSale(IWebElement element)
         {
         var url = element.FindElements(By.CssSelector("a"));
@@ -113,7 +147,7 @@ namespace Funda
                 Url = url[2].GetAttribute("href"),
                 Title = title.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)[0],
                 Subtitle = subTitle.Text,
-                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value, out parsedPrice) ? parsedPrice*1000 : (decimal?)null,
+                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value.Replace(".", ""), out parsedPrice) ? parsedPrice : (decimal?)null,
                 LivingArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(livingArea.Text)[0].Value, out parsedLivingArea) ? parsedLivingArea : (int?)null,
                 TotalArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(totalArea.Text)[0].Value, out parsedTotalArea) ? parsedTotalArea : (int?)null,
                 RoomCount = int.TryParse(roomCount.Text.Split(new string[] { "\r\n", "\n", "•", "kamers" }, StringSplitOptions.None)[1].Trim(), out parsedRoomCount) ? parsedRoomCount : (int?)null,
@@ -141,7 +175,7 @@ namespace Funda
                 Url = url[2].GetAttribute("href"),
                 Title = title.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)[0],
                 Subtitle = subTitle.Text,
-                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value, out parsedPrice) ? parsedPrice*1000 : (decimal?)null,
+                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value.Replace(".",""), out parsedPrice) ? parsedPrice : (decimal?)null,
                 LivingArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(livingArea.Text)[0].Value, out parsedLivingArea) ? parsedLivingArea : (int?)null,
                 TotalArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(totalArea.Text)[0].Value, out parsedTotalArea) ? parsedTotalArea : (int?)null,
                 RoomCount = int.TryParse(roomCount.Text.Split(new string[] { "\r\n", "\n", "•", "kamers" }, StringSplitOptions.None)[1].Trim(), out parsedRoomCount) ? parsedRoomCount : (int?)null,
