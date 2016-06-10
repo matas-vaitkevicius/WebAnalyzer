@@ -19,12 +19,25 @@
           <Property Name="TotalArea" Type="int" />
           <Property Name="RoomCount" Type="int" />
           <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="DateAdded" Type="datetime" />
+          <Property Name="DateRemoved" Type="datetime" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Subtitle" Type="nvarchar" MaxLength="100" />
+          <Property Name="Address" Type="nvarchar" MaxLength="100" />
+          <Property Name="Price" Type="money" />
+          <Property Name="LivingArea" Type="int" />
+          <Property Name="RoomCount" Type="int" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="TotalArea" Type="int" />
+          <Property Name="DateAdded" Type="datetime" />
+          <Property Name="DateRemoved" Type="datetime" />
         </EntityType>
         <EntityContainer Name="WebAnalyzerModelStoreContainer">
           <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
@@ -52,14 +65,27 @@
           <Property Name="TotalArea" Type="Int32" />
           <Property Name="RoomCount" Type="Int32" />
           <Property Name="PostCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <Property Name="DateRemoved" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Subtitle" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="LivingArea" Type="Int32" />
+          <Property Name="RoomCount" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="TotalArea" Type="Int32" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <Property Name="DateRemoved" Type="DateTime" Precision="3" />
         </EntityType>
-      </Schema>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -68,6 +94,8 @@
           <EntitySetMapping Name="Rent">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
               <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
                 <ScalarProperty Name="PostCode" ColumnName="PostCode" />
                 <ScalarProperty Name="RoomCount" ColumnName="RoomCount" />
                 <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />
@@ -84,6 +112,17 @@
           <EntitySetMapping Name="Sale">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
               <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="RoomCount" ColumnName="RoomCount" />
+                <ScalarProperty Name="LivingArea" ColumnName="LivingArea" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -4,6 +4,8 @@
     <EntitySetMapping Name="Rent">
       <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
         <MappingFragment StoreEntitySet="Rent">
+          <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
+          <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
           <ScalarProperty Name="PostCode" ColumnName="PostCode" />
           <ScalarProperty Name="RoomCount" ColumnName="RoomCount" />
           <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />
@@ -20,6 +22,17 @@
     <EntitySetMapping Name="Sale">
       <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
         <MappingFragment StoreEntitySet="Sale">
+          <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
+          <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+          <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />
+          <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+          <ScalarProperty Name="RoomCount" ColumnName="RoomCount" />
+          <ScalarProperty Name="LivingArea" ColumnName="LivingArea" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Url" ColumnName="Url" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

@@ -15,5 +15,16 @@ namespace Funda
     public partial class Sale
     {
         public int Id { get; set; }
+        public string Url { get; set; }
+        public string Title { get; set; }
+        public string Subtitle { get; set; }
+        public string Address { get; set; }
+        public Nullable<decimal> Price { get; set; }
+        public Nullable<int> LivingArea { get; set; }
+        public Nullable<int> RoomCount { get; set; }
+        public string PostCode { get; set; }
+        public Nullable<int> TotalArea { get; set; }
+        public Nullable<System.DateTime> DateAdded { get; set; }
+        public Nullable<System.DateTime> DateRemoved { get; set; }
     }
 }

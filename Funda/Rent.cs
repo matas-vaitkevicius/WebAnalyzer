@@ -24,5 +24,7 @@ namespace Funda
         public Nullable<int> TotalArea { get; set; }
         public Nullable<int> RoomCount { get; set; }
         public string PostCode { get; set; }
+        public Nullable<System.DateTime> DateAdded { get; set; }
+        public Nullable<System.DateTime> DateRemoved { get; set; }
     }
 }

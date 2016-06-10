@@ -14,12 +14,25 @@
     <Property Name="TotalArea" Type="int" />
     <Property Name="RoomCount" Type="int" />
     <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
+    <Property Name="DateAdded" Type="datetime" />
+    <Property Name="DateRemoved" Type="datetime" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Url" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="Subtitle" Type="nvarchar" MaxLength="100" />
+    <Property Name="Address" Type="nvarchar" MaxLength="100" />
+    <Property Name="Price" Type="money" />
+    <Property Name="LivingArea" Type="int" />
+    <Property Name="RoomCount" Type="int" />
+    <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
+    <Property Name="TotalArea" Type="int" />
+    <Property Name="DateAdded" Type="datetime" />
+    <Property Name="DateRemoved" Type="datetime" />
   </EntityType>
   <EntityContainer Name="WebAnalyzerModelStoreContainer">
     <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
