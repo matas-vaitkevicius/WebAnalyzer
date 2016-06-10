@@ -26,5 +26,6 @@ namespace Funda
         public Nullable<int> TotalArea { get; set; }
         public Nullable<System.DateTime> DateAdded { get; set; }
         public Nullable<System.DateTime> DateRemoved { get; set; }
+        public Nullable<System.DateTime> DateLastProcessed { get; set; }
     }
 }

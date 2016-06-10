@@ -20,6 +20,7 @@
     <Property Name="PostCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
     <Property Name="DateAdded" Type="DateTime" Precision="3" />
     <Property Name="DateRemoved" Type="DateTime" Precision="3" />
+    <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>
@@ -37,5 +38,6 @@
     <Property Name="TotalArea" Type="Int32" />
     <Property Name="DateAdded" Type="DateTime" Precision="3" />
     <Property Name="DateRemoved" Type="DateTime" Precision="3" />
+    <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
   </EntityType>
 </Schema>

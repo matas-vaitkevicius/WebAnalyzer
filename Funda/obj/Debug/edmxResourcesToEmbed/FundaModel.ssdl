@@ -16,6 +16,7 @@
     <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
     <Property Name="DateAdded" Type="datetime" />
     <Property Name="DateRemoved" Type="datetime" />
+    <Property Name="DateLastProcessed" Type="datetime" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>
@@ -33,6 +34,7 @@
     <Property Name="TotalArea" Type="int" />
     <Property Name="DateAdded" Type="datetime" />
     <Property Name="DateRemoved" Type="datetime" />
+    <Property Name="DateLastProcessed" Type="datetime" />
   </EntityType>
   <EntityContainer Name="WebAnalyzerModelStoreContainer">
     <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />

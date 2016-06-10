@@ -21,6 +21,7 @@
           <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
+          <Property Name="DateLastProcessed" Type="datetime" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -38,6 +39,7 @@
           <Property Name="TotalArea" Type="int" />
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
+          <Property Name="DateLastProcessed" Type="datetime" />
         </EntityType>
         <EntityContainer Name="WebAnalyzerModelStoreContainer">
           <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
@@ -67,6 +69,7 @@
           <Property Name="PostCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="DateAdded" Type="DateTime" Precision="3" />
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
+          <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -84,6 +87,7 @@
           <Property Name="TotalArea" Type="Int32" />
           <Property Name="DateAdded" Type="DateTime" Precision="3" />
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
+          <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -94,6 +98,7 @@
           <EntitySetMapping Name="Rent">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
               <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
                 <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
                 <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
                 <ScalarProperty Name="PostCode" ColumnName="PostCode" />
@@ -112,6 +117,7 @@
           <EntitySetMapping Name="Sale">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
               <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
                 <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
                 <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
                 <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />

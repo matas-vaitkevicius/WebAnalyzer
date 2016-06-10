@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Rent">
       <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
         <MappingFragment StoreEntitySet="Rent">
+          <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
           <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
           <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
           <ScalarProperty Name="PostCode" ColumnName="PostCode" />
@@ -22,6 +23,7 @@
     <EntitySetMapping Name="Sale">
       <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
         <MappingFragment StoreEntitySet="Sale">
+          <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
           <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
           <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
           <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />

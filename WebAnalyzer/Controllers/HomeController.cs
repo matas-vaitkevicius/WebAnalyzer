@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
+using System;
 
 namespace WebAnalyzer.Controllers
 {
@@ -64,28 +65,51 @@ namespace WebAnalyzer.Controllers
             return View("Index");
         }
 
+        object _lock;
+
         public ActionResult UpdateExisting()
         {
-            var crawler = new Crawler();
-            using (var db = new Funda.WebAnalyzerEntities())
-            {
-                foreach (var rent in db.Rent.Where(o => o.DateRemoved == null))
-                {
-                    try
-                    {
-                        crawler.Navigate(rent.Url);
-                        var dates = crawler.GetRecordDates();
-                        rent.DateAdded = dates.Item1;
-                        rent.DateRemoved = dates.Item2;
 
-                        db.SaveChanges();
+            var crawler = new Crawler();
+            _lock = new object();
+            lock (_lock)
+            {
+                using (var db = new Funda.WebAnalyzerEntities())
+                {
+                    var now = DateTime.Now;
+                    foreach (var rent in db.Rent.Where(o => o.DateRemoved == null && (o.DateLastProcessed < now.Date || o.DateLastProcessed == null)).ToList())
+                    {
+                        try
+                        {
+                            crawler.Navigate(rent.Url);
+                            var dates = crawler.GetRecordDates();
+                            rent.DateAdded = dates.Item1;
+                            rent.DateRemoved = dates.Item2;
+                            rent.DateLastProcessed = now;
+                            db.SaveChanges();
+
+                        }
+                        catch { }
                     }
-                    catch { }
+
+                    foreach (var sale in db.Sale.Where(o => o.DateRemoved == null && (o.DateLastProcessed < now || o.DateLastProcessed == null)).ToList())
+                    {
+                        try
+                        {
+                            crawler.Navigate(sale.Url);
+                            var dates = crawler.GetRecordDates();
+                            sale.DateAdded = dates.Item1;
+                            sale.DateRemoved = dates.Item2;
+                            sale.DateLastProcessed = now;
+                            db.SaveChanges();
+
+                        }
+                        catch { }
+                    }
                 }
 
+                return View("Index");
             }
-
-            return View("Index");
         }
 
         public ActionResult About()
