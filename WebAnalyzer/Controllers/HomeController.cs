@@ -18,7 +18,7 @@ namespace WebAnalyzer.Controllers
                 {
                     _searches = new List<Funda.Crawler.Search>
                 {
-                   new Funda.Crawler.Search { Text="Rotterdam", PriceMin=45000, PriceMax= 125000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+       //            new Funda.Crawler.Search { Text="Rotterdam", PriceMin=45000, PriceMax= 125000, MinRooms = 1, MaxRooms = 4, IsSale = true },
                    new Funda.Crawler.Search { Text="Rotterdam", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
                 };
 
@@ -34,30 +34,32 @@ namespace WebAnalyzer.Controllers
 
         public ActionResult CollectNew()
         {
-            var crawler = new Funda.Crawler();
-            using (var db = new Funda.WebAnalyzerEntities())
+            using (var crawler = new Funda.Crawler())
             {
-                foreach (var search in Searches)
+                using (var db = new Funda.WebAnalyzerEntities())
                 {
-                    for (int i = 0; i < 10; i++)
+                    foreach (var search in Searches)
                     {
-                        search.PaginationNumber = i;
-                        crawler.Navigate(search);
-
-                        if (search.IsSale)
+                        for (int i = 0; i < 10; i++)
                         {
-                            var adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                            search.PaginationNumber = i;
+                            crawler.Navigate(search);
 
-                            db.Sale.AddRange(adverts);
+                            if (search.IsSale)
+                            {
+                                var adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+
+                                db.Sale.AddRange(adverts);
+                            }
+                            else
+                            {
+                                var adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                db.Rent.AddRange(adverts);
+
+                            }
+
+                            db.SaveChanges();
                         }
-                        else
-                        {
-                            var adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                            db.Rent.AddRange(adverts);
-
-                        }
-
-                        db.SaveChanges();
                     }
                 }
             }
@@ -70,46 +72,29 @@ namespace WebAnalyzer.Controllers
         public ActionResult UpdateExisting()
         {
 
-            var crawler = new Crawler();
-            _lock = new object();
-            lock (_lock)
+            using (var crawler = new Crawler())
             {
-                using (var db = new Funda.WebAnalyzerEntities())
+                _lock = new object();
+                lock (_lock)
                 {
-                    var now = DateTime.Now;
-                    foreach (var rent in db.Rent.Where(o => o.DateRemoved == null && (o.DateLastProcessed < now.Date || o.DateLastProcessed == null)).ToList())
+                    using (var db = new Funda.WebAnalyzerEntities())
                     {
-                        try
+                        var now = DateTime.Now;
+                        foreach (var rent in db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null).ToList().Union(db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null).ToList()).ToList())
                         {
-                            crawler.Navigate(rent.Url);
-                            var dates = crawler.GetRecordDates();
-                            rent.DateAdded = dates.Item1;
-                            rent.DateRemoved = dates.Item2;
-                            rent.DateLastProcessed = now;
-                            db.SaveChanges();
+                            try
+                            {
+                                crawler.Navigate(rent.Url);
+                                crawler.GetRecordDataFromItsPage(rent);
+                                db.SaveChanges();
 
+                            }
+                            catch { }
                         }
-                        catch { }
-                    }
-
-                    foreach (var sale in db.Sale.Where(o => o.DateRemoved == null && (o.DateLastProcessed < now || o.DateLastProcessed == null)).ToList())
-                    {
-                        try
-                        {
-                            crawler.Navigate(sale.Url);
-                            var dates = crawler.GetRecordDates();
-                            sale.DateAdded = dates.Item1;
-                            sale.DateRemoved = dates.Item2;
-                            sale.DateLastProcessed = now;
-                            db.SaveChanges();
-
-                        }
-                        catch { }
                     }
                 }
-
-                return View("Index");
             }
+                    return View("Index"); 
         }
 
         public ActionResult About()

@@ -79,6 +79,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>FundaModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="IFundaRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Rent.cs">
       <DependentUpon>FundaModel.tt</DependentUpon>

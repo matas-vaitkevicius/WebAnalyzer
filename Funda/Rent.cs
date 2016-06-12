@@ -12,7 +12,7 @@ namespace Funda
     using System;
     using System.Collections.Generic;
     
-    public partial class Rent
+    public partial class Rent : IFundaRecord
     {
         public int Id { get; set; }
         public string Url { get; set; }
@@ -27,5 +27,6 @@ namespace Funda
         public Nullable<System.DateTime> DateAdded { get; set; }
         public Nullable<System.DateTime> DateRemoved { get; set; }
         public Nullable<System.DateTime> DateLastProcessed { get; set; }
+        public Nullable<decimal> InitialCostToRentOut { get; set; }
     }
 }

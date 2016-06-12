@@ -12,7 +12,7 @@ namespace Funda
     using System;
     using System.Collections.Generic;
     
-    public partial class Sale
+    public partial class Sale : IFundaRecord
     {
         public int Id { get; set; }
         public string Url { get; set; }

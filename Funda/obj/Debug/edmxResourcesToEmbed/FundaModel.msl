@@ -4,6 +4,7 @@
     <EntitySetMapping Name="Rent">
       <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
         <MappingFragment StoreEntitySet="Rent">
+          <ScalarProperty Name="InitialCostToRentOut" ColumnName="InitialCostToRentOut" />
           <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
           <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
           <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />

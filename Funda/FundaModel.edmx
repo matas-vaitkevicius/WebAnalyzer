@@ -22,6 +22,7 @@
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
           <Property Name="DateLastProcessed" Type="datetime" />
+          <Property Name="InitialCostToRentOut" Type="money" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -70,6 +71,7 @@
           <Property Name="DateAdded" Type="DateTime" Precision="3" />
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
           <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
+          <Property Name="InitialCostToRentOut" Type="Decimal" Precision="19" Scale="4" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -98,6 +100,7 @@
           <EntitySetMapping Name="Rent">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
               <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="InitialCostToRentOut" ColumnName="InitialCostToRentOut" />
                 <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
                 <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
                 <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />

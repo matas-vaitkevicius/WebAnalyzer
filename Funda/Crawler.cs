@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections.Specialized;
 
 namespace Funda
 {
-    public class Crawler
+    public class Crawler :IDisposable
     {
         public Crawler()
         {
@@ -47,6 +48,10 @@ namespace Funda
             }
 
             return list;
+        }
+
+        public Regex NumberRegex {
+            get { return new Regex("([0-9.]*)"); }
         }
 
         public class Search
@@ -99,7 +104,7 @@ namespace Funda
             }
         }
 
-        public Tuple<DateTime?, DateTime?> GetRecordDates()
+        public IFundaRecord GetRecordDataFromItsPage(IFundaRecord fundaRecord)
         {
             DateTime? dateAdded = null;
             var dateRegex = new Regex("([0-9]{1,2}) ([a-zA-Z]*) 2016");
@@ -118,14 +123,50 @@ namespace Funda
             DateTime? dateRemoved;
             try
             {
-                var dateRemovedElement = this.Driver.FindElementByCssSelector(".label -transactie-voorbehoud");
+                var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
                 dateRemoved = DateTime.Now;
             }
             catch {
-                dateRemoved = null;
+                try
+                {
+                    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+                    dateRemoved = DateTime.Now;
+                }
+                catch
+                {
+                    dateRemoved = null;
+                }
             }
 
-            return new Tuple<DateTime?, DateTime?>(dateAdded, dateRemoved);
+            if (fundaRecord is Rent)
+            {
+                decimal initialCostToRentOut = 0m;
+                try
+                {
+                    var initialCostToRentOutElement = this.Driver.FindElement(By.CssSelector(".object-header-services-costs"));
+                    foreach (var match in this.NumberRegex.Matches(initialCostToRentOutElement.Text))
+                    {
+                        if (decimal.TryParse(((Match)match).Value, out initialCostToRentOut))
+                        {
+                            break;
+                        }
+                    }
+
+                    ((Rent)fundaRecord).InitialCostToRentOut = initialCostToRentOut;
+                }
+                catch { }
+            }
+            if (!fundaRecord.DateAdded.HasValue)
+            {
+                fundaRecord.DateAdded = dateAdded;
+            }
+            if (!fundaRecord.DateRemoved.HasValue)
+            {
+                fundaRecord.DateRemoved = dateRemoved;
+            }
+            fundaRecord.DateLastProcessed = DateTime.Now;
+            // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
+            return fundaRecord;
         }
 
         public Sale GetSale(IWebElement element)
@@ -170,18 +211,32 @@ namespace Funda
             var parsedTotalArea = 0;
             var parsedRoomCount = 0;
             var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
+            var numberRegex = this.NumberRegex;
+            decimal? initialCostToRentOut = null;
+            try {
+               var initialCostToRentOutElement = element.FindElement(By.CssSelector(".search-result-info-small"));
+                initialCostToRentOut = 0m;
+            }
+            catch { }
+
             return new Rent
             {
                 Url = url[2].GetAttribute("href"),
                 Title = title.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)[0],
                 Subtitle = subTitle.Text,
-                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value.Replace(".",""), out parsedPrice) ? parsedPrice : (decimal?)null,
-                LivingArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(livingArea.Text)[0].Value, out parsedLivingArea) ? parsedLivingArea : (int?)null,
-                TotalArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(totalArea.Text)[0].Value, out parsedTotalArea) ? parsedTotalArea : (int?)null,
+                Price = decimal.TryParse(numberRegex.Matches(price.Text)[2].Value.Replace(".", ""), out parsedPrice) ? parsedPrice : (decimal?)null,
+                LivingArea = int.TryParse(numberRegex.Matches(livingArea.Text)[0].Value, out parsedLivingArea) ? parsedLivingArea : (int?)null,
+                TotalArea = int.TryParse(numberRegex.Matches(totalArea.Text)[0].Value, out parsedTotalArea) ? parsedTotalArea : (int?)null,
                 RoomCount = int.TryParse(roomCount.Text.Split(new string[] { "\r\n", "\n", "•", "kamers" }, StringSplitOptions.None)[1].Trim(), out parsedRoomCount) ? parsedRoomCount : (int?)null,
                 Address = title.Text.Replace("\r\n", ""),
-                PostCode = postCodeRegex.Count !=0 ? postCodeRegex[0].Value : null
+                PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null,
+                InitialCostToRentOut = initialCostToRentOut 
             };
+        }
+
+        public void Dispose()
+        {
+            this.Driver.Dispose();
         }
 
         private ChromeDriver Driver { get; set; }

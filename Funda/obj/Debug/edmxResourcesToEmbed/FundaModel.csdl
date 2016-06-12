@@ -21,6 +21,7 @@
     <Property Name="DateAdded" Type="DateTime" Precision="3" />
     <Property Name="DateRemoved" Type="DateTime" Precision="3" />
     <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
+    <Property Name="InitialCostToRentOut" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>

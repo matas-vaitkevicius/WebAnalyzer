@@ -17,6 +17,7 @@
     <Property Name="DateAdded" Type="datetime" />
     <Property Name="DateRemoved" Type="datetime" />
     <Property Name="DateLastProcessed" Type="datetime" />
+    <Property Name="InitialCostToRentOut" Type="money" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>
