@@ -18,8 +18,10 @@ namespace WebAnalyzer.Controllers
                 {
                     _searches = new List<Funda.Crawler.Search>
                 {
-       //            new Funda.Crawler.Search { Text="Rotterdam", PriceMin=45000, PriceMax= 125000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.Search { Text="Rotterdam", PriceMin=45000, PriceMax= 125000, MinRooms = 1, MaxRooms = 4, IsSale = true },
                    new Funda.Crawler.Search { Text="Rotterdam", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.Search { Text="Amsterdam", PriceMin=70000, PriceMax= 150000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.Search { Text="Amsterdam", PriceMin=0, PriceMax=1750, MinRooms=1, MaxRooms =4, IsSale = false },
                 };
 
                 }
@@ -64,7 +66,7 @@ namespace WebAnalyzer.Controllers
                 }
             }
 
-            return View("Index");
+            return RedirectToAction("UpdateExisting");
         }
 
         object _lock;
