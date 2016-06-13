@@ -171,7 +171,7 @@ namespace Funda
 
         public Sale GetSale(IWebElement element)
         {
-        var url = element.FindElements(By.CssSelector("a"));
+        var url = element.FindElements(By.CssSelector(".search-result-header a"));
         var title = element.FindElement(By.CssSelector(".search-result-title"));
         var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
         var price = element.FindElement(By.CssSelector(".search-result-price"));
@@ -185,7 +185,7 @@ namespace Funda
             var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
             return new Sale
             {
-                Url = url[2].GetAttribute("href"),
+                Url = url[0].GetAttribute("href"),
                 Title = title.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)[0],
                 Subtitle = subTitle.Text,
                 Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value.Replace(".", ""), out parsedPrice) ? parsedPrice : (decimal?)null,
