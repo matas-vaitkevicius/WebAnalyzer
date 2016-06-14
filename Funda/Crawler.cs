@@ -106,36 +106,47 @@ namespace Funda
 
         public IFundaRecord GetRecordDataFromItsPage(IFundaRecord fundaRecord)
         {
-            DateTime? dateAdded = null;
-            var dateRegex = new Regex("([0-9]{1,2}) ([a-zA-Z]*) 2016");
-            var dateAddedElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => dateRegex.IsMatch(o.Text));
+            if (!fundaRecord.DateAdded.HasValue)
+            {
+                DateTime? dateAdded = null;
+                var dateRegex = new Regex("([0-9]{1,2}) ([a-zA-Z]*) 2016");
+                var dateAddedElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => dateRegex.IsMatch(o.Text));
 
-            if (dateAddedElement != null)
-            {
-                System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("nl-NL");
-                dateAdded = DateTime.Parse(dateAddedElement.Text, cultureinfo);
-            }
-            else
-            {
-                dateAdded = DateTime.Now;
+                if (dateAddedElement != null)
+                {
+                    System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("nl-NL");
+                    dateAdded = DateTime.Parse(dateAddedElement.Text, cultureinfo);
+                }
+                else
+                {
+                    dateAdded = DateTime.Now;
+                }
+
+                fundaRecord.DateAdded = dateAdded;
             }
 
-            DateTime? dateRemoved;
-            try
+            if (!fundaRecord.DateRemoved.HasValue)
             {
-                var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
-                dateRemoved = DateTime.Now;
-            }
-            catch {
+                DateTime? dateRemoved;
                 try
                 {
-                    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+                    var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
                     dateRemoved = DateTime.Now;
                 }
                 catch
                 {
-                    dateRemoved = null;
+                    try
+                    {
+                        var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+                        dateRemoved = DateTime.Now;
+                    }
+                    catch
+                    {
+                        dateRemoved = null;
+                    }
                 }
+
+                fundaRecord.DateRemoved = dateRemoved;
             }
 
             if (fundaRecord is Rent)
@@ -156,16 +167,23 @@ namespace Funda
                 }
                 catch { }
             }
-            if (!fundaRecord.DateAdded.HasValue)
-            {
-                fundaRecord.DateAdded = dateAdded;
-            }
-            if (!fundaRecord.DateRemoved.HasValue)
-            {
-                fundaRecord.DateRemoved = dateRemoved;
-            }
+
             fundaRecord.DateLastProcessed = DateTime.Now;
             // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
+            if (!fundaRecord.RoomCount.HasValue)
+            {
+                var roomCountRegex = new Regex("([1-9]{1}) kamer(.*)");
+                var roomCountElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => roomCountRegex.IsMatch(o.Text));
+                if (roomCountElement != null)
+                {
+                    var parsedRooms = 0;
+                    if (int.TryParse(roomCountRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
+                    {
+                        fundaRecord.RoomCount = parsedRooms;
+                    }
+                }
+            }
+
             return fundaRecord;
         }
 

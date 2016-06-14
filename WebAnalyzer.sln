@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAnalyzer", "WebAnalyzer\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Funda", "Funda\Funda.csproj", "{D0BF1DE1-9A6C-4465-B50E-2BC2C185D5E3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlScripts", "SqlScripts", "{09F647FF-CED5-434E-BA87-F9AD0DDFB89E}"
+	ProjectSection(SolutionItems) = preProject
+		SqMeterToRentSqMeterPriceRatio.sql = SqMeterToRentSqMeterPriceRatio.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

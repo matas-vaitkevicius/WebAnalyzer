@@ -11,3 +11,4 @@ C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug
 C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug\WebDriver.Support.xml
 C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.dll
 C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.pdb
+C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.csprojResolveAssemblyReference.cache
