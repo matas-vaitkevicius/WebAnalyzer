@@ -36,6 +36,7 @@
     <Property Name="DateAdded" Type="datetime" />
     <Property Name="DateRemoved" Type="datetime" />
     <Property Name="DateLastProcessed" Type="datetime" />
+    <Property Name="ServiceCosts" Type="money" />
   </EntityType>
   <EntityContainer Name="WebAnalyzerModelStoreContainer">
     <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />

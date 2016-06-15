@@ -170,6 +170,7 @@ namespace Funda
 
             fundaRecord.DateLastProcessed = DateTime.Now;
             // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
+          
             if (!fundaRecord.RoomCount.HasValue)
             {
                 var roomCountRegex = new Regex("([1-9]{1}) kamer(.*)");
@@ -183,6 +184,21 @@ namespace Funda
                     }
                 }
             }
+
+            if ((fundaRecord is Sale) && !((Sale)fundaRecord).ServiceCosts.HasValue)
+            {
+                var serviceCostRegex = new Regex(".* ([0-9]{1,3}) per maand");
+                var roomCountElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
+                if (roomCountElement != null)
+                {
+                    var parsedRooms = 0;
+                    if (int.TryParse(serviceCostRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
+                    {
+                        ((Sale)fundaRecord).ServiceCosts = parsedRooms;
+                    }
+                }
+            }
+
 
             return fundaRecord;
         }

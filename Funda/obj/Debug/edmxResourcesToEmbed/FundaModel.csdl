@@ -40,5 +40,6 @@
     <Property Name="DateAdded" Type="DateTime" Precision="3" />
     <Property Name="DateRemoved" Type="DateTime" Precision="3" />
     <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
+    <Property Name="ServiceCosts" Type="Decimal" Precision="19" Scale="4" />
   </EntityType>
 </Schema>
