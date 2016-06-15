@@ -188,13 +188,13 @@ namespace Funda
             if ((fundaRecord is Sale) && !((Sale)fundaRecord).ServiceCosts.HasValue)
             {
                 var serviceCostRegex = new Regex(".* ([0-9]{1,3}) per maand");
-                var roomCountElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
-                if (roomCountElement != null)
+                var serviceCostElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
+                if (serviceCostElement != null)
                 {
-                    var parsedRooms = 0;
-                    if (int.TryParse(serviceCostRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
+                    var serviceCost = 0;
+                    if (int.TryParse(serviceCostRegex.Matches(serviceCostElement.Text)[0].Groups[1].Value, out serviceCost))
                     {
-                        ((Sale)fundaRecord).ServiceCosts = parsedRooms;
+                        ((Sale)fundaRecord).ServiceCosts = serviceCost;
                     }
                 }
             }

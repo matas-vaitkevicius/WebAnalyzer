@@ -128,7 +128,7 @@ namespace WebAnalyzer.Controllers
 
         object _lock;
 
-        public ActionResult UpdateExisting()
+        public ActionResult UpdateExisting(bool? isSale)
         {
 
             using (var crawler = new Crawler())
@@ -139,7 +139,24 @@ namespace WebAnalyzer.Controllers
                     using (var db = new Funda.WebAnalyzerEntities())
                     {
                         var now = DateTime.Now;
-                        foreach (var rent in db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null).ToList().Union(db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null).ToList()).ToList())
+                        var list = new List<IFundaRecord>();
+                        if (!isSale.HasValue)
+                        {
+                            list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null).ToList().Union(db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null).ToList()).ToList();
+                        }
+                        else
+                        {
+                            if (isSale.Value)
+                            {
+                                list = db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null).ToList();
+                            }
+                            else
+                            {
+                                list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null).ToList();
+                            }
+                        }
+                    
+                        foreach (var rent in list)
                         {
                             try
                             {
