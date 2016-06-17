@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlScripts", "SqlScripts", "{09F647FF-CED5-434E-BA87-F9AD0DDFB89E}"
 	ProjectSection(SolutionItems) = preProject
 		GoodDeals.sql = GoodDeals.sql
+		PricePerPostcode.sql = PricePerPostcode.sql
 		SqMeterToRentSqMeterPriceRatio.sql = SqMeterToRentSqMeterPriceRatio.sql
 	EndProjectSection
 EndProject

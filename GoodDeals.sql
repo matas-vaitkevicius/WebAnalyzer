@@ -1,5 +1,5 @@
 
-select analysis.cnt, analysis.l_cnt, (ads.price/ads.LivingArea) per_sq_m, (ads.price/ads.LivingArea)/(analysis.sq) avg_town_ratio, (ads.price/ads.LivingArea)/(analysis.l_sq) avg_local_ratio, *, PARSENAME(REPLACE(Subtitle, ' ', '.'), 1) town from Sale ads
+select analysis.cnt, analysis.l_cnt, (ads.price/ads.LivingArea) per_sq_m, (ads.price/ads.LivingArea)/(analysis.sq) avg_town_ratio, (ads.price/ads.LivingArea)/(analysis.l_sq) avg_local_ratio, ads.Price/(((ads.LivingArea*analysis.l_r_sq)-ads.ServiceCosts)*12) years_to_pay_for_itself, *, PARSENAME(REPLACE(Subtitle, ' ', '.'), 1) town from Sale ads
 left outer join (
 select * from (select *, (s.sq/r.r_sq)/12 years from (SELECT  
 PARSENAME(REPLACE(Subtitle, ' ', '.'), 1) name , sum(price)/sum(LivingArea) sq , coalesce(sl.RoomCount,-1) roomC, count(1) cnt , sum(case when sl.DateRemoved is not null then 1 else 0 end) taken, cast(sum(case when sl.DateRemoved is not null then 1 else 0 end) as decimal)/count(1) taken_ratio
@@ -38,13 +38,14 @@ cast(sum(case when sl.DateRemoved is not null then 1 else 0 end) as decimal)/cou
  on (by_town.name = by_area.l_name and by_town.roomC = by_area.l_roomC) or (by_town.name = by_area.l_r_name and by_town.roomC = by_area.l_r_roomcount) ) analysis
    on analysis.postarea = dbo.PullNumbers(Subtitle) and analysis.roomC  = coalesce(ads.RoomCount,-1)
   where 
- ((ads.price/ads.LivingArea) < (analysis.l_sq)*0.7 or (ads.price/ads.LivingArea) < (analysis.sq)*0.7) and
+ --((ads.price/ads.LivingArea) < (analysis.l_sq)*0.8 or (ads.price/ads.LivingArea) < (analysis.sq)*0.7) and
    ads.DateRemoved is  null and
    price < 100000 and
-   ads.ServiceCosts < 200
+   ads.ServiceCosts < 150
+   and analysis.l_cnt >3
  -- --Subtitle like '%Rott%'
  -- --and
  ----  DateRemoved is null
  --order by price  
  -- order by (ads.price/ads.LivingArea)/(an.sq) desc
- order by avg_local_ratio
+ order by years_to_pay_for_itself
