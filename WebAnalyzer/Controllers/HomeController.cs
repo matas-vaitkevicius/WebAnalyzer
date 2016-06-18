@@ -103,18 +103,21 @@ namespace WebAnalyzer.Controllers
                         {
                             search.PaginationNumber = i;
                             crawler.Navigate(search);
-
+                            var adverts = Enumerable.Empty<IFundaRecord>();
                             if (search.IsSale)
                             {
-                                var adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
-
-                                db.Sale.AddRange(adverts);
+                                adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                db.Sale.AddRange(adverts.Cast<Sale>().ToList());
                             }
                             else
                             {
-                                var adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                                db.Rent.AddRange(adverts);
+                                adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                            }
 
+                            if (!adverts.Any())
+                            {
+                                break;
                             }
 
                             db.SaveChanges();

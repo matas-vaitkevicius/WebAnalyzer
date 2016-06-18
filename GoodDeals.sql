@@ -38,14 +38,17 @@ cast(sum(case when sl.DateRemoved is not null then 1 else 0 end) as decimal)/cou
  on (by_town.name = by_area.l_name and by_town.roomC = by_area.l_roomC) or (by_town.name = by_area.l_r_name and by_town.roomC = by_area.l_r_roomcount) ) analysis
    on analysis.postarea = dbo.PullNumbers(Subtitle) and analysis.roomC  = coalesce(ads.RoomCount,-1)
   where 
- --((ads.price/ads.LivingArea) < (analysis.l_sq)*0.8 or (ads.price/ads.LivingArea) < (analysis.sq)*0.7) and
+ ((ads.price/ads.LivingArea) < (analysis.l_sq)*0.8 or (ads.price/ads.LivingArea) < (analysis.sq)*0.7) and
    ads.DateRemoved is  null and
-   price < 100000 and
+   price < 80000 and
    ads.ServiceCosts < 150
    and analysis.l_cnt >3
  -- --Subtitle like '%Rott%'
  -- --and
+
+and id not in (655,2358,2109,2071,1539,619,2058,671,699) --already looked at
+
  ----  DateRemoved is null
  --order by price  
- -- order by (ads.price/ads.LivingArea)/(an.sq) desc
- order by years_to_pay_for_itself
+  --order by (ads.price/ads.LivingArea)/(analysis.sq) desc
+ order by avg_local_ratio
