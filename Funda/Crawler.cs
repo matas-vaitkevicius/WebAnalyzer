@@ -54,18 +54,68 @@ namespace Funda
             get { return new Regex("([0-9.]*)"); }
         }
 
-        public class Search
+        public class AruodasSearch : Search
         {
-            public int? MinRooms { get; set; }
-            public int? MaxRooms { get; set; }
-            public int? PriceMin { get; set; }
-            public int? PriceMax { get; set; }
-            public string Sorting { get { return "sorteer-datum-af/"; } }
-            public string Text { get; set; }
-            public bool IsSale { get; set; }
-            public int? PaginationNumber { get; set; }
+            public override string Sorting { get { return "&FOrder=Price"; } }
 
-            public string Url
+            public int FDistrict { get; set; }
+
+            public int FRegion { get; set; }
+
+            public override bool IsSale
+            {
+                get
+                {
+                    return !this.Text.Contains("-nuoma");
+                }
+            }
+
+            public override string Url
+            {
+                get
+                {
+                    //http://www.aruodas.lt/butai/vilniuje/?FDistrict=1&FPriceMax=50000&FPriceMin=0&FRegion=461&FRoomNumMax=4&FRoomNumMin=1&mod=Siulo&act=makeSearch&Page=2
+                    string url = "http://www.aruodas.lt/";
+                    url += this.Text;
+                    url += "?";
+                    url += "FDistrict=";
+                    url += FDistrict;
+                    url += "&";
+                    url += "FPriceMax=";
+                    url += PriceMax;
+                    url += "&";
+                    url += "FPriceMin=";
+                    url += PriceMin;
+                    url += "&";
+                    url += "FRegion=";
+                    url += FRegion;
+                    url += "&";
+                    url += "FRoomNumMax=";
+                    url += MaxRooms;
+                    url += "&";
+                    url += "FRoomNumMin=";
+                    url += MinRooms;
+                    url += "&";
+                    url += "mod=Siulo";
+                    url += "&";
+                    url += "act=makeSearch";
+                    url += this.Sorting;
+                    if (this.PaginationNumber.HasValue)
+                    {
+                    url += string.Format("&Page={0}", this.PaginationNumber.Value);
+                }
+                    
+                 
+                    return url;
+                }
+            }
+        }
+
+        public class FundaSearch : Search
+        {
+            public override string Sorting { get { return "sorteer-datum-af/"; } }
+            
+            public override string Url
             {
                 get
                 {
@@ -74,34 +124,48 @@ namespace Funda
                     url += "/";
                     url += this.Text + "/";
                     if (this.MinRooms.HasValue || this.MaxRooms.HasValue) // jei minRooms turi reiksme ARBA maxRooms turi reiksme tada varyt per koda kur tarp {}
-                        {
-                            var maxString = !this.MaxRooms.HasValue ? "+kamers" : string.Format("-{0}-kamers", this.MaxRooms.Value);
-                            if (!this.MinRooms.HasValue) { this.MinRooms = 0; }
-                            url += this.MinRooms.ToString();
-                            url += maxString;
-                            url += "/";
-                        }
+                    {
+                        var maxString = !this.MaxRooms.HasValue ? "+kamers" : string.Format("-{0}-kamers", this.MaxRooms.Value);
+                        if (!this.MinRooms.HasValue) { this.MinRooms = 0; }
+                        url += this.MinRooms.ToString();
+                        url += maxString;
+                        url += "/";
+                    }
 
                     if (this.PriceMin.HasValue || this.PriceMax.HasValue)
-                   {
-                          var maxString = !this.PriceMax.HasValue ? "+" : string.Format("-{0}", this.PriceMax.Value);
-                          if (!this.PriceMin.HasValue) { this.PriceMin = 0; }
-                          url += this.PriceMin.ToString();
-                          url += maxString;
-                          url += "/";
-                  }
+                    {
+                        var maxString = !this.PriceMax.HasValue ? "+" : string.Format("-{0}", this.PriceMax.Value);
+                        if (!this.PriceMin.HasValue) { this.PriceMin = 0; }
+                        url += this.PriceMin.ToString();
+                        url += maxString;
+                        url += "/";
+                    }
                     if (this.PaginationNumber.HasValue)
                     {
                         url += string.Format("p{0}/", this.PaginationNumber.Value);
                     }
-                     
-                       
 
-                  //s  return "http://www.funda.nl/huur/rotterdam/1-4-kamers/sorteer-datum-af/p2/";
+                    //s  return "http://www.funda.nl/huur/rotterdam/1-4-kamers/sorteer-datum-af/p2/";
                     url += this.Sorting;
                     return url;
                 }
+
+
             }
+
+        }
+
+        public class Search
+        {
+            public int? MinRooms { get; set; }
+            public int? MaxRooms { get; set; }
+            public int? PriceMin { get; set; }
+            public int? PriceMax { get; set; }
+            public virtual string Sorting             {                get;            }
+            public virtual bool IsSale { get; set; }
+            public int? PaginationNumber { get; set; }
+            public string Text { get; set; }
+            public virtual string Url { get; }
         }
 
         public IFundaRecord GetRecordDataFromItsPage(IFundaRecord fundaRecord)
@@ -274,5 +338,45 @@ namespace Funda
         }
 
         private ChromeDriver Driver { get; set; }
+
+        public object AddNewLtSales(Search search)
+        {
+            var list = new List<Sale>();
+            var adds = this.Driver.FindElementsByCssSelector(".search-result");
+            foreach (var advert in adds)
+            {
+                list.Add(this.GetLtSale(advert));
+            }
+
+            return list;
+        }
+
+        private Sale GetLtSale(IWebElement element)
+        {
+            var url = element.FindElements(By.CssSelector(".search-result-header a"));
+            var title = element.FindElement(By.CssSelector(".search-result-title"));
+            var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
+            var price = element.FindElement(By.CssSelector(".search-result-price"));
+            var livingArea = element.FindElement(By.CssSelector("[title='Woonoppervlakte']"));
+            var totalArea = element.FindElement(By.CssSelector("[title='Perceeloppervlakte']"));
+            var roomCount = livingArea.FindElement(By.XPath(".."));
+            var parsedPrice = 0M;
+            var parsedLivingArea = 0;
+            var parsedTotalArea = 0;
+            var parsedRoomCount = 0;
+            var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
+            return new Sale
+            {
+                Url = url[0].GetAttribute("href"),
+                Title = title.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)[0],
+                Subtitle = subTitle.Text,
+                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value.Replace(".", ""), out parsedPrice) ? parsedPrice : (decimal?)null,
+                LivingArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(livingArea.Text)[0].Value, out parsedLivingArea) ? parsedLivingArea : (int?)null,
+                TotalArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(totalArea.Text)[0].Value, out parsedTotalArea) ? parsedTotalArea : (int?)null,
+                RoomCount = int.TryParse(roomCount.Text.Split(new string[] { "\r\n", "\n", "•", "kamers" }, StringSplitOptions.None)[1].Trim(), out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                Address = title.Text.Replace("\r\n", ""),
+                PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null
+            };
+        }
     }
 }

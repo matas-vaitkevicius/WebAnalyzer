@@ -9,6 +9,38 @@ namespace WebAnalyzer.Controllers
     public class HomeController : Controller
     {
         private List<Crawler.Search> _searches;
+        private List<Crawler.Search> _aroudasSearches;
+        public List<Funda.Crawler.Search> AruodasSearches
+        {
+            get
+            {
+                if (_aroudasSearches == null)
+                {
+                    _aroudasSearches = new List<Funda.Crawler.Search>
+                    {
+                        new Funda.Crawler.AruodasSearch { Text="butai/kaune/", FDistrict=6, FRegion=43, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="butu-nuoma/kaune/", FDistrict=6, FRegion=43, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="namai/kaune/", FDistrict=6, FRegion=43, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="namu-nuoma/kaune/", FDistrict=6, FRegion=43, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="butai/vilniuje/", FDistrict=1, FRegion=461, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="butu-nuoma/vilniuje/", FDistrict=1, FRegion=461, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="namai/vilniuje/", FDistrict=1, FRegion=461, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="namu-nuoma/vilniuje/", FDistrict=1, FRegion=461, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="butai/klaipedoje/", FDistrict=7, FRegion=112, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="butu-nuoma/klaipedoje/", FDistrict=7, FRegion=112, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="namai/klaipedoje/", FDistrict=7, FRegion=112, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="namu-nuoma/klaipedoje/", FDistrict=7, FRegion=112, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="butai/siauliuose/", FDistrict=11, FRegion=259, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="butu-nuoma/siauliuose/", FDistrict=11, FRegion=259, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="namai/siauliuose/", FDistrict=11, FRegion=259, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="namu-nuoma/siauliuose/", FDistrict=11, FRegion=259, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="butai/panevezyje/", FDistrict=10, FRegion=205, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="butu-nuoma/panevezyje/", FDistrict=10, FRegion=205, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                        new Funda.Crawler.AruodasSearch { Text="namai/panevezyje/", FDistrict=10, FRegion=205, PriceMin=4000, PriceMax= 50000, MinRooms = 1, MaxRooms = 4 },
+                        new Funda.Crawler.AruodasSearch { Text="namu-nuoma/panevezyje/", FDistrict=10, FRegion=205, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
+                    };
+                }
+                return _aroudasSearches; } }
 
         public List<Funda.Crawler.Search> Searches
         {
@@ -18,13 +50,13 @@ namespace WebAnalyzer.Controllers
                 {
                     _searches = new List<Funda.Crawler.Search>
                 {
-                   new Funda.Crawler.Search { Text="Rotterdam", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Rotterdam", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Amsterdam", PriceMin=70000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Amsterdam", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Eindhoven", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Eindhoven", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Utrecht", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Rotterdam", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Rotterdam", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Amsterdam", PriceMin=70000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Amsterdam", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Eindhoven", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Eindhoven", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Utrecht", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
                    new Funda.Crawler.Search { Text="Utrecht", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
                    new Funda.Crawler.Search { Text="Tilburg", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
                    new Funda.Crawler.Search { Text="Tilburg", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
@@ -187,5 +219,44 @@ namespace WebAnalyzer.Controllers
             ViewBag.Message = "Your contact page.";
             return View();
         }
-    }
-}
+
+
+        public ActionResult CollectNewLt()
+        {
+           using (var crawler = new Funda.Crawler())
+            {
+                using (var db = new Funda.WebAnalyzerEntities())
+                {
+                   foreach (var search in AruodasSearches)
+                    {
+                       // SetMinMax(search);
+                       for (int i = 0; i < 10; i++)
+                       {
+                           search.PaginationNumber = i;
+                           crawler.Navigate(search);
+                          // var adverts = Enumerable.Empty<IFundaRecord>();
+                          //if (search.IsSale)
+                          //{
+                          //     adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                          //    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                          //}
+                          //else
+                          // {
+                          //     adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                          //    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                          // }
+
+                          // if (!adverts.Any())
+                          // {
+                          //     break;
+                          // }
+
+                          // db.SaveChanges();
+                        }
+                   }
+               }
+          }
+
+           return RedirectToAction("UpdateExisting");
+        }
+   }}
