@@ -26,7 +26,7 @@ namespace Funda
             this.Driver.Navigate();
         }
 
-        public List<Sale> AddNewSales(Search search)
+        public List<Sale> AddNewSales()
         {
                 var list = new List<Sale>();
                 var adds = this.Driver.FindElementsByCssSelector(".search-result");
@@ -38,7 +38,7 @@ namespace Funda
             return list;
         }
 
-        public List<Rent> AddNewRents(Search search)
+        public List<Rent> AddNewRents()
         {
             var list = new List<Rent>();
             var adds = this.Driver.FindElementsByCssSelector(".search-result");
@@ -56,7 +56,7 @@ namespace Funda
 
         public class AruodasSearch : Search
         {
-            public override string Sorting { get { return "&FOrder=Price"; } }
+            public override string Sorting { get { return "&FOrder=Actuality"; } }
 
             public int FDistrict { get; set; }
 
@@ -339,10 +339,10 @@ namespace Funda
 
         private ChromeDriver Driver { get; set; }
 
-        public object AddNewLtSales(Search search)
+        public List<Sale> AddNewLtSales()
         {
             var list = new List<Sale>();
-            var adds = this.Driver.FindElementsByCssSelector(".search-result");
+            var adds = this.Driver.FindElementsByClassName("list-row").Where(o => o.Text != "");
             foreach (var advert in adds)
             {
                 list.Add(this.GetLtSale(advert));
@@ -353,29 +353,67 @@ namespace Funda
 
         private Sale GetLtSale(IWebElement element)
         {
-            var url = element.FindElements(By.CssSelector(".search-result-header a"));
-            var title = element.FindElement(By.CssSelector(".search-result-title"));
-            var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
-            var price = element.FindElement(By.CssSelector(".search-result-price"));
-            var livingArea = element.FindElement(By.CssSelector("[title='Woonoppervlakte']"));
-            var totalArea = element.FindElement(By.CssSelector("[title='Perceeloppervlakte']"));
-            var roomCount = livingArea.FindElement(By.XPath(".."));
+            var url = element.FindElement(By.CssSelector("a")).GetAttribute("href");
+            var title = element.FindElement(By.CssSelector(".list-adress ")).Text;
+        //    var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
+            var price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ","").Replace("€", "");
+            var livingArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
+            var roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
             var parsedPrice = 0M;
-            var parsedLivingArea = 0;
+            var parsedLivingArea = 0M;
             var parsedTotalArea = 0;
             var parsedRoomCount = 0;
-            var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
+         //   var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
             return new Sale
             {
-                Url = url[0].GetAttribute("href"),
-                Title = title.Text.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.None)[0],
-                Subtitle = subTitle.Text,
-                Price = decimal.TryParse(new Regex("([0-9.]*)").Matches(price.Text)[2].Value.Replace(".", ""), out parsedPrice) ? parsedPrice : (decimal?)null,
-                LivingArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(livingArea.Text)[0].Value, out parsedLivingArea) ? parsedLivingArea : (int?)null,
-                TotalArea = int.TryParse(new System.Text.RegularExpressions.Regex("([0-9]*)").Matches(totalArea.Text)[0].Value, out parsedTotalArea) ? parsedTotalArea : (int?)null,
-                RoomCount = int.TryParse(roomCount.Text.Split(new string[] { "\r\n", "\n", "•", "kamers" }, StringSplitOptions.None)[1].Trim(), out parsedRoomCount) ? parsedRoomCount : (int?)null,
-                Address = title.Text.Replace("\r\n", ""),
-                PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null
+                Url = url,
+                Title = title,
+               // Subtitle = subTitle.Text,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea,0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                //  Address = title.Text.Replace("\r\n", ""),
+                //   PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null
+//"1233"
+            };
+        }
+
+        public List<Rent> AddNewLtRents()
+        {
+            var list = new List<Rent>();
+            var adds = this.Driver.FindElementsByClassName("list-row").Where(o => o.Text != "");
+            foreach (var advert in adds)
+            {
+                list.Add(this.GetLtRent(advert));
+            }
+
+            return list;
+        }
+
+        private Rent GetLtRent(IWebElement element)
+        {
+            var url = element.FindElement(By.CssSelector("a")).GetAttribute("href");
+            var title = element.FindElement(By.CssSelector(".list-adress ")).Text;
+            //    var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
+            var price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ", "").Replace("€", "");
+            var livingArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
+            var roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
+            var parsedPrice = 0M;
+            var parsedLivingArea = 0M;
+            var parsedTotalArea = 0;
+            var parsedRoomCount = 0;
+            //   var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
+            return new Rent
+            {
+                Url = url,
+                Title = title,
+                // Subtitle = subTitle.Text,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                //  Address = title.Text.Replace("\r\n", ""),
+                //   PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null
+                //"1233"
             };
         }
     }

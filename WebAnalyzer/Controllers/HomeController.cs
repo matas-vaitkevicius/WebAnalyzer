@@ -57,43 +57,43 @@ namespace WebAnalyzer.Controllers
                    new Funda.Crawler.FundaSearch { Text="Eindhoven", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
                    new Funda.Crawler.FundaSearch { Text="Eindhoven", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
                    new Funda.Crawler.FundaSearch { Text="Utrecht", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Utrecht", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Tilburg", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Tilburg", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Leiden", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Leiden", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Breda", PriceMin=50000, PriceMax= 1300000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Breda", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Dordrecht", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Dordrecht", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="den-haag", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="den-haag", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Groningen", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Groningen", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Almere", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Almere", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Nijmegen", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Nijmegen", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Enschede", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Enschede", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Apeldoorn", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Apeldoorn", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Haarlem", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Haarlem", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Amersfoort", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Amersfoort", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Arnhem", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Arnhem", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Zwolle", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Zwolle", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="Zoetermeer", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="Zoetermeer", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="gemeente-zaanstad", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="gemeente-zaanstad", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="den-bosch", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="den-bosch", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
-                   new Funda.Crawler.Search { Text="gemeente-haarlemmermeer", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
-                   new Funda.Crawler.Search { Text="gemeente-haarlemmermeer", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Utrecht", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Tilburg", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Tilburg", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Leiden", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Leiden", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Breda", PriceMin=50000, PriceMax= 1300000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Breda", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Dordrecht", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Dordrecht", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="den-haag", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="den-haag", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Groningen", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Groningen", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Almere", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Almere", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Nijmegen", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Nijmegen", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Enschede", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Enschede", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Apeldoorn", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Apeldoorn", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Haarlem", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Haarlem", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Amersfoort", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Amersfoort", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Arnhem", PriceMin=50000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Arnhem", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Zwolle", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Zwolle", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="Zoetermeer", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="Zoetermeer", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="gemeente-zaanstad", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="gemeente-zaanstad", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="den-bosch", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="den-bosch", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
+                   new Funda.Crawler.FundaSearch { Text="gemeente-haarlemmermeer", PriceMin=45000, PriceMax= 130000, MinRooms = 1, MaxRooms = 4, IsSale = true },
+                   new Funda.Crawler.FundaSearch { Text="gemeente-haarlemmermeer", PriceMin=0, PriceMax=1300, MinRooms=1, MaxRooms =4, IsSale = false },
                     };
 
                 }
@@ -138,12 +138,12 @@ namespace WebAnalyzer.Controllers
                             var adverts = Enumerable.Empty<IFundaRecord>();
                             if (search.IsSale)
                             {
-                                adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                adverts = crawler.AddNewSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
                                 db.Sale.AddRange(adverts.Cast<Sale>().ToList());
                             }
                             else
                             {
-                                adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                adverts = crawler.AddNewRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
                                 db.Rent.AddRange(adverts.Cast<Rent>().ToList());
                             }
 
@@ -230,28 +230,28 @@ namespace WebAnalyzer.Controllers
                    foreach (var search in AruodasSearches)
                     {
                        // SetMinMax(search);
-                       for (int i = 0; i < 10; i++)
+                       for (int i = 0; i < 15; i++)
                        {
                            search.PaginationNumber = i;
                            crawler.Navigate(search);
-                          // var adverts = Enumerable.Empty<IFundaRecord>();
-                          //if (search.IsSale)
-                          //{
-                          //     adverts = crawler.AddNewSales(search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
-                          //    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
-                          //}
-                          //else
-                          // {
-                          //     adverts = crawler.AddNewRents(search).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                          //    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
-                          // }
+                           var adverts = Enumerable.Empty<IFundaRecord>();
+                          if (search.IsSale)
+                          {
+                               adverts = crawler.AddNewLtSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                              db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                          }
+                          else
+                           {
+                               adverts = crawler.AddNewLtRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                              db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                           }
 
-                          // if (!adverts.Any())
-                          // {
-                          //     break;
-                          // }
+                           if (!adverts.Any())
+                           {
+                               break;
+                           }
 
-                          // db.SaveChanges();
+                           db.SaveChanges();
                         }
                    }
                }
