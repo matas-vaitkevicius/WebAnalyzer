@@ -9,7 +9,7 @@
     <Property Name="Title" Type="nvarchar" MaxLength="128" Nullable="false" />
     <Property Name="Address" Type="nvarchar" MaxLength="128" />
     <Property Name="Subtitle" Type="nvarchar" MaxLength="128" />
-    <Property Name="Price" Type="money" />
+    <Property Name="Price" Type="decimal" Precision="19" Scale="4" />
     <Property Name="LivingArea" Type="int" />
     <Property Name="TotalArea" Type="int" />
     <Property Name="RoomCount" Type="int" />
@@ -17,7 +17,7 @@
     <Property Name="DateAdded" Type="datetime" />
     <Property Name="DateRemoved" Type="datetime" />
     <Property Name="DateLastProcessed" Type="datetime" />
-    <Property Name="InitialCostToRentOut" Type="money" />
+    <Property Name="InitialCostToRentOut" Type="decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityType Name="Sale">
     <Key>
@@ -28,7 +28,7 @@
     <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
     <Property Name="Subtitle" Type="nvarchar" MaxLength="100" />
     <Property Name="Address" Type="nvarchar" MaxLength="100" />
-    <Property Name="Price" Type="money" />
+    <Property Name="Price" Type="decimal" Precision="19" Scale="4" />
     <Property Name="LivingArea" Type="int" />
     <Property Name="RoomCount" Type="int" />
     <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
@@ -36,7 +36,7 @@
     <Property Name="DateAdded" Type="datetime" />
     <Property Name="DateRemoved" Type="datetime" />
     <Property Name="DateLastProcessed" Type="datetime" />
-    <Property Name="ServiceCosts" Type="money" />
+    <Property Name="ServiceCosts" Type="decimal" Precision="19" Scale="4" />
   </EntityType>
   <EntityContainer Name="WebAnalyzerModelStoreContainer">
     <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />

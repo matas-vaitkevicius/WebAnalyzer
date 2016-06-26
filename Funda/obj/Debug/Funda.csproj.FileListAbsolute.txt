@@ -12,3 +12,17 @@ C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\bin\Debug
 C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.dll
 C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.pdb
 C:\Users\LIUFA\documents\visual studio 2015\Projects\WebAnalyzer\Funda\obj\Debug\Funda.csprojResolveAssemblyReference.cache
+D:\Git\WebAnalyzer\Funda\bin\Debug\Funda.dll.config
+D:\Git\WebAnalyzer\Funda\bin\Debug\Funda.dll
+D:\Git\WebAnalyzer\Funda\bin\Debug\Funda.pdb
+D:\Git\WebAnalyzer\Funda\bin\Debug\EntityFramework.dll
+D:\Git\WebAnalyzer\Funda\bin\Debug\EntityFramework.SqlServer.dll
+D:\Git\WebAnalyzer\Funda\bin\Debug\WebDriver.dll
+D:\Git\WebAnalyzer\Funda\bin\Debug\WebDriver.Support.dll
+D:\Git\WebAnalyzer\Funda\bin\Debug\EntityFramework.xml
+D:\Git\WebAnalyzer\Funda\bin\Debug\EntityFramework.SqlServer.xml
+D:\Git\WebAnalyzer\Funda\bin\Debug\WebDriver.xml
+D:\Git\WebAnalyzer\Funda\bin\Debug\WebDriver.Support.xml
+D:\Git\WebAnalyzer\Funda\obj\Debug\Funda.dll
+D:\Git\WebAnalyzer\Funda\obj\Debug\Funda.pdb
+D:\Git\WebAnalyzer\Funda\obj\Debug\Funda.csprojResolveAssemblyReference.cache

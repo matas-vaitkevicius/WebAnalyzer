@@ -62,6 +62,8 @@ namespace Funda
 
             public int FRegion { get; set; }
 
+            public bool IsHouse { get { return this.Text.Contains("nam"); } }
+
             public override bool IsSale
             {
                 get
@@ -339,29 +341,43 @@ namespace Funda
 
         private ChromeDriver Driver { get; set; }
 
-        public List<Sale> AddNewLtSales()
+        public List<Sale> AddNewLtSales(AruodasSearch search)
         {
             var list = new List<Sale>();
             var adds = this.Driver.FindElementsByClassName("list-row").Where(o => o.Text != "");
             foreach (var advert in adds)
             {
-                list.Add(this.GetLtSale(advert));
+                list.Add(this.GetLtSale(advert, search));
             }
 
             return list;
         }
 
-        private Sale GetLtSale(IWebElement element)
+        private Sale GetLtSale(IWebElement element, AruodasSearch search)
         {
             var url = element.FindElement(By.CssSelector("a")).GetAttribute("href");
             var title = element.FindElement(By.CssSelector(".list-adress ")).Text;
-        //    var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
-            var price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ","").Replace("€", "");
-            var livingArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
-            var roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
+            //    var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
+            var price = "";
+            var livingArea = "";
+            var roomCount = "";
+            var totalArea = "";
+            if (search.IsHouse)
+            {
+                price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ", "").Replace("€", "");
+                livingArea = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
+                totalArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
+            }
+            else
+            {
+                price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ", "").Replace("€", "");
+                livingArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
+                roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
+            }
+
             var parsedPrice = 0M;
             var parsedLivingArea = 0M;
-            var parsedTotalArea = 0;
+            var parsedTotalArea = 0M;
             var parsedRoomCount = 0;
          //   var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
             return new Sale
@@ -371,6 +387,7 @@ namespace Funda
                // Subtitle = subTitle.Text,
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
                 LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea,0) : (int?)null,
+                TotalArea = decimal.TryParse(totalArea, out parsedTotalArea) ? (int?)(parsedTotalArea*1000) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
                 //  Address = title.Text.Replace("\r\n", ""),
                 //   PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null
