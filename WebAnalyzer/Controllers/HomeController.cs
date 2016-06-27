@@ -239,7 +239,7 @@ namespace WebAnalyzer.Controllers
                            var adverts = Enumerable.Empty<IFundaRecord>();
                           if (search.IsSale)
                           {
-                               adverts = crawler.AddNewLtSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                               adverts = crawler.AddNewLtSales((Crawler.AruodasSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
                               db.Sale.AddRange(adverts.Cast<Sale>().ToList());
                           }
                           else
