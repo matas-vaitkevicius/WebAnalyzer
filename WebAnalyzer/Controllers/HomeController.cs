@@ -163,6 +163,8 @@ namespace WebAnalyzer.Controllers
 
         object _lock;
 
+
+
         public ActionResult UpdateExisting(bool? isSale)
         {
 
@@ -230,7 +232,7 @@ namespace WebAnalyzer.Controllers
                    foreach (var search in AruodasSearches)
                     {
                        // SetMinMax(search);
-                       for (int i = 0; i < 15; i++)
+                       for (int i = 1; i < 15; i++)
                        {
                            search.PaginationNumber = i;
                            crawler.Navigate(search);
@@ -257,6 +259,53 @@ namespace WebAnalyzer.Controllers
                }
           }
 
-           return RedirectToAction("UpdateExisting");
+           return RedirectToAction("UpdateExistingLt");
         }
-   }}
+
+        public ActionResult UpdateExistingLt(bool? isSale)
+        {
+
+            using (var crawler = new Crawler())
+            {
+                _lock = new object();
+                lock (_lock)
+                {
+                    using (var db = new Funda.WebAnalyzerEntities())
+                    {
+                        var now = DateTime.Now;
+                        var list = new List<IFundaRecord>();
+                        if (!isSale.HasValue)
+                        {
+                            list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList().Union(db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList()).ToList();
+                        }
+                        else
+                        {
+                            if (isSale.Value)
+                            {
+                                list = db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
+                            }
+                            else
+                            {
+                                list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
+                            }
+                        }
+
+                        foreach (var rent in list)
+                        {
+                            try
+                            {
+                                crawler.Navigate(rent.Url);
+                                crawler.GetRecordDataFromItsPageLt(rent);
+                                db.SaveChanges();
+
+                            }
+                            catch { }
+                        }
+                    }
+                }
+            }
+            return View("Index");
+        }
+
+    }
+}

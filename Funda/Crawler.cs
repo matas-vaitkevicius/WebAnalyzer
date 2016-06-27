@@ -416,5 +416,105 @@ namespace Funda
                 //"1233"
             };
         }
+
+        public IFundaRecord GetRecordDataFromItsPageLt(IFundaRecord fundaRecord)
+        {
+            if (!fundaRecord.DateAdded.HasValue)
+            {
+                DateTime? dateAdded = null;
+                var dateRegex = new Regex("([0-9]{1,2}) ([a-zA-Z]*) 2016");
+                var dateAddedElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => dateRegex.IsMatch(o.Text));
+
+                if (dateAddedElement != null)
+                {
+                    System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("nl-NL");
+                    dateAdded = DateTime.Parse(dateAddedElement.Text, cultureinfo);
+                }
+                else
+                {
+                    dateAdded = DateTime.Now;
+                }
+
+                fundaRecord.DateAdded = dateAdded;
+            }
+
+            if (!fundaRecord.DateRemoved.HasValue)
+            {
+                DateTime? dateRemoved;
+                try
+                {
+                    var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
+                    dateRemoved = DateTime.Now;
+                }
+                catch
+                {
+                    try
+                    {
+                        var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+                        dateRemoved = DateTime.Now;
+                    }
+                    catch
+                    {
+                        dateRemoved = null;
+                    }
+                }
+
+                fundaRecord.DateRemoved = dateRemoved;
+            }
+
+            if (fundaRecord is Rent)
+            {
+                decimal initialCostToRentOut = 0m;
+                try
+                {
+                    var initialCostToRentOutElement = this.Driver.FindElement(By.CssSelector(".object-header-services-costs"));
+                    foreach (var match in this.NumberRegex.Matches(initialCostToRentOutElement.Text))
+                    {
+                        if (decimal.TryParse(((Match)match).Value, out initialCostToRentOut))
+                        {
+                            break;
+                        }
+                    }
+
+                    ((Rent)fundaRecord).InitialCostToRentOut = initialCostToRentOut;
+                }
+                catch { }
+            }
+
+            fundaRecord.DateLastProcessed = DateTime.Now;
+            // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
+
+            if (!fundaRecord.RoomCount.HasValue)
+            {
+                var roomCountRegex = new Regex("([1-9]{1}) kamer(.*)");
+                var roomCountElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => roomCountRegex.IsMatch(o.Text));
+                if (roomCountElement != null)
+                {
+                    var parsedRooms = 0;
+                    if (int.TryParse(roomCountRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
+                    {
+                        fundaRecord.RoomCount = parsedRooms;
+                    }
+                }
+            }
+
+            if ((fundaRecord is Sale) && !((Sale)fundaRecord).ServiceCosts.HasValue)
+            {
+                var serviceCostRegex = new Regex(".* ([0-9]{1,3}) per maand");
+                var serviceCostElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
+                if (serviceCostElement != null)
+                {
+                    var serviceCost = 0;
+                    if (int.TryParse(serviceCostRegex.Matches(serviceCostElement.Text)[0].Groups[1].Value, out serviceCost))
+                    {
+                        ((Sale)fundaRecord).ServiceCosts = serviceCost;
+                    }
+                }
+            }
+
+
+            return fundaRecord;
+        }
+
     }
 }
