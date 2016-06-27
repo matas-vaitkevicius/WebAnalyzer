@@ -1,0 +1,7 @@
+/.vs/WebAnalyzer/v14/*.suo
+/Funda/obj/Debug/*.cache
+config
+Debug
+roslyn
+bin
+*.user
