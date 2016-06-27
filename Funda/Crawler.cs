@@ -503,7 +503,7 @@ namespace Funda
 
             if (!fundaRecord.RoomCount.HasValue)
             {
-                var roomCountRegex = new Regex("([1-9]{1}) kamer(.*)");
+                var roomCountRegex = new Regex("([1-9]{1})");
                 var roomCountElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => roomCountRegex.IsMatch(o.Text));
                 if (roomCountElement != null)
                 {
