@@ -2,7 +2,7 @@
 
 namespace Funda
 {
-    public interface IFundaRecord
+    public interface IRecord
     {
          int Id { get; set; }
          string Url { get; set; }
@@ -17,5 +17,6 @@ namespace Funda
          Nullable<System.DateTime> DateAdded { get; set; }
          Nullable<System.DateTime> DateRemoved { get; set; }
          Nullable<System.DateTime> DateLastProcessed { get; set; }
+         string HeatingType { get; set; }
     }
 }

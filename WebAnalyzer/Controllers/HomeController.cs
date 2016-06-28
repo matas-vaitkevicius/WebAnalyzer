@@ -135,7 +135,7 @@ namespace WebAnalyzer.Controllers
                         {
                             search.PaginationNumber = i;
                             crawler.Navigate(search);
-                            var adverts = Enumerable.Empty<IFundaRecord>();
+                            var adverts = Enumerable.Empty<IRecord>();
                             if (search.IsSale)
                             {
                                 adverts = crawler.AddNewSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
@@ -176,20 +176,20 @@ namespace WebAnalyzer.Controllers
                     using (var db = new Funda.WebAnalyzerEntities())
                     {
                         var now = DateTime.Now;
-                        var list = new List<IFundaRecord>();
+                        var list = new List<IRecord>();
                         if (!isSale.HasValue)
                         {
-                            list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null).ToList().Union(db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null).ToList()).ToList();
+                            list = db.Rent.Where<IRecord>(o => o.DateRemoved == null).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null).ToList()).ToList();
                         }
                         else
                         {
                             if (isSale.Value)
                             {
-                                list = db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null).ToList();
+                                list = db.Sale.Where<IRecord>(o => o.DateRemoved == null).ToList();
                             }
                             else
                             {
-                                list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null).ToList();
+                                list = db.Rent.Where<IRecord>(o => o.DateRemoved == null).ToList();
                             }
                         }
                     
@@ -236,7 +236,7 @@ namespace WebAnalyzer.Controllers
                        {
                            search.PaginationNumber = i;
                            crawler.Navigate(search);
-                           var adverts = Enumerable.Empty<IFundaRecord>();
+                           var adverts = Enumerable.Empty<IRecord>();
                           if (search.IsSale)
                           {
                                adverts = crawler.AddNewLtSales((Crawler.AruodasSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
@@ -273,20 +273,20 @@ namespace WebAnalyzer.Controllers
                     using (var db = new Funda.WebAnalyzerEntities())
                     {
                         var now = DateTime.Now;
-                        var list = new List<IFundaRecord>();
+                        var list = new List<IRecord>();
                         if (!isSale.HasValue)
                         {
-                            list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList().Union(db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList()).ToList();
+                            list = db.Rent.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList()).ToList();
                         }
                         else
                         {
                             if (isSale.Value)
                             {
-                                list = db.Sale.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
+                                list = db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
                             }
                             else
                             {
-                                list = db.Rent.Where<IFundaRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
+                                list = db.Rent.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
                             }
                         }
 

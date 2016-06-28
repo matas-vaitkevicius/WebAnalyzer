@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Linq;
 using System.Collections.Specialized;
+using OpenQA.Selenium.Interactions;
+using System.Threading;
 
 namespace Funda
 {
@@ -170,7 +172,7 @@ namespace Funda
             public virtual string Url { get; }
         }
 
-        public IFundaRecord GetRecordDataFromItsPage(IFundaRecord fundaRecord)
+        public IRecord GetRecordDataFromItsPage(IRecord fundaRecord)
         {
             if (!fundaRecord.DateAdded.HasValue)
             {
@@ -434,17 +436,53 @@ namespace Funda
             };
         }
 
-        public IFundaRecord GetRecordDataFromItsPageLt(IFundaRecord fundaRecord)
+        public string[] GetAruodasAddress()
         {
-            if (!fundaRecord.DateAdded.HasValue)
+
+            var mapElement = this.Driver.FindElementsByCssSelector("[href='#map']");
+            if (mapElement.Any())
+            {
+                using (var mapDriver = new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Driver\")))
+                {
+                    try
+                    {
+                        var mapUrl = mapElement[0].GetAttribute("data-href");
+                        mapDriver.Url = string.Format("http://www.aruodas.lt{0}", mapUrl);
+                        mapDriver.Navigate();
+                        Thread.Sleep(1000);
+                        mapDriver.FindElementByCssSelector("[title^='Spustel']").Click();
+                        Thread.Sleep(2500);
+                        mapDriver.SwitchTo().Window(mapDriver.WindowHandles.Last());
+                        Actions action = new Actions(mapDriver);
+                        action.MoveToElement(mapDriver.FindElementByCssSelector("body"), 465, 471).ContextClick().Build().Perform();
+                        Thread.Sleep(2000);
+                        action.SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.Return).Build().Perform();
+                        Thread.Sleep(1000);
+                        var address = mapDriver.FindElementsByCssSelector(".widget-reveal-card-address-line");
+
+                        return address.Select(o => o.Text).ToArray();
+                    }
+                    finally
+                    {
+                        mapDriver.Close();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        public IRecord GetRecordDataFromItsPageLt(IRecord record)
+        {
+            if (!record.DateAdded.HasValue)
             {
                 DateTime? dateAdded = null;
-                var dateRegex = new Regex("([0-9]{1,2}) ([a-zA-Z]*) 2016");
-                var dateAddedElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => dateRegex.IsMatch(o.Text));
+             //   DateTime date = DateTime.Parse("yyyy-MM-dd");
+                var dateAddedElement = this.Driver.FindElementsByCssSelector(".obj-stats.obj-stats-border dd")[1];
 
                 if (dateAddedElement != null)
                 {
-                    System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("nl-NL");
+                    System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("lt-LT");
                     dateAdded = DateTime.Parse(dateAddedElement.Text, cultureinfo);
                 }
                 else
@@ -452,85 +490,98 @@ namespace Funda
                     dateAdded = DateTime.Now;
                 }
 
-                fundaRecord.DateAdded = dateAdded;
+                record.DateAdded = dateAdded;
             }
 
-            if (!fundaRecord.DateRemoved.HasValue)
+            if (string.IsNullOrWhiteSpace(record.Address))
             {
-                DateTime? dateRemoved;
-                try
-                {
-                    var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
-                    dateRemoved = DateTime.Now;
+                var adresai = GetAruodasAddress();
+                if (adresai != null) {
+                    record.Address = adresai[0];
+                    record.PostCode = adresai[1];
                 }
-                catch
-                {
-                    try
-                    {
-                        var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
-                        dateRemoved = DateTime.Now;
-                    }
-                    catch
-                    {
-                        dateRemoved = null;
-                    }
-                }
-
-                fundaRecord.DateRemoved = dateRemoved;
             }
 
-            if (fundaRecord is Rent)
+            //if (!fundaRecord.DateRemoved.HasValue)
+           // {
+              //  DateTime? dateRemoved;
+              //  try
+              //  {
+                  //  var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
+                  //  dateRemoved = DateTime.Now;
+               // }
+               // catch
+               // {
+                 //   try
+                 //   {
+                    //    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+                  //      dateRemoved = DateTime.Now;
+                  //  }
+                  //  catch
+                  //  {
+                   //     dateRemoved = null;
+                  //  }
+               // }
+
+              //  fundaRecord.DateRemoved = dateRemoved;
+           // }
+           if (string.IsNullOrEmpty( record.HeatingType))
             {
-                decimal initialCostToRentOut = 0m;
-                try
-                {
-                    var initialCostToRentOutElement = this.Driver.FindElement(By.CssSelector(".object-header-services-costs"));
-                    foreach (var match in this.NumberRegex.Matches(initialCostToRentOutElement.Text))
-                    {
-                        if (decimal.TryParse(((Match)match).Value, out initialCostToRentOut))
-                        {
-                            break;
-                        }
-                    }
-
-                    ((Rent)fundaRecord).InitialCostToRentOut = initialCostToRentOut;
-                }
-                catch { }
+                var heatingType = this.Driver.FindElementsByCssSelector(".obj-details dd")[7];
+                 record.HeatingType = heatingType.Text;
             }
+            // if (fundaRecord is Rent)
+            // {
+            //    decimal initialCostToRentOut = 0m;
+            //    try
+            //    {
+            //     var initialCostToRentOutElement = this.Driver.FindElement(By.CssSelector(".object-header-services-costs"));
+            //     foreach (var match in this.NumberRegex.Matches(initialCostToRentOutElement.Text))
+            //    {
+            //       if (decimal.TryParse(((Match)match).Value, out initialCostToRentOut))
+            //       {
+            //        break;
+            //    }
+            //  }
 
-            fundaRecord.DateLastProcessed = DateTime.Now;
+            // ((Rent)fundaRecord).InitialCostToRentOut = initialCostToRentOut;
+            // }
+            // catch { }
+            // }
+
+            record.DateLastProcessed = DateTime.Now;
             // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
 
-            if (!fundaRecord.RoomCount.HasValue)
-            {
-                var roomCountRegex = new Regex("([1-9]{1})");
-                var roomCountElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => roomCountRegex.IsMatch(o.Text));
-                if (roomCountElement != null)
-                {
-                    var parsedRooms = 0;
-                    if (int.TryParse(roomCountRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
-                    {
-                        fundaRecord.RoomCount = parsedRooms;
-                    }
-                }
-            }
+            //if (!record.RoomCount.HasValue)
+            //{
+            //    var roomCountRegex = new Regex("([1-9]{1})");
+            //    var roomCountElement = this.Driver.FindElementsByCssSelector("(.obj-details dd')[3])").FirstOrDefault(o => roomCountRegex.IsMatch(o.Text));
+            //    if (roomCountElement != null)
+            //    {
+            //        var parsedRooms = 0;
+            //        if (int.TryParse(roomCountRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
+            //        {
+            //            record.RoomCount = parsedRooms;
+            //        }
+            //    }
+            //}
 
-            if ((fundaRecord is Sale) && !((Sale)fundaRecord).ServiceCosts.HasValue)
-            {
-                var serviceCostRegex = new Regex(".* ([0-9]{1,3}) per maand");
-                var serviceCostElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
-                if (serviceCostElement != null)
-                {
-                    var serviceCost = 0;
-                    if (int.TryParse(serviceCostRegex.Matches(serviceCostElement.Text)[0].Groups[1].Value, out serviceCost))
-                    {
-                        ((Sale)fundaRecord).ServiceCosts = serviceCost;
-                    }
-                }
-            }
+            //if ((record is Sale) && !((Sale)record).ServiceCosts.HasValue)
+            //{
+            //    var serviceCostRegex = new Regex(".* ([0-9]{1,3}) per maand");
+            //    var serviceCostElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
+            //    if (serviceCostElement != null)
+            //    {
+            //        var serviceCost = 0;
+            //        if (int.TryParse(serviceCostRegex.Matches(serviceCostElement.Text)[0].Groups[1].Value, out serviceCost))
+            //        {
+            //            ((Sale)record).ServiceCosts = serviceCost;
+            //        }
+            //    }
+            //}
 
 
-            return fundaRecord;
+            return record;
         }
 
     }

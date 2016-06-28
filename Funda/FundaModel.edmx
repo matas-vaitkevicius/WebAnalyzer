@@ -14,7 +14,7 @@
           <Property Name="Title" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="Address" Type="nvarchar" MaxLength="128" />
           <Property Name="Subtitle" Type="nvarchar" MaxLength="128" />
-          <Property Name="Price" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="Price" Type="money" />
           <Property Name="LivingArea" Type="int" />
           <Property Name="TotalArea" Type="int" />
           <Property Name="RoomCount" Type="int" />
@@ -22,7 +22,8 @@
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
           <Property Name="DateLastProcessed" Type="datetime" />
-          <Property Name="InitialCostToRentOut" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="InitialCostToRentOut" Type="money" />
+          <Property Name="HeatingType" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -33,7 +34,7 @@
           <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Subtitle" Type="nvarchar" MaxLength="100" />
           <Property Name="Address" Type="nvarchar" MaxLength="100" />
-          <Property Name="Price" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="Price" Type="money" />
           <Property Name="LivingArea" Type="int" />
           <Property Name="RoomCount" Type="int" />
           <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
@@ -41,7 +42,8 @@
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
           <Property Name="DateLastProcessed" Type="datetime" />
-          <Property Name="ServiceCosts" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ServiceCosts" Type="money" />
+          <Property Name="HeatingType" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityContainer Name="WebAnalyzerModelStoreContainer">
           <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
@@ -73,6 +75,7 @@
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
           <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
           <Property Name="InitialCostToRentOut" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -92,6 +95,7 @@
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
           <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
           <Property Name="ServiceCosts" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -102,6 +106,7 @@
           <EntitySetMapping Name="Rent">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
               <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="HeatingType" ColumnName="HeatingType" />
                 <ScalarProperty Name="InitialCostToRentOut" ColumnName="InitialCostToRentOut" />
                 <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
                 <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
@@ -122,6 +127,7 @@
           <EntitySetMapping Name="Sale">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
               <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="HeatingType" ColumnName="HeatingType" />
                 <ScalarProperty Name="ServiceCosts" ColumnName="ServiceCosts" />
                 <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
                 <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />

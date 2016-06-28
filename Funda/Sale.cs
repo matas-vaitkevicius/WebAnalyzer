@@ -12,7 +12,7 @@ namespace Funda
     using System;
     using System.Collections.Generic;
     
-    public partial class Sale : IFundaRecord
+    public partial class Sale : IRecord
     {
         public int Id { get; set; }
         public string Url { get; set; }
@@ -28,5 +28,6 @@ namespace Funda
         public Nullable<System.DateTime> DateRemoved { get; set; }
         public Nullable<System.DateTime> DateLastProcessed { get; set; }
         public Nullable<decimal> ServiceCosts { get; set; }
+        public string HeatingType { get; set; }
     }
 }
