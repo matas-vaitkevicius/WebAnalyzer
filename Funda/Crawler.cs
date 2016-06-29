@@ -454,7 +454,7 @@ namespace Funda
                         Thread.Sleep(2500);
                         mapDriver.SwitchTo().Window(mapDriver.WindowHandles.Last());
                         Actions action = new Actions(mapDriver);
-                        action.MoveToElement(mapDriver.FindElementByCssSelector("body"), 465, 471).ContextClick().Build().Perform();
+                        action.MoveToElement(mapDriver.FindElementByCssSelector("body"), 464, 467).ContextClick().Build().Perform();
                         Thread.Sleep(2000);
                         action.SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.ArrowDown).SendKeys(Keys.Return).Build().Perform();
                         Thread.Sleep(1000);
@@ -493,7 +493,7 @@ namespace Funda
                 record.DateAdded = dateAdded;
             }
 
-            if (string.IsNullOrWhiteSpace(record.Address))
+            if (string.IsNullOrWhiteSpace(record.Address) && string.IsNullOrWhiteSpace(record.PostCode))
             {
                 var adresai = GetAruodasAddress();
                 if (adresai != null) {
@@ -503,32 +503,38 @@ namespace Funda
             }
 
             //if (!fundaRecord.DateRemoved.HasValue)
-           // {
-              //  DateTime? dateRemoved;
-              //  try
-              //  {
-                  //  var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
-                  //  dateRemoved = DateTime.Now;
-               // }
-               // catch
-               // {
-                 //   try
-                 //   {
-                    //    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
-                  //      dateRemoved = DateTime.Now;
-                  //  }
-                  //  catch
-                  //  {
-                   //     dateRemoved = null;
-                  //  }
-               // }
+            // {
+            //  DateTime? dateRemoved;
+            //  try
+            //  {
+            //  var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
+            //  dateRemoved = DateTime.Now;
+            // }
+            // catch
+            // {
+            //   try
+            //   {
+            //    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+            //      dateRemoved = DateTime.Now;
+            //  }
+            //  catch
+            //  {
+            //     dateRemoved = null;
+            //  }
+            // }
 
-              //  fundaRecord.DateRemoved = dateRemoved;
-           // }
-           if (string.IsNullOrEmpty( record.HeatingType))
+            //  fundaRecord.DateRemoved = dateRemoved;
+            // }
+            if (string.IsNullOrEmpty(record.HeatingType))
             {
-                var heatingType = this.Driver.FindElementsByCssSelector(".obj-details dd")[7];
-                 record.HeatingType = heatingType.Text;
+
+                var sildymasElementai = this.Driver.FindElementsByCssSelector(".obj-details dt");
+                var sildymasElementas = sildymasElementai.FirstOrDefault(o => o.Text.Contains("ildymas:"));
+                if (sildymasElementas != null)
+                {
+                    var heatingType = this.Driver.FindElementsByCssSelector(".obj-details dd")[sildymasElementai.IndexOf(sildymasElementas)];
+                    record.HeatingType = heatingType.Text;
+                }
             }
             // if (fundaRecord is Rent)
             // {

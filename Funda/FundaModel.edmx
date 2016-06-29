@@ -18,7 +18,7 @@
           <Property Name="LivingArea" Type="int" />
           <Property Name="TotalArea" Type="int" />
           <Property Name="RoomCount" Type="int" />
-          <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="128" />
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
           <Property Name="DateLastProcessed" Type="datetime" />
@@ -37,7 +37,7 @@
           <Property Name="Price" Type="money" />
           <Property Name="LivingArea" Type="int" />
           <Property Name="RoomCount" Type="int" />
-          <Property Name="PostCode" Type="nvarchar" MaxLength="16" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="128" />
           <Property Name="TotalArea" Type="int" />
           <Property Name="DateAdded" Type="datetime" />
           <Property Name="DateRemoved" Type="datetime" />
@@ -70,7 +70,7 @@
           <Property Name="LivingArea" Type="Int32" />
           <Property Name="TotalArea" Type="Int32" />
           <Property Name="RoomCount" Type="Int32" />
-          <Property Name="PostCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="DateAdded" Type="DateTime" Precision="3" />
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
           <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
@@ -89,7 +89,7 @@
           <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="LivingArea" Type="Int32" />
           <Property Name="RoomCount" Type="Int32" />
-          <Property Name="PostCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="PostCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="TotalArea" Type="Int32" />
           <Property Name="DateAdded" Type="DateTime" Precision="3" />
           <Property Name="DateRemoved" Type="DateTime" Precision="3" />
