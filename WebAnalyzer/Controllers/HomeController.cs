@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Linq;
 using System;
+using System.Data.Entity;
 
 namespace WebAnalyzer.Controllers
 {
@@ -305,7 +306,13 @@ namespace WebAnalyzer.Controllers
                                 db.SaveChanges();
 
                             }
-                            catch { }
+                            catch (Exception e) {
+                                if (!(e is TimeoutException))
+                                {
+                                    db.Entry(rent).State = EntityState.Unchanged;
+                                    db.SaveChanges();
+                                }
+                            }
                         }
                     }
                 }

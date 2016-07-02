@@ -478,12 +478,12 @@ namespace Funda
             {
                 DateTime? dateAdded = null;
              //   DateTime date = DateTime.Parse("yyyy-MM-dd");
-                var dateAddedElement = this.Driver.FindElementsByCssSelector(".obj-stats.obj-stats-border dd")[1];
+                var dateAddedElement = this.Driver.FindElementsByCssSelector(".obj-stats.obj-stats-border dd");
 
-                if (dateAddedElement != null)
+                if (dateAddedElement.Count > 1)
                 {
                     System.Globalization.CultureInfo cultureinfo = new System.Globalization.CultureInfo("lt-LT");
-                    dateAdded = DateTime.Parse(dateAddedElement.Text, cultureinfo);
+                    dateAdded = DateTime.Parse(dateAddedElement[1].Text, cultureinfo);
                 }
                 else
                 {
@@ -539,7 +539,8 @@ namespace Funda
                 if (sildymasElementas != null)
                 {
                     var heatingType = this.Driver.FindElementsByCssSelector(".obj-details dd")[sildymasElementai.IndexOf(sildymasElementas)];
-                    record.HeatingType = heatingType.Text;
+                    if(heatingType.Text.Length < 50)
+                     record.HeatingType = heatingType.Text;
                 }
             }
 
