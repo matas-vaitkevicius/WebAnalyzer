@@ -493,38 +493,44 @@ namespace Funda
                 record.DateAdded = dateAdded;
             }
 
-            if (string.IsNullOrWhiteSpace(record.Address) && string.IsNullOrWhiteSpace(record.PostCode))
+            //if (string.IsNullOrWhiteSpace(record.Address) && string.IsNullOrWhiteSpace(record.PostCode))
+            //{
+            //    var adresai = GetAruodasAddress();
+            //    if (adresai != null) {
+            //        record.Address = adresai[0];
+            //        record.PostCode = adresai[1];
+            //    }
+            //}
+
+            if (!record.DateRemoved.HasValue)
             {
-                var adresai = GetAruodasAddress();
-                if (adresai != null) {
-                    record.Address = adresai[0];
-                    record.PostCode = adresai[1];
+                DateTime? dateRemoved;
+                if (record.Url != this.Driver.Url)
+                {
+                    dateRemoved = DateTime.Now;
                 }
+                else {
+                    try
+                    {
+                        var dateRemovedElement = this.Driver.FindElementByCssSelector(".error-div.error2");
+                        dateRemoved = DateTime.Now;
+                    }
+                    catch
+                    {
+                        //try
+                        //{
+                        //    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
+                        //    dateRemoved = DateTime.Now;
+                        //}
+                        //catch
+                        //{
+                            dateRemoved = null;
+                      //  }
+                    }
+                }
+
+                record.DateRemoved = dateRemoved;
             }
-
-            //if (!fundaRecord.DateRemoved.HasValue)
-            // {
-            //  DateTime? dateRemoved;
-            //  try
-            //  {
-            //  var dateRemovedElement = this.Driver.FindElementByCssSelector(".label-transactie-voorbehoud");
-            //  dateRemoved = DateTime.Now;
-            // }
-            // catch
-            // {
-            //   try
-            //   {
-            //    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
-            //      dateRemoved = DateTime.Now;
-            //  }
-            //  catch
-            //  {
-            //     dateRemoved = null;
-            //  }
-            // }
-
-            //  fundaRecord.DateRemoved = dateRemoved;
-            // }
             if (string.IsNullOrEmpty(record.HeatingType))
             {
 
@@ -536,6 +542,15 @@ namespace Funda
                     record.HeatingType = heatingType.Text;
                 }
             }
+
+            try {
+                var priceElement = this.Driver.FindElementByCssSelector(".obj-price");
+                var price = int.Parse(priceElement.Text.Split('€')[0]);
+                    if (record.Price != price) {
+                    record.Price = price;
+                }
+
+            } catch { }
             // if (fundaRecord is Rent)
             // {
             //    decimal initialCostToRentOut = 0m;

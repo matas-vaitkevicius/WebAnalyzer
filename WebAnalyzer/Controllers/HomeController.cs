@@ -234,26 +234,32 @@ namespace WebAnalyzer.Controllers
                        // SetMinMax(search);
                        for (int i = 1; i < 15; i++)
                        {
-                           search.PaginationNumber = i;
-                           crawler.Navigate(search);
-                           var adverts = Enumerable.Empty<IRecord>();
-                          if (search.IsSale)
-                          {
-                               adverts = crawler.AddNewLtSales((Crawler.AruodasSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
-                              db.Sale.AddRange(adverts.Cast<Sale>().ToList());
-                          }
-                          else
-                           {
-                               adverts = crawler.AddNewLtRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                              db.Rent.AddRange(adverts.Cast<Rent>().ToList());
-                           }
+                            try
+                            {
+                                search.PaginationNumber = i;
+                                crawler.Navigate(search);
+                                var adverts = Enumerable.Empty<IRecord>();
+                                if (search.IsSale)
+                                {
+                                    adverts = crawler.AddNewLtSales((Crawler.AruodasSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                                }
+                                else
+                                {
+                                    adverts = crawler.AddNewLtRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                                }
 
-                           if (!adverts.Any())
-                           {
-                               break;
-                           }
+                                if (!adverts.Any())
+                                {
+                                    break;
+                                }
 
-                           db.SaveChanges();
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                            }
                         }
                    }
                }
