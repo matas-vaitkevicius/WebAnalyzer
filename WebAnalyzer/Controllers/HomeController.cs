@@ -164,11 +164,8 @@ namespace WebAnalyzer.Controllers
 
         object _lock;
 
-
-
-        public ActionResult UpdateExisting(bool? isSale)
+        public void DoUpdate(string systemName, bool? isSale)
         {
-
             using (var crawler = new Crawler())
             {
                 _lock = new object();
@@ -180,26 +177,26 @@ namespace WebAnalyzer.Controllers
                         var list = new List<IRecord>();
                         if (!isSale.HasValue)
                         {
-                            list = db.Rent.Where<IRecord>(o => o.DateRemoved == null).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null).ToList()).ToList();
+                            list = db.Rent.Where<IRecord>(o =>  (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
                         }
                         else
                         {
                             if (isSale.Value)
                             {
-                                list = db.Sale.Where<IRecord>(o => o.DateRemoved == null).ToList();
+                                list = db.Sale.Where<IRecord>(o =>  (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
                             }
                             else
                             {
-                                list = db.Rent.Where<IRecord>(o => o.DateRemoved == null).ToList();
+                                list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
                             }
                         }
-                    
+
                         foreach (var rent in list)
                         {
                             try
                             {
                                 crawler.Navigate(rent.Url);
-                                crawler.GetRecordDataFromItsPage(rent);
+                                crawler.GetRecordDataFromItsPageLt(rent);
                                 db.SaveChanges();
 
                             }
@@ -208,6 +205,12 @@ namespace WebAnalyzer.Controllers
                     }
                 }
             }
+        }
+
+        public ActionResult UpdateExisting(bool? isSale)
+        {
+            DoUpdate("funda", isSale);
+
                     return View("Index"); 
         }
 
@@ -222,7 +225,6 @@ namespace WebAnalyzer.Controllers
             ViewBag.Message = "Your contact page.";
             return View();
         }
-
 
         public ActionResult CollectNewLt()
         {
@@ -271,54 +273,8 @@ namespace WebAnalyzer.Controllers
 
         public ActionResult UpdateExistingLt(bool? isSale)
         {
-
-            using (var crawler = new Crawler())
-            {
-                _lock = new object();
-                lock (_lock)
-                {
-                    using (var db = new Funda.WebAnalyzerEntities())
-                    {
-                        var now = DateTime.Now;
-                        var list = new List<IRecord>();
-                        if (!isSale.HasValue)
-                        {
-                            list = db.Rent.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList()).ToList();
-                        }
-                        else
-                        {
-                            if (isSale.Value)
-                            {
-                                list = db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
-                            }
-                            else
-                            {
-                                list = db.Rent.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains("aruodas")).ToList();
-                            }
-                        }
-
-                        foreach (var rent in list)
-                        {
-                            try
-                            {
-                                crawler.Navigate(rent.Url);
-                                crawler.GetRecordDataFromItsPageLt(rent);
-                                db.SaveChanges();
-
-                            }
-                            catch (Exception e) {
-                                if (!(e is TimeoutException))
-                                {
-                                    db.Entry(rent).State = EntityState.Unchanged;
-                                    db.SaveChanges();
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            DoUpdate("aruodas", isSale);
             return View("Index");
         }
-
     }
 }

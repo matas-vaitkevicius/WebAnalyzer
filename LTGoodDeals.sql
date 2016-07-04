@@ -1,6 +1,6 @@
 ﻿/****** Script for SelectTopNRows command from SSMS  ******/
 select analysis.cnt, analysis.l_cnt, 
-(ads.price/ads.LivingArea) per_sq_m, (ads.price/ads.LivingArea)/(analysis.sq) avg_town_ratio, (ads.price/ads.LivingArea)/(analysis.l_sq) avg_local_ratio, (ads.LivingArea*analysis.l_r_sq) rent_per_month, (ads.Price/(ads.LivingArea*analysis.l_r_sq))/12 years_to_pay_for_itself,
+(ads.price/ads.LivingArea) per_sq_m, (ads.price/ads.LivingArea)/(analysis.sq) avg_town_ratio, (ads.price/ads.LivingArea)/(analysis.l_sq) avg_local_ratio, (ads.LivingArea*analysis.l_r_sq) rent_per_month, (ads.LivingArea*analysis.l_sq) worth, (ads.Price/(ads.LivingArea*analysis.l_r_sq))/12 years_to_pay_for_itself,
  url,* from (
 select * from
   (SELECT (s.l_sq/r.l_r_sq)/12 l_years, * FROM (select  SUBSTRING(Title,1,4) miestas, 
@@ -37,7 +37,7 @@ join (select  * from
   where 
  ((
  --(ads.price/ads.LivingArea) > (analysis.l_sq)*0.6 and 
- (ads.price/ads.LivingArea) < (analysis.l_sq)*0.8) --or (ads.price/ads.LivingArea) < (analysis.sq)*0.5
+ (ads.price/ads.LivingArea) < (analysis.l_sq)*0.6) --or (ads.price/ads.LivingArea) < (analysis.sq)*0.5
  ) 
  and ads.DateRemoved is  null 
 -- and Price < 35000
@@ -46,4 +46,4 @@ join (select  * from
 
 and analysis.l_cnt > 3 and analysis.l_r_cnt > 3 and analysis.l_roomC > 0 
    and HeatingType not like '%Kietu kuru%'
-order by rent_per_month desc 
+order by avg_local_ratio desc 

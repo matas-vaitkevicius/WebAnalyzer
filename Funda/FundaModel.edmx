@@ -44,6 +44,7 @@
           <Property Name="DateLastProcessed" Type="datetime" />
           <Property Name="ServiceCosts" Type="money" />
           <Property Name="HeatingType" Type="varchar" MaxLength="50" />
+          <Property Name="IsBendrabutis" Type="bit" />
         </EntityType>
         <EntityContainer Name="WebAnalyzerModelStoreContainer">
           <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
@@ -96,6 +97,7 @@
           <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
           <Property Name="ServiceCosts" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsBendrabutis" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -127,6 +129,7 @@
           <EntitySetMapping Name="Sale">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
               <MappingFragment StoreEntitySet="Sale">
+                <ScalarProperty Name="IsBendrabutis" ColumnName="IsBendrabutis" />
                 <ScalarProperty Name="HeatingType" ColumnName="HeatingType" />
                 <ScalarProperty Name="ServiceCosts" ColumnName="ServiceCosts" />
                 <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />

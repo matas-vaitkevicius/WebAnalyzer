@@ -552,6 +552,15 @@ namespace Funda
                 }
 
             } catch { }
+
+            if (record is Sale && !((Sale)record).IsBendrabutis.HasValue) {
+                var sale = (Sale)record;
+                var mainText = this.Driver.FindElementsByClassName("obj-comment");
+                if (mainText.Any()) {
+                    sale.IsBendrabutis = mainText[0].Text.ToLower().Contains("bendrabu");
+                    }
+                }
+            
             // if (fundaRecord is Rent)
             // {
             //    decimal initialCostToRentOut = 0m;
