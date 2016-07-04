@@ -493,15 +493,6 @@ namespace Funda
                 record.DateAdded = dateAdded;
             }
 
-            //if (string.IsNullOrWhiteSpace(record.Address) && string.IsNullOrWhiteSpace(record.PostCode))
-            //{
-            //    var adresai = GetAruodasAddress();
-            //    if (adresai != null) {
-            //        record.Address = adresai[0];
-            //        record.PostCode = adresai[1];
-            //    }
-            //}
-
             if (!record.DateRemoved.HasValue)
             {
                 DateTime? dateRemoved;
@@ -517,15 +508,7 @@ namespace Funda
                     }
                     catch
                     {
-                        //try
-                        //{
-                        //    var addNotFoundElement = this.Driver.FindElementByCssSelector(".icon-not-found-house-blueBrand");
-                        //    dateRemoved = DateTime.Now;
-                        //}
-                        //catch
-                        //{
                             dateRemoved = null;
-                      //  }
                     }
                 }
 
@@ -553,65 +536,14 @@ namespace Funda
 
             } catch { }
 
-            if (record is Sale && !((Sale)record).IsBendrabutis.HasValue) {
-                var sale = (Sale)record;
+            if (!record.IsBendrabutis.HasValue) {
                 var mainText = this.Driver.FindElementsByClassName("obj-comment");
                 if (mainText.Any()) {
-                    sale.IsBendrabutis = mainText[0].Text.ToLower().Contains("bendrabu");
+                    record.IsBendrabutis = mainText[0].Text.ToLower().Contains("bendrabu");
                     }
                 }
-            
-            // if (fundaRecord is Rent)
-            // {
-            //    decimal initialCostToRentOut = 0m;
-            //    try
-            //    {
-            //     var initialCostToRentOutElement = this.Driver.FindElement(By.CssSelector(".object-header-services-costs"));
-            //     foreach (var match in this.NumberRegex.Matches(initialCostToRentOutElement.Text))
-            //    {
-            //       if (decimal.TryParse(((Match)match).Value, out initialCostToRentOut))
-            //       {
-            //        break;
-            //    }
-            //  }
-
-            // ((Rent)fundaRecord).InitialCostToRentOut = initialCostToRentOut;
-            // }
-            // catch { }
-            // }
 
             record.DateLastProcessed = DateTime.Now;
-            // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
-
-            //if (!record.RoomCount.HasValue)
-            //{
-            //    var roomCountRegex = new Regex("([1-9]{1})");
-            //    var roomCountElement = this.Driver.FindElementsByCssSelector("(.obj-details dd')[3])").FirstOrDefault(o => roomCountRegex.IsMatch(o.Text));
-            //    if (roomCountElement != null)
-            //    {
-            //        var parsedRooms = 0;
-            //        if (int.TryParse(roomCountRegex.Matches(roomCountElement.Text)[0].Groups[1].Value, out parsedRooms))
-            //        {
-            //            record.RoomCount = parsedRooms;
-            //        }
-            //    }
-            //}
-
-            //if ((record is Sale) && !((Sale)record).ServiceCosts.HasValue)
-            //{
-            //    var serviceCostRegex = new Regex(".* ([0-9]{1,3}) per maand");
-            //    var serviceCostElement = this.Driver.FindElementsByCssSelector(".object-primary .object-kenmerken-body .object-kenmerken-list dd").FirstOrDefault(o => serviceCostRegex.IsMatch(o.Text));
-            //    if (serviceCostElement != null)
-            //    {
-            //        var serviceCost = 0;
-            //        if (int.TryParse(serviceCostRegex.Matches(serviceCostElement.Text)[0].Groups[1].Value, out serviceCost))
-            //        {
-            //            ((Sale)record).ServiceCosts = serviceCost;
-            //        }
-            //    }
-            //}
-
-
             return record;
         }
 

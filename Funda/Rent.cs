@@ -29,5 +29,6 @@ namespace Funda
         public Nullable<System.DateTime> DateLastProcessed { get; set; }
         public Nullable<decimal> InitialCostToRentOut { get; set; }
         public string HeatingType { get; set; }
+        public Nullable<bool> IsBendrabutis { get; set; }
     }
 }

@@ -25,7 +25,7 @@ namespace Funda
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Rent> Rent { get; set; }
         public virtual DbSet<Sale> Sale { get; set; }
+        public virtual DbSet<Rent> Rent { get; set; }
     }
 }

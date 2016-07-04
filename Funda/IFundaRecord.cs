@@ -18,5 +18,6 @@ namespace Funda
          Nullable<System.DateTime> DateRemoved { get; set; }
          Nullable<System.DateTime> DateLastProcessed { get; set; }
          string HeatingType { get; set; }
+        Nullable<bool> IsBendrabutis { get; set; }
     }
 }
