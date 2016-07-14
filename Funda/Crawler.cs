@@ -84,6 +84,7 @@ namespace Funda
                     url += "?";
                     url += "FDistrict=";
                     url += FDistrict;
+                    url += "&obj=" + (this.IsSale && !this.IsHouse ? 1 : this.IsSale && this.IsHouse ? 2 : !this.IsSale && !this.IsHouse ? 4 : 5);
                     url += "&";
                     url += "FPriceMax=";
                     url += PriceMax;
@@ -234,6 +235,19 @@ namespace Funda
                     ((Rent)fundaRecord).InitialCostToRentOut = initialCostToRentOut;
                 }
                 catch { }
+
+                try {
+                    var IsFurnishedSekcijos = this.Driver.FindElementsByCssSelector(".object-kenmerken-body .object-kenmerken-list");
+                    var IsFurnishedSekcija =  IsFurnishedSekcijos.FirstOrDefault(o => o.Text.Contains("Specifiek"));
+                    if (IsFurnishedSekcija != null)
+                    {
+                        var isFurishedElementai = IsFurnishedSekcija.FindElements(By.CssSelector("dt"));
+                        var isFurnishedElementas = isFurishedElementai.FirstOrDefault(o => o.Text.Contains("Specifiek"));
+                        var isFurnishedText = IsFurnishedSekcija.FindElements(By.CssSelector("dd"))[isFurishedElementai.IndexOf(isFurnishedElementas)];
+                            ((Rent)fundaRecord).IsFurnished = isFurnishedText.Text == "Gemeubileerd";
+                    }
+
+                } catch { }
             }
 
             fundaRecord.DateLastProcessed = DateTime.Now;

@@ -25,6 +25,7 @@
           <Property Name="InitialCostToRentOut" Type="money" />
           <Property Name="HeatingType" Type="varchar" MaxLength="50" />
           <Property Name="IsBendrabutis" Type="bit" />
+          <Property Name="IsFurnished" Type="bit" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -56,9 +57,31 @@
     <edmx:ConceptualModels>
       <Schema Namespace="WebAnalyzerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="WebAnalyzerEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Sale" EntityType="WebAnalyzerModel.Sale" />
           <EntitySet Name="Rent" EntityType="WebAnalyzerModel.Rent" />
+          <EntitySet Name="Sale" EntityType="WebAnalyzerModel.Sale" />
         </EntityContainer>
+        <EntityType Name="Rent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Subtitle" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="LivingArea" Type="Int32" />
+          <Property Name="TotalArea" Type="Int32" />
+          <Property Name="RoomCount" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DateAdded" Type="DateTime" Precision="3" />
+          <Property Name="DateRemoved" Type="DateTime" Precision="3" />
+          <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
+          <Property Name="InitialCostToRentOut" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="IsBendrabutis" Type="Boolean" />
+          <Property Name="IsFurnished" Type="Boolean" />
+        </EntityType>
         <EntityType Name="Sale">
           <Key>
             <PropertyRef Name="Id" />
@@ -80,33 +103,35 @@
           <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsBendrabutis" Type="Boolean" />
         </EntityType>
-        <EntityType Name="Rent">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Url" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Subtitle" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="Price" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="LivingArea" Type="Int32" />
-          <Property Name="TotalArea" Type="Int32" />
-          <Property Name="RoomCount" Type="Int32" />
-          <Property Name="PostCode" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="DateAdded" Type="DateTime" Precision="3" />
-          <Property Name="DateRemoved" Type="DateTime" Precision="3" />
-          <Property Name="DateLastProcessed" Type="DateTime" Precision="3" />
-          <Property Name="InitialCostToRentOut" Type="Decimal" Precision="19" Scale="4" />
-          <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="IsBendrabutis" Type="Boolean" />
-        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="WebAnalyzerModelStoreContainer" CdmEntityContainer="WebAnalyzerEntities">
+          <EntitySetMapping Name="Rent">
+            <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
+              <MappingFragment StoreEntitySet="Rent">
+                <ScalarProperty Name="IsFurnished" ColumnName="IsFurnished" />
+                <ScalarProperty Name="IsBendrabutis" ColumnName="IsBendrabutis" />
+                <ScalarProperty Name="HeatingType" ColumnName="HeatingType" />
+                <ScalarProperty Name="InitialCostToRentOut" ColumnName="InitialCostToRentOut" />
+                <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
+                <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
+                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="RoomCount" ColumnName="RoomCount" />
+                <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />
+                <ScalarProperty Name="LivingArea" ColumnName="LivingArea" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Url" ColumnName="Url" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Sale">
             <EntityTypeMapping TypeName="WebAnalyzerModel.Sale">
               <MappingFragment StoreEntitySet="Sale">
@@ -123,28 +148,6 @@
                 <ScalarProperty Name="Price" ColumnName="Price" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="Url" ColumnName="Url" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Rent">
-            <EntityTypeMapping TypeName="WebAnalyzerModel.Rent">
-              <MappingFragment StoreEntitySet="Rent">
-                <ScalarProperty Name="IsBendrabutis" ColumnName="IsBendrabutis" />
-                <ScalarProperty Name="HeatingType" ColumnName="HeatingType" />
-                <ScalarProperty Name="InitialCostToRentOut" ColumnName="InitialCostToRentOut" />
-                <ScalarProperty Name="DateLastProcessed" ColumnName="DateLastProcessed" />
-                <ScalarProperty Name="DateRemoved" ColumnName="DateRemoved" />
-                <ScalarProperty Name="DateAdded" ColumnName="DateAdded" />
-                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
-                <ScalarProperty Name="RoomCount" ColumnName="RoomCount" />
-                <ScalarProperty Name="TotalArea" ColumnName="TotalArea" />
-                <ScalarProperty Name="LivingArea" ColumnName="LivingArea" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Subtitle" ColumnName="Subtitle" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="Url" ColumnName="Url" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

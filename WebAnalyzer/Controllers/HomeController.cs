@@ -187,7 +187,7 @@ namespace WebAnalyzer.Controllers
                             }
                             else
                             {
-                                list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
+                                list = db.Rent.Where<IRecord>(o =>  (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null &&  o.Url.Contains(systemName)).ToList();
                             }
                         }
 
@@ -196,7 +196,7 @@ namespace WebAnalyzer.Controllers
                             try
                             {
                                 crawler.Navigate(rent.Url);
-                                crawler.GetRecordDataFromItsPageLt(rent);
+                                crawler.GetRecordDataFromItsPage(rent);
                                 db.SaveChanges();
 
                             }

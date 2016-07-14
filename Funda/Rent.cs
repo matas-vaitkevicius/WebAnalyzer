@@ -30,5 +30,6 @@ namespace Funda
         public Nullable<decimal> InitialCostToRentOut { get; set; }
         public string HeatingType { get; set; }
         public Nullable<bool> IsBendrabutis { get; set; }
+        public Nullable<bool> IsFurnished { get; set; }
     }
 }

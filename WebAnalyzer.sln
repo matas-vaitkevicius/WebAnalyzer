@@ -15,6 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SqlScripts", "SqlScripts", 
 		LTGoodDeals.sql = LTGoodDeals.sql
 		PricePerPostcode.sql = PricePerPostcode.sql
 		SqMeterToRentSqMeterPriceRatio.sql = SqMeterToRentSqMeterPriceRatio.sql
+		SuBendrabuciais.sql = SuBendrabuciais.sql
 	EndProjectSection
 EndProject
 Global
