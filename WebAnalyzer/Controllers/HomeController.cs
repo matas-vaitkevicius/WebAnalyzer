@@ -177,17 +177,17 @@ namespace WebAnalyzer.Controllers
                         var list = new List<IRecord>();
                         if (!isSale.HasValue)
                         {
-                            list = db.Rent.Where<IRecord>(o =>  (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
+                            list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
                         }
                         else
                         {
                             if (isSale.Value)
                             {
-                                list = db.Sale.Where<IRecord>(o =>  (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
+                                list = db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
                             }
                             else
                             {
-                                list = db.Rent.Where<IRecord>(o =>  (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null &&  o.Url.Contains(systemName)).ToList();
+                                list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
                             }
                         }
 
@@ -196,7 +196,14 @@ namespace WebAnalyzer.Controllers
                             try
                             {
                                 crawler.Navigate(rent.Url);
-                                crawler.GetRecordDataFromItsPage(rent);
+                                if (systemName == "funda")
+                                {
+                                    crawler.GetRecordDataFromItsPage(rent);
+                                }
+                                else
+                                {
+                                    crawler.GetRecordDataFromItsPageLt(rent);
+                                }
                                 db.SaveChanges();
 
                             }
