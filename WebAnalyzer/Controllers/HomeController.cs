@@ -132,7 +132,7 @@ namespace WebAnalyzer.Controllers
                     foreach (var search in Searches)
                     {
                         SetMinMax(search);
-                        for (int i = 0; i < 10; i++)
+                        for (int i = 0; i < 15; i++)
                         {
                             search.PaginationNumber = i;
                             crawler.Navigate(search);
