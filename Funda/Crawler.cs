@@ -14,7 +14,15 @@ namespace Funda
     {
         public Crawler()
         {
-            this.Driver = new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Driver\"));
+            var options = new ChromeOptions { };
+            options.AddArgument("disable-infobars");
+            var username = Environment.GetEnvironmentVariable("USERNAME");
+            var userProfile = "C:\\Users\\" + username + "\\AppData\\Local\\Google\\Chrome\\User Data\\Default";
+            options.AddArgument(string.Format("user-data-dir={0}", userProfile));
+
+            options.AddArguments("excludeSwitches", "ignore-certificate-errors", "safebrowsing-disable-download-protection", "safebrowsing-disable-auto-update", "disable-client-side-phishing-detection");
+
+            this.Driver = new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Driver\"),options) ;
         }
 
         public void Navigate(Search search)

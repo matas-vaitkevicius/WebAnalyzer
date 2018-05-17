@@ -102,31 +102,6 @@ namespace WebAnalyzer.Controllers
             }
         }
 
-        //        odesskaya-oblast/
-        //vinnitskaya-oblast/
-        //volyinskaya-oblast/
-        //dnepropetrovskaya-oblast/
-        //donetskaya-oblast/
-        //zhitomirskaya-oblast/
-        //zakarpatskaya-oblast/
-        //ivano-frankovskaya-oblast/
-        //kievskaya-oblast/
-        //kirovogradskaya-oblast/
-        //luganskaya-oblast/
-        //lvovskaya-oblast/
-        //nikolaevskaya-oblast/
-        //poltavskaya-oblast/
-        //respublika-kryim/
-        //rovenskaya-oblast/
-        //sumskaya-oblast/
-        //ternopolskaya-oblast/
-        //harkovskaya-oblast/
-        //hersonskaya-oblast/
-        //hmelnitskaya-oblast/
-        //cherkasskaya-oblast/
-        //chernigovskaya-oblast/
-        //chernovitskaya-oblast/
-
         public List<Funda.Crawler.MestoUaSearch> MestoUaSearchList()
         {
             return new List<Crawler.MestoUaSearch> {
