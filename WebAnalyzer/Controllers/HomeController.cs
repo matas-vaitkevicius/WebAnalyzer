@@ -102,6 +102,61 @@ namespace WebAnalyzer.Controllers
             }
         }
 
+        //        odesskaya-oblast/
+        //vinnitskaya-oblast/
+        //volyinskaya-oblast/
+        //dnepropetrovskaya-oblast/
+        //donetskaya-oblast/
+        //zhitomirskaya-oblast/
+        //zakarpatskaya-oblast/
+        //ivano-frankovskaya-oblast/
+        //kievskaya-oblast/
+        //kirovogradskaya-oblast/
+        //luganskaya-oblast/
+        //lvovskaya-oblast/
+        //nikolaevskaya-oblast/
+        //poltavskaya-oblast/
+        //respublika-kryim/
+        //rovenskaya-oblast/
+        //sumskaya-oblast/
+        //ternopolskaya-oblast/
+        //harkovskaya-oblast/
+        //hersonskaya-oblast/
+        //hmelnitskaya-oblast/
+        //cherkasskaya-oblast/
+        //chernigovskaya-oblast/
+        //chernovitskaya-oblast/
+
+        public List<Funda.Crawler.MestoUaSearch> MestoUaSearchList()
+        {
+            return new List<Crawler.MestoUaSearch> {
+                 new Crawler.MestoUaSearch {Text="odesskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="vinnitskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="volyinskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="dnepropetrovskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="donetskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="zhitomirskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="zakarpatskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="ivano-frankovskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="kievskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="kirovogradskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="luganskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="lvovskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="nikolaevskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="poltavskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="respublika-kryim", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="rovenskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="sumskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="ternopolskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="harkovskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="hersonskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="hmelnitskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="cherkasskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="chernigovskaya-oblast", PriceMin=5000, IsSale = true },
+                 new Crawler.MestoUaSearch {Text="chernovitskaya-oblast", PriceMin=5000, IsSale = true },
+            };
+        }
+
         public ActionResult Index()
         {
             return View();
@@ -279,6 +334,57 @@ namespace WebAnalyzer.Controllers
         }
 
         public ActionResult UpdateExistingLt(bool? isSale)
+        {
+            DoUpdate("aruodas", isSale);
+            return View("Index");
+        }
+
+        public ActionResult CollectNewMestoUe()
+        {
+            using (var crawler = new Funda.Crawler())
+            {
+                using (var db = new Funda.WebAnalyzerEntities())
+                {
+                    foreach (var search in MestoUaSearchList())
+                    {
+                        // SetMinMax(search);
+                        for (int i = 1; i < 15; i++)
+                        {
+                            try
+                            {
+                                search.PaginationNumber = i;
+                                crawler.Navigate(search);
+                                var adverts = Enumerable.Empty<IRecord>();
+                                if (search.IsSale)
+                                {
+                                    adverts = crawler.AddNewMestoUeSales((Crawler.MestoUaSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                                }
+                                else
+                                {
+                                    adverts = crawler.AddNewLtRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                                }
+
+                                if (!adverts.Any())
+                                {
+                                    break;
+                                }
+
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("UpdateExistingLt");
+        }
+
+        public ActionResult UpdateExistingMestoUe(bool? isSale)
         {
             DoUpdate("aruodas", isSale);
             return View("Index");
