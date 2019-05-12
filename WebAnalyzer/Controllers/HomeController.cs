@@ -105,7 +105,27 @@ namespace WebAnalyzer.Controllers
         //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
         //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l/2?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
         //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&minPrice=100&maxPrice=1500&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
-
+        //Huelva
+        //Algeciras
+        //Estepona
+        //Marbella
+        //Málaga
+        //Motril
+        //Roquetas de Mar
+        //Almería
+        //Aguilas
+        //Salado
+        //Los Alcázares
+        //San Javier, Murcia
+        //Torrevieja
+        //Alicante
+        //Villajoyosa
+        //Benidorm
+        //Xàbia
+        //Dénia
+        //Gandia
+        //Cullera
+        //Valencia
         public List<Funda.Crawler.FotoCasaSearch> FotoCasaSearchList()
         {
             return new List<Crawler.FotoCasaSearch> {
