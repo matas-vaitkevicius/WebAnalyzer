@@ -102,6 +102,16 @@ namespace WebAnalyzer.Controllers
             }
         }
 
+        //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
+        //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l/2?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
+        //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&minPrice=100&maxPrice=1500&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
+
+        public List<Funda.Crawler.FotoCasaSearch> FotoCasaSearchList()
+        {
+            return new List<Crawler.FotoCasaSearch> {
+                 new Crawler.FotoCasaSearch {Text="el-puerto-de-santa-maria/todas-las-zonas", LatitudeAndLongitude="latitude=36.6014&longitude=-6.22775", PriceMin=100, PriceMax=1500, CombinedLocationIds="724,1,11,282,506,11027,0,0,0", IsSale = true }, };
+        }
+
         public List<Funda.Crawler.MestoUaSearch> MestoUaSearchList()
         {
             return new List<Crawler.MestoUaSearch> {
@@ -254,7 +264,9 @@ namespace WebAnalyzer.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
-            return View();
+
+       
+                return View();
         }
 
         public ActionResult Contact()
@@ -363,6 +375,51 @@ namespace WebAnalyzer.Controllers
         {
             DoUpdate("aruodas", isSale);
             return View("Index");
+        }
+
+        public ActionResult CollectNewEs()
+        {
+            using (var crawler = new Funda.Crawler())
+            {
+                using (var db = new Funda.WebAnalyzerEntities())
+                {
+                    foreach (var search in FotoCasaSearchList())
+                    {
+                        // SetMinMax(search);
+                        for (int i = 1; i < 5; i++)
+                        {
+                            try
+                            {
+                                search.PaginationNumber = i;
+                                crawler.Navigate(search);
+                                var adverts = Enumerable.Empty<IRecord>();
+                                //if (search.IsSale)
+                                //{
+                                //    adverts = crawler.AddNewLtSales((Crawler.FotoCasaSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                //    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                                //}
+                                //else
+                                //{
+                                //    adverts = crawler.AddNewLtRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                //    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                                //}
+
+                                //if (!adverts.Any())
+                                //{
+                                //    break;
+                                //}
+
+                                //db.SaveChanges();
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+
+            return RedirectToAction("UpdateExistingLt");
         }
     }
 }

@@ -21,8 +21,11 @@ namespace Funda
             options.AddArgument(string.Format("user-data-dir={0}", userProfile));
 
             options.AddArguments("excludeSwitches", "ignore-certificate-errors", "safebrowsing-disable-download-protection", "safebrowsing-disable-auto-update", "disable-client-side-phishing-detection");
+            // options.Arguments
+            this.Driver = AppDomain.CurrentDomain.BaseDirectory.Contains("ConsoleLauncher") ? 
+                   new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, options)
+               : new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Funda\bin\Debug"),options) ;
 
-            this.Driver = new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Driver\"),options) ;
         }
 
         public void Navigate(Search search)
@@ -183,6 +186,34 @@ namespace Funda
                     return url;
                 }
             }
+        }
+
+        public class FotoCasaSearch : Search
+        {
+            public override string Url
+            {
+                get
+                {
+                    var url = "https://www.fotocasa.es/es/alquiler/viviendas/" + this.Text + "/l";
+                        if (this.PaginationNumber.HasValue)
+                    {
+                        url += string.Format("/{0}", this.PaginationNumber.Value);
+                    }
+                    url += "?sortType=publicationDate";
+                    if (!string.IsNullOrWhiteSpace(this.LatitudeAndLongitude))
+                    {
+                        url += "&" + this.LatitudeAndLongitude;
+                    }
+                            
+                            url+= "&minPrice=" + this.PriceMin + "&maxPrice=" + this.PriceMax + "&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=" + this.CombinedLocationIds + "&gridType=3;";
+
+                    return url;
+                }
+            }
+
+            public string LatitudeAndLongitude { get; set; }
+            public string CombinedLocationIds { get; set; }
+
         }
 
         public class Search
