@@ -195,6 +195,7 @@ namespace Funda
                 get
                 {
                     var url = "https://www.fotocasa.es/es/alquiler/viviendas/" + this.Text + "/l";
+         
                         if (this.PaginationNumber.HasValue)
                     {
                         url += string.Format("/{0}", this.PaginationNumber.Value);
@@ -204,8 +205,8 @@ namespace Funda
                     {
                         url += "&" + this.LatitudeAndLongitude;
                     }
-                            
-                            url+= "&minPrice=" + this.PriceMin + "&maxPrice=" + this.PriceMax + "&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=" + this.CombinedLocationIds + "&gridType=3;";
+   
+                    url += "&minPrice=" + this.PriceMin + "&maxPrice=" + this.PriceMax + "&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=" + this.CombinedLocationIds + "&gridType=3;";
 
                     return url;
                 }

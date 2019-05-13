@@ -105,8 +105,9 @@ namespace WebAnalyzer.Controllers
         //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
         //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l/2?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
         //https://www.fotocasa.es/es/alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l?sortType=publicationDate&latitude=36.6014&longitude=-6.22775&minPrice=100&maxPrice=1500&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=724,1,11,282,506,11027,0,0,0&gridType=3
-        //Huelva
-        //Algeciras
+        //https://www.fotocasa.es/es/alquiler/viviendas/huelva-provincia/todas-las-zonas/l?latitude=37.2564&longitude=-6.94977&minPrice=100&maxPrice=1500&propertySubtypeIds=1;2;5;7;52&combinedLocationIds=724,1,21,0,0,0,0,0,0&gridType=3
+        //https://www.fotocasa.es/es/alquiler/viviendas/algeciras/todas-las-zonas/l?latitude=36.1327&longitude=-5.44636&minPrice=100&maxPrice=1500&propertySubtypeIds=2;5;7;8;52;1&combinedLocationIds=724,1,11,280,501,11004,0,0,0&gridType=3
+            //Algeciras
         //Estepona
         //Marbella
         //Málaga
@@ -129,8 +130,12 @@ namespace WebAnalyzer.Controllers
         public List<Funda.Crawler.FotoCasaSearch> FotoCasaSearchList()
         {
             return new List<Crawler.FotoCasaSearch> {
-                 new Crawler.FotoCasaSearch {Text="el-puerto-de-santa-maria/todas-las-zonas", LatitudeAndLongitude="latitude=36.6014&longitude=-6.22775", PriceMin=100, PriceMax=1500, CombinedLocationIds="724,1,11,282,506,11027,0,0,0", IsSale = true }, };
-        }
+                 new Crawler.FotoCasaSearch {Text="el-puerto-de-santa-maria/todas-las-zonas", LatitudeAndLongitude="latitude=36.6014&longitude=-6.22775", PriceMin=100, PriceMax=1500, CombinedLocationIds="724,1,11,282,506,11027,0,0,0", IsSale = true },
+                 new Crawler.FotoCasaSearch { Text = "huelva-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=37.2564&longitude=-6.94977", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,21,0,0,0,0,0,0", IsSale = true },
+                  new Crawler.FotoCasaSearch { Text = "algeciras/todas-las-zonas", LatitudeAndLongitude = "latitude=36.1327&longitude=-5.44636", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,11,280,501,11004,0,0,0", IsSale = true },
+
+            };
+    }
 
         public List<Funda.Crawler.MestoUaSearch> MestoUaSearchList()
         {
@@ -406,7 +411,7 @@ namespace WebAnalyzer.Controllers
                     foreach (var search in FotoCasaSearchList())
                     {
                         // SetMinMax(search);
-                        for (int i = 1; i < 5; i++)
+                        for (int i = 1; i < 2; i++)
                         {
                             try
                             {
