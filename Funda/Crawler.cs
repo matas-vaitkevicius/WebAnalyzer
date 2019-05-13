@@ -205,8 +205,12 @@ namespace Funda
                     {
                         url += "&" + this.LatitudeAndLongitude;
                     }
-   
-                    url += "&minPrice=" + this.PriceMin + "&maxPrice=" + this.PriceMax + "&propertySubtypeIds=1;2;5;7;6;8;52;54&combinedLocationIds=" + this.CombinedLocationIds + "&gridType=3;";
+                    if (!string.IsNullOrWhiteSpace(this.CombinedLocationIds))
+                    {
+                       this.CombinedLocationIds = "&combinedLocationIds=" + this.CombinedLocationIds;
+                    }
+
+                    url += "&minPrice=" + this.PriceMin + "&maxPrice=" + this.PriceMax + "&propertySubtypeIds=1;2;5;7;6;8;52;54" + this.CombinedLocationIds + "&gridType=3;";
 
                     return url;
                 }
