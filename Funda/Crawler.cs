@@ -688,7 +688,7 @@ namespace Funda
                         "        await delay(300);" +
                         "    }" +
                         "})(); ");
-            Thread.Sleep(5000);
+            Thread.Sleep(8000);
 
             var adds = this.Driver.FindElementsByClassName("re-Searchresult-itemRow").Where(o => o.Text != "");
             foreach (var advert in adds)
@@ -706,18 +706,20 @@ namespace Funda
             var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
             var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0];
-            var roomCountRegex = new Regex("([1-9]{1}) hab\\.");
-            var roomCountElement = element.FindElement(By.CssSelector(".re-Card-feature"));
-            var livingArea = element.FindElements(By.CssSelector(".re-Card-feature"))[1].Text.Split(' ')[0];
+            var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
+            var roomCountRegex = new Regex("([1-9]{1}) hab(s)\\.");
+            var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
+            var roomCountElement = roomsAndArea.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingArea = livingAreaElement!=null?  livingAreaElement.Text.Split(' ')[0]: null;
 
-            var roomCount = roomCountElement.Text.Split(' ')[0];
+            var roomCount = roomCountElement!=null ? roomCountElement.Text.Split(' ')[0] : null;
             var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
 
             int parsedDateAdded = 0;
             int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
-            var dateAdded = dateAddedText.Split(' ')[2].StartsWith("m",StringComparison.CurrentCultureIgnoreCase) 
-                            || dateAddedText.Split(' ')[2].StartsWith("h", StringComparison.CurrentCultureIgnoreCase) 
-                            ? DateTime.Now : DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0));
+            var dateAdded = dateAddedText.Split(' ')[2].StartsWith("d",StringComparison.CurrentCultureIgnoreCase)                     
+                            ? DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0)) : DateTime.Now ;
 
             var parsedPrice = 0M;
             var parsedLivingArea = 0M;
