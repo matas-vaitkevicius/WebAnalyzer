@@ -676,5 +676,63 @@ namespace Funda
             };
         }
 
+
+        public List<Rent> AddFotoCasaRents()
+        {
+            var list = new List<Rent>();
+            (this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); "+
+                        "(async () => {"+
+                        "    while (document.documentElement.scrollTop <= document.body.scrollHeight - 500)" +
+                        "    {" +
+                        "        window.scrollTo(0, document.documentElement.scrollTop + 500);" +
+                        "        await delay(300);" +
+                        "    }" +
+                        "})(); ");
+            Thread.Sleep(5000);
+
+            var adds = this.Driver.FindElementsByClassName("re-Searchresult-itemRow").Where(o => o.Text != "");
+            foreach (var advert in adds)
+            {
+                list.Add(this.GetFotoCasaRents(advert));
+            }
+
+            return list;
+        }
+
+        private Rent GetFotoCasaRents(IWebElement element)
+        {
+            var url = element.FindElement(By.CssSelector(".re-Card-link")).GetAttribute("href");
+            var title = string.Join(" ", url.Split('/')[6].Split('-'));
+            var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
+
+            var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0];
+            var roomCountRegex = new Regex("([1-9]{1}) hab\\.");
+            var roomCountElement = element.FindElement(By.CssSelector(".re-Card-feature"));
+            var livingArea = element.FindElements(By.CssSelector(".re-Card-feature"))[1].Text.Split(' ')[0];
+
+            var roomCount = roomCountElement.Text.Split(' ')[0];
+            var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
+
+            int parsedDateAdded = 0;
+            int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
+            var dateAdded = dateAddedText.Split(' ')[2].StartsWith("m",StringComparison.CurrentCultureIgnoreCase) 
+                            || dateAddedText.Split(' ')[2].StartsWith("h", StringComparison.CurrentCultureIgnoreCase) 
+                            ? DateTime.Now : DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0));
+
+            var parsedPrice = 0M;
+            var parsedLivingArea = 0M;
+            var parsedRoomCount = 0;
+            return new Rent
+            {
+                Url = url,
+                Title = title,
+                 Subtitle = subTitle,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                DateAdded = dateAdded
+            };
+        }
+
     }
 }

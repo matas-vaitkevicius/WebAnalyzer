@@ -452,16 +452,16 @@ namespace WebAnalyzer.Controllers
                                 //}
                                 //else
                                 //{
-                                //    adverts = crawler.AddNewLtRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                                //    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                                adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                db.Rent.AddRange(adverts.Cast<Rent>().ToList());
                                 //}
 
-                                //if (!adverts.Any())
-                                //{
-                                //    break;
-                                //}
+                                if (!adverts.Any())
+                                {
+                                    break;
+                                }
 
-                                //db.SaveChanges();
+                                db.SaveChanges();
                             }
                             catch
                             {
