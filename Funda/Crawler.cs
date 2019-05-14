@@ -688,7 +688,7 @@ namespace Funda
                         "        await delay(300);" +
                         "    }" +
                         "})(); ");
-            Thread.Sleep(8000);
+            Thread.Sleep(5500);
 
             var adds = this.Driver.FindElements(By.CssSelector(".re-Searchresult-itemRow .re-Card")).Where(o => o.Text != "");
             foreach (var advert in adds)
@@ -711,7 +711,7 @@ namespace Funda
             
                 var url = element.FindElement(By.CssSelector(".re-Card-link")).GetAttribute("href");
                 var title = string.Join(" ", url.Split('/')[6].Split('-'));
-                var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
+               // var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
                 var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0];
                 var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
@@ -737,7 +737,7 @@ namespace Funda
                 {
                     Url = url,
                     Title = title,
-                    Subtitle = subTitle,
+                 //   Subtitle = subTitle,
                     Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
                     LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                     RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
