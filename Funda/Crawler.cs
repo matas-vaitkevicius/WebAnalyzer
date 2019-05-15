@@ -194,7 +194,7 @@ namespace Funda
             {
                 get
                 {
-                    var url = "https://www.fotocasa.es/es/alquiler/viviendas/" + this.Text + "/l";
+                    var url = "https://www.fotocasa.es/es/" + this.Text + "/l";
          
                         if (this.PaginationNumber.HasValue)
                     {
