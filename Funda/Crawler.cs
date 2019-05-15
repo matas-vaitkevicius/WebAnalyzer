@@ -709,7 +709,7 @@ namespace Funda
         private Rent GetFotoCasaRents(IWebElement element)
         {
             
-                var url = element.FindElement(By.CssSelector(".re-Card-link")).GetAttribute("href");
+                var url = element.FindElement(By.CssSelector(".re-Card-link")).GetAttribute("href").Split('?')[0];
                 var title = string.Join(" ", url.Split('/')[6].Split('-'));
                // var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
@@ -738,7 +738,7 @@ namespace Funda
                     Url = url,
                     Title = title,
                  //   Subtitle = subTitle,
-                    Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                    Price = decimal.TryParse(price, out parsedPrice) ?  parsedPrice <= 2 ? parsedPrice*1000 : parsedPrice : (decimal?)null,
                     LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                     RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
                     DateAdded = dateAdded

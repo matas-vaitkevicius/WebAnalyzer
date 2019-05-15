@@ -417,7 +417,7 @@ namespace WebAnalyzer.Controllers
                     foreach (var search in FotoCasaSearchList())
                     {
                         // SetMinMax(search);
-                        for (int i = 1; i < 2; i++)
+                        for (int i = 1; i < 5; i++)
                         {
                             try
                             {
