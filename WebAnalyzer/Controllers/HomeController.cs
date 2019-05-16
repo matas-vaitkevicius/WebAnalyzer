@@ -101,24 +101,7 @@ namespace WebAnalyzer.Controllers
                 return _searches;
             }
         }
-        //https://www.fotocasa.es/es/comprar/viviendas/el-puerto-de-santa-maria/todas-las-zonas/l/1?sortType=publicationDate&minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;6;8;52;54&gridType=3;
-        //https://www.fotocasa.es/es/comprar/viviendas/huelva-provincia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&combinedLocationIds=724,1,21,0,0,0,0,0,0&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/algeciras/todas-las-zonas/l?propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/estepona/todas-las-zonas/l?propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/marbella/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&combinedLocationIds=724,1,29,320,551,29069,0,0,0&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/malaga-provincia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/motril/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/roquetas-de-mar/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/almeria-provincia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/aguilas/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/los-alcazares/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/torrevieja/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/alicante-provincia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/benidorm/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/denia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/gandia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/cullera/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
-        //https://www.fotocasa.es/es/comprar/viviendas/valencia-provincia/todas-las-zonas/l?minPrice=50000&maxPrice=150000&propertySubtypeIds=1;2;5;7;8;52&gridType=3
+
         //huelva
         //Algeciras
         //Estepona
@@ -462,16 +445,16 @@ namespace WebAnalyzer.Controllers
                                 search.PaginationNumber = i;
                                 crawler.Navigate(search);
                                 var adverts = Enumerable.Empty<IRecord>();
-                                //if (search.IsSale)
-                                //{
-                                //    adverts = crawler.AddNewLtSales((Crawler.FotoCasaSearch)search).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
-                                //    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
-                                //}
-                                //else
-                                //{
-                                adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                if (search.IsSale)
+                                {
+                                    adverts = crawler.AddFotoCasaSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                                }
+                                else
+                                {
+                                    adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
                                 db.Rent.AddRange(adverts.Cast<Rent>().ToList());
-                                //}
+                                }
 
                                 if (!adverts.Any())
                                 {
