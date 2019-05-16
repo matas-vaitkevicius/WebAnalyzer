@@ -781,9 +781,8 @@ namespace Funda
             var title = string.Join(" ", url.Split('/')[6].Split('-'));
             // var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
-            var price1 = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Split('.')[0];
-            var price2 = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Split('.')[1];
-            var price = price1 + "" + price2;
+
+            var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Replace(".","");
             var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
             var roomCountRegex = new Regex("([1-9]{1}) hab(s)\\.");
             var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
