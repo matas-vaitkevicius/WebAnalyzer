@@ -122,44 +122,44 @@ namespace WebAnalyzer.Controllers
         public List<Funda.Crawler.FotoCasaSearch> FotoCasaSearchList()
         {
             return new List<Crawler.FotoCasaSearch> {
-                 new Crawler.FotoCasaSearch {Text="alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas", LatitudeAndLongitude="latitude=36.6014&longitude=-6.22775", PriceMin=100, PriceMax=1500, CombinedLocationIds="724,1,11,282,506,11027,0,0,0", IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/huelva-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=37.2564&longitude=-6.94977", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,21,0,0,0,0,0,0", IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/algeciras/todas-las-zonas", LatitudeAndLongitude = "latitude=36.1327&longitude=-5.44636", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,11,280,501,11004,0,0,0", IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/estepona/todas-las-zonas", PriceMin = 100, PriceMax = 1500,  IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/marbella/todas-las-zonas", LatitudeAndLongitude = "latitude=36.511&longitude=-4.8827", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,29,320,551,29069,0,0,0", IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/malaga-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/motril/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/roquetas-de-mar/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/almeria-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/aguilas/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/los-alcazares/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/torrevieja/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/alicante-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/benidorm/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/denia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch {Text="alquiler/viviendas/el-puerto-de-santa-maria/todas-las-zonas", LatitudeAndLongitude="latitude=36.6014&longitude=-6.22775", PriceMin=100, PriceMax=1500, CombinedLocationIds="724,1,11,282,506,11027,0,0,0", IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/huelva-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=37.2564&longitude=-6.94977", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,21,0,0,0,0,0,0", IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/algeciras/todas-las-zonas", LatitudeAndLongitude = "latitude=36.1327&longitude=-5.44636", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,11,280,501,11004,0,0,0", IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/estepona/todas-las-zonas", PriceMin = 100, PriceMax = 1500,  IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/marbella/todas-las-zonas", LatitudeAndLongitude = "latitude=36.511&longitude=-4.8827", PriceMin = 100, PriceMax = 1500, CombinedLocationIds = "724,1,29,320,551,29069,0,0,0", IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/malaga-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/motril/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/roquetas-de-mar/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/almeria-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/aguilas/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/los-alcazares/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/torrevieja/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/alicante-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/benidorm/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/denia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
                  new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/gandia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/cullera/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMin = 100, PriceMax = 1500, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/cullera/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+                 //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMin = 100, PriceMax = 1500, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = false },
 
 
-                 new Crawler.FotoCasaSearch {Text="comprar/viviendas/el-puerto-de-santa-maria/todas-las-zonas",  PriceMax=150000,  IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/huelva-provincia/todas-las-zonas",  PriceMax = 150000, CombinedLocationIds = "724,1,21,0,0,0,0,0,0", IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/algeciras/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/estepona/todas-las-zonas",  PriceMax = 150000,  IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/marbella/todas-las-zonas",   PriceMax = 150000, CombinedLocationIds = "724,1,29,320,551,29069,0,0,0", IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/malaga-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/motril/todas-las-zonas", PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/roquetas-de-mar/todas-las-zonas", PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/almeria-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/aguilas/todas-las-zonas", PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/los-alcazares/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/torrevieja/todas-las-zonas", PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/alicante-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/benidorm/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/denia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch {Text="comprar/viviendas/el-puerto-de-santa-maria/todas-las-zonas",  PriceMax=150000,  IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/huelva-provincia/todas-las-zonas",  PriceMax = 150000, CombinedLocationIds = "724,1,21,0,0,0,0,0,0", IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/algeciras/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/estepona/todas-las-zonas",  PriceMax = 150000,  IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/marbella/todas-las-zonas",   PriceMax = 150000, CombinedLocationIds = "724,1,29,320,551,29069,0,0,0", IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/malaga-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/motril/todas-las-zonas", PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/roquetas-de-mar/todas-las-zonas", PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/almeria-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/aguilas/todas-las-zonas", PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/los-alcazares/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/torrevieja/todas-las-zonas", PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/alicante-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/benidorm/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+              //   new Crawler.FotoCasaSearch { Text = "comprar/viviendas/denia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
                  new Crawler.FotoCasaSearch { Text = "comprar/viviendas/gandia/todas-las-zonas", PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/cullera/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMax = 150000, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/cullera/todas-las-zonas",  PriceMax = 150000, IsSale = true },
+                 //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMax = 150000, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = true },
 
             };
     }
@@ -291,6 +291,10 @@ namespace WebAnalyzer.Controllers
                                 if (systemName == "funda")
                                 {
                                     crawler.GetRecordDataFromItsPage(rent);
+                                }
+                                else if (systemName == "fotocasa")
+                                {
+                                   rent= crawler.GetRecordDataFromFotoCasa(rent);
                                 }
                                 else
                                 {
@@ -438,7 +442,7 @@ namespace WebAnalyzer.Controllers
                     foreach (var search in FotoCasaSearchList())
                     {
                         // SetMinMax(search);
-                        for (int i = 1; i < 5; i++)
+                        for (int i = 20; i > 10; i--)
                         {
                             try
                             {
@@ -471,7 +475,14 @@ namespace WebAnalyzer.Controllers
                 }
             }
 
-            return RedirectToAction("UpdateExistingLt");
+            return RedirectToAction("UpdateFotoCasa");
+        }
+
+
+        public ActionResult UpdateFotoCasa()
+        {
+            DoUpdate("fotocasa",null);
+            return View("Index");
         }
     }
 }

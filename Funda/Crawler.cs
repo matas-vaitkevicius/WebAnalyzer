@@ -547,6 +547,18 @@ namespace Funda
             return null;
         }
 
+        public IRecord GetRecordDataFromFotoCasa(IRecord record)
+        {
+            var scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("window.__INITIAL_PROPS__")).First();
+
+            var coords = scriptWithCoord.GetAttribute("innerHTML").Split(new[] { "coordinates", "accuracy" }, StringSplitOptions.None)[2].Split(':');
+            var lat = coords[2].Split(',')[0];
+            var lon = coords[3].Split(',')[0];
+            record.Address = lat + ',' + lon;
+            record.DateLastProcessed = DateTime.Now;
+            return record; 
+        }
+
         public IRecord GetRecordDataFromItsPageLt(IRecord record)
         {
             if (!record.DateAdded.HasValue)

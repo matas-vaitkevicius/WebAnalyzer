@@ -15,9 +15,10 @@ title, sum(price)/sum(LivingArea) r_sq ,RoomCount, count(1) cnt, sum(case when D
   where r.cnt > 3 and s.cnt > 3) analysis
   inner join [WebAnalyzer].[dbo].Sale ads on analysis.Title =ads.Title  and analysis.RoomCount  = coalesce(ads.RoomCount,-1) 
  where ads.LivingArea is not null
+ 
  and ads.title = 'gandia'
  and ads.Price < 56000
- --and ads.DateAdded > '2019-05-17'
+ and ads.DateAdded > '2019-05-18'
   --Subtitle like '%Rott%'
   --and
  --  DateRemoved is null
