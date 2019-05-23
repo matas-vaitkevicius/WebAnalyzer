@@ -137,7 +137,8 @@ namespace WebAnalyzer.Controllers
                  //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/alicante-provincia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
                  //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/benidorm/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
                  //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/denia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
-                 new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/gandia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+         //        new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/gandia/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
+          //                        new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/daimus/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
                  //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/cullera/todas-las-zonas", PriceMin = 100, PriceMax = 1500, IsSale = false },
                  //new Crawler.FotoCasaSearch { Text = "alquiler/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMin = 100, PriceMax = 1500, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = false },
 
@@ -157,7 +158,8 @@ namespace WebAnalyzer.Controllers
                  //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/alicante-provincia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
                  //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/benidorm/todas-las-zonas",  PriceMax = 150000, IsSale = true },
               //   new Crawler.FotoCasaSearch { Text = "comprar/viviendas/denia/todas-las-zonas",  PriceMax = 150000, IsSale = true },
-                 new Crawler.FotoCasaSearch { Text = "comprar/viviendas/gandia/todas-las-zonas", PriceMax = 150000, IsSale = true },
+           //      new Crawler.FotoCasaSearch { Text = "comprar/viviendas/gandia/todas-las-zonas", PriceMax = 150000, IsSale = true },
+                                  new Crawler.FotoCasaSearch { Text = "comprar/viviendas/daimus/todas-las-zonas", PriceMax = 150000, IsSale = true },
                  //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/cullera/todas-las-zonas",  PriceMax = 150000, IsSale = true },
                  //new Crawler.FotoCasaSearch { Text = "comprar/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMax = 150000, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = true },
 
@@ -294,7 +296,7 @@ namespace WebAnalyzer.Controllers
                                 }
                                 else if (systemName == "fotocasa")
                                 {
-                                   rent= crawler.GetRecordDataFromFotoCasa(rent);
+                                    crawler.GetRecordDataFromFotoCasa(rent);
                                 }
                                 else
                                 {
@@ -442,7 +444,7 @@ namespace WebAnalyzer.Controllers
                     foreach (var search in FotoCasaSearchList())
                     {
                         // SetMinMax(search);
-                        for (int i = 20; i > 10; i--)
+                        for (int i = 1; i < 15; i++)
                         {
                             try
                             {
