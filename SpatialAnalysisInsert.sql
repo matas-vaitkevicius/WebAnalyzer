@@ -15,25 +15,25 @@ declare @temp table(
 	[RentsIn1kRadiusCount] [int] NULL,
 	[SalesIn1kRadiusCount] [int] NULL,
 	[RentsIn1kRadiusAvgSqM] [decimal](12, 6) NULL,
-	[SalesIn1kRadiusAvgSqM] [decimal](12, 6) NULL--,
-	--[RentsIn500RadiusCount] [int] NULL,
-	--[SalesIn500RadiusCount] [int] NULL,
-	--[RentsIn500RadiusAvgSqM] [decimal](12, 6) NULL,
-	--[SalesIn500RadiusAvgSqM] [decimal](12, 6) NULL,
-	--[RentsIn200RadiusCount] [int] NULL,
-	--[SalesIn200RadiusCount] [int] NULL,
-	--[RentsIn200RadiusAvgSqM] [decimal](12, 6) NULL,
-	--[SalesIn200RadiusAvgSqM] [decimal](12, 6) NULL,
-	--[RentsIn100RadiusCount] [int] NULL,
-	--[SalesIn100RadiusCount] [int] NULL,
-	--[RentsIn100RadiusAvgSqM] [decimal](12, 6) NULL,
-	--[SalesIn100RadiusAvgSqM] [decimal](12, 6) NULL
+	[SalesIn1kRadiusAvgSqM] [decimal](12, 6) NULL,
+	[RentsIn500RadiusCount] [int] NULL,
+	[SalesIn500RadiusCount] [int] NULL,
+	[RentsIn500RadiusAvgSqM] [decimal](12, 6) NULL,
+	[SalesIn500RadiusAvgSqM] [decimal](12, 6) NULL,
+	[RentsIn200RadiusCount] [int] NULL,
+	[SalesIn200RadiusCount] [int] NULL,
+	[RentsIn200RadiusAvgSqM] [decimal](12, 6) NULL,
+	[SalesIn200RadiusAvgSqM] [decimal](12, 6) NULL,
+	[RentsIn100RadiusCount] [int] NULL,
+	[SalesIn100RadiusCount] [int] NULL,
+	[RentsIn100RadiusAvgSqM] [decimal](12, 6) NULL,
+	[SalesIn100RadiusAvgSqM] [decimal](12, 6) NULL
 )
 
 declare @lat nvarchar(20)
 declare @lon nvarchar(20)
 declare @rooms int
-while @i <= 100--(select max(id) from Webanalyzer.dbo.sale)
+while @i <= (select max(id) from Webanalyzer.dbo.sale)
 begin
 
  select top 1 
@@ -47,10 +47,12 @@ begin
 declare @p GEOGRAPHY =  GEOGRAPHY::STGeomFromText('POINT('+ @lat +' '+   @lon        +')', 4326)
 
 
--------1k
+-------sales
 		
-	insert into	@temp([SaleId],[Point],[SalesIn1kRadiusCount],[SalesIn1kRadiusAvgSqM])
-select r.id,  @p, cnt,   avg_sq_m  from
+	insert into Webanalyzer.dbo.SpatialAnalysis([SaleId],[Point],[SalesIn1kRadiusCount],[SalesIn1kRadiusAvgSqM],[SalesIn500RadiusCount],[SalesIn200RadiusCount],[SalesIn100RadiusCount],
+	[SalesIn500RadiusAvgSqM],[SalesIn200RadiusAvgSqM],[SalesIn100RadiusAvgSqM]
+	)
+select @i,  @p, prox.cnt,   prox.avg_sq_m,prox500.cnt, prox200.cnt, prox100.cnt,prox500.avg_sq_m,prox200.avg_sq_m,prox100.avg_sq_m   from
 	(select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
 			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
             convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
@@ -60,11 +62,51 @@ select r.id,  @p, cnt,   avg_sq_m  from
 				  where --(Title = 'gandia' or Title = 'daimus')   and
  address is not null and LivingArea is not null and RoomCount = @rooms
 			) s
-		where [Intersects] = 1) prox
-		inner join Webanalyzer.dbo.sale r on  prox.id = r.id
+		where [Intersects] = 1) prox, 
+		
+		 (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
+			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
+            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
+            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
+				.STBuffer(500).STIntersects(@p) as [Intersects]
+				from Webanalyzer.dbo.sale
+				  where --(Title = 'gandia' or Title = 'daimus')   and
+ address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
+			) s
+		where [Intersects] = 1) prox500, 
+		
+		 (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
+			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
+            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
+            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
+				.STBuffer(200).STIntersects(@p) as [Intersects]
+				from Webanalyzer.dbo.sale
+				  where --(Title = 'gandia' or Title = 'daimus')   and
+ address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
+			) s
+		where [Intersects] = 1) prox200, 
+		
+		 (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
+			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
+            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
+            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
+				.STBuffer(100).STIntersects(@p) as [Intersects]
+				from Webanalyzer.dbo.sale
+				  where --(Title = 'gandia' or Title = 'daimus')   and
+ address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
+			) s
+		where [Intersects] = 1) prox100 where prox500.id = prox.id and prox200.id = prox.id and prox100.id = prox.id
 
-update t set RentsIn1kRadiusCount = cnt, [RentsIn1kRadiusAvgSqM] =
-		   avg_sq_m  from
+
+
+------rents
+
+update t set
+ RentsIn1kRadiusCount = prox1k.cnt, [RentsIn1kRadiusAvgSqM] =		   prox1k.avg_sq_m,
+ [RentsIn500RadiusCount] = prox.cnt, [RentsIn500RadiusAvgSqM] =		   prox.avg_sq_m  ,
+[RentsIn200RadiusCount] = prox1.cnt, [RentsIn200RadiusAvgSqM] = prox1.avg_sq_m,
+[RentsIn100RadiusCount] = prox100.cnt, [RentsIn100RadiusAvgSqM] = prox100.avg_sq_m
+from 
 	(select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
 			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
             convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
@@ -74,24 +116,36 @@ update t set RentsIn1kRadiusCount = cnt, [RentsIn1kRadiusAvgSqM] =
 				  where --(Title = 'gandia' or Title = 'daimus')   and
  address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
 			) s
-		where [Intersects] = 1) prox, @temp t
-		where prox.id = t.Id
-
-------500m
-
-update t set RentsIn1kRadiusCount = cnt, [RentsIn1kRadiusAvgSqM] =
-		   avg_sq_m  from
+		where [Intersects] = 1) prox1k,
 	(select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
 			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
             convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
             convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
-				.STBuffer(1000).STIntersects(@p) as [Intersects]
+				.STBuffer(500).STIntersects(@p) as [Intersects]
 				from Webanalyzer.dbo.rent
 				  where --(Title = 'gandia' or Title = 'daimus')   and
  address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
 			) s
-		where [Intersects] = 1) prox, @temp t
-		where prox.id = t.Id
+		where [Intersects] = 1) prox, (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
+			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
+            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
+            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
+				.STBuffer(200).STIntersects(@p) as [Intersects]
+				from Webanalyzer.dbo.rent
+				  where --(Title = 'gandia' or Title = 'daimus')   and
+ address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
+			) s
+		where [Intersects] = 1) prox1,(select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
+			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
+            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
+            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
+				.STBuffer(100).STIntersects(@p) as [Intersects]
+				from Webanalyzer.dbo.rent
+				  where --(Title = 'gandia' or Title = 'daimus')   and
+ address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
+			) s
+		where [Intersects] = 1) prox100,Webanalyzer.dbo.SpatialAnalysis t
+		where prox.id = t.Saleid and prox1.id = t.Saleid and prox100.id = t.Saleid and prox1k.id = t.Saleid
 		--inner join Webanalyzer.dbo.sale r on  prox.id = r.id
 	--	group by s.Id
 		set @i = @i+1
