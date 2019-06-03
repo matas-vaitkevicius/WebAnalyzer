@@ -186,7 +186,7 @@ namespace WebAnalyzer.Controllers
                  new Crawler.PisosSearch { Text = "alquiler/pisos-gandia",PriceMax = 1500,  IsSale = false },
                  new Crawler.PisosSearch { Text = "alquiler/pisos-cullera",PriceMax = 1500,  IsSale = false },
                  new Crawler.PisosSearch { Text = "alquiler/pisos-valencia",PriceMax =1500,  IsSale = false },
-
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-daimus/",PriceMax =1500,  IsSale = false },
 
                  new Crawler.PisosSearch { Text = "venta/pisos-el_puerto_de_santa_maria",PriceMax=120000, IsSale = true },
                  new Crawler.PisosSearch { Text = "venta/pisos-huelva",PriceMax=120000, IsSale = true },
@@ -206,7 +206,7 @@ namespace WebAnalyzer.Controllers
                  new Crawler.PisosSearch { Text = "venta/pisos-gandia",PriceMax = 120000,  IsSale = true },
                  new Crawler.PisosSearch { Text = "venta/pisos-cullera",PriceMax = 120000,  IsSale = true },
                  new Crawler.PisosSearch { Text = "venta/pisos-valencia",PriceMax =120000,  IsSale = true },
-
+                 new Crawler.PisosSearch { Text = "venta/pisos-daimus",PriceMax =120000,  IsSale = true },
             };
         }
         public List<Funda.Crawler.MestoUaSearch> MestoUaSearchList()

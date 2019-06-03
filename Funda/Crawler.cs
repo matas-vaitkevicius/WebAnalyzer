@@ -819,7 +819,7 @@ namespace Funda
             // var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
 
-            var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Replace(".","");
+            var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Replace(".", "");
             var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
             var roomCountRegex = new Regex("([1-9]{1}) hab(s)\\.");
             var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
@@ -851,6 +851,28 @@ namespace Funda
             };
 
         }
+        public string ChangePisosTitle(string caption)
+        {
+            if (caption == "El Puerto de Santa María, Cádiz") { return "el puerto de santa maria"; }
+            else if (caption == "Huelva") { return "huelva capital"; }
+            else if (caption == "Algeciras, Cádiz") { return "algeciras"; }
+            else if (caption == "Estepona, Málaga") { return "estepona"; }
+            else if (caption == "Marbella, Málaga") { return "marbella"; }
+            else if (caption == "Málaga") { return "malaga capital"; }
+            else if (caption == "Roquetas de Mar, Almería") { return "roquetas de mar"; }
+            else if (caption == "Almería") { return "almeria capital"; }
+            else if (caption == "Torrevieja, Alicante") { return "torrevieja"; }
+            else if (caption == "Alicante") { return "alicante alacant"; }
+            else if (caption == "Benidorm, Alicante") { return "benidorm"; }
+            else if (caption == "Dénia, Alicante") { return "denia"; }
+            else if (caption == "Gandia, València") { return "gandia"; }
+            else if (caption == "Cullera, València") { return "cullera"; }
+            else if (caption == "València") { return "valencia capital"; }
+            else if (caption == "Daimús, València") { return "daimus"; }
+            else if (caption == "Motril, Granada") { return "motril"; }
+            else if (caption == "Águilas, Murcia") { return "aguilas"; }
+            return caption;
+        }
         public List<Rent> AddPisosRents()
         {
             var list = new List<Rent>();
@@ -872,7 +894,8 @@ namespace Funda
                 try
                 {
                     var ad = this.GetPisosRents(advert);
-                    ad.Title = title;
+
+                    ad.Title = ChangePisosTitle(title);
                     list.Add(ad);
                 }
                 catch (Exception e)
@@ -946,7 +969,8 @@ namespace Funda
                 try
                 {
                     var ad = this.GetPisosSales(advert);
-                    ad.Title = title;
+                    
+                    ad.Title = ChangePisosTitle(title);
                     list.Add(ad);
                 }
                 catch (Exception e)
