@@ -556,9 +556,13 @@ namespace WebAnalyzer.Controllers
                 }
             }
 
-            return RedirectToAction("UpdateExistingLt");
+            return RedirectToAction("UpdateFotoCasa");
         }
 
-
+        public ActionResult UpdateFotoCasa()
+        {
+            DoUpdate("fotocasa", null);
+            return View("Index");
+        }
     }
 }
