@@ -519,7 +519,7 @@ namespace WebAnalyzer.Controllers
                     //}
                     foreach (var search in PisosSearchList())
                     {
-                        // SetMinMax(search);
+                      
                         for (int i = 1; i < 3; i++)
                         {
                             try
