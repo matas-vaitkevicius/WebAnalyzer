@@ -50,7 +50,8 @@ declare @p GEOGRAPHY =  GEOGRAPHY::STGeomFromText('POINT('+ @lat +' '+   @lon   
 
 -------sales
 		
-	insert into  @temp -- Webanalyzer.dbo.SpatialAnalysis
+	insert into  --@temp 
+	 Webanalyzer.dbo.SpatialAnalysis
 	([SaleId],[Point],[SalesIn1kRadiusCount],[SalesIn1kRadiusAvgSqM],[SalesIn500RadiusCount],[SalesIn200RadiusCount],[SalesIn100RadiusCount],
 	[SalesIn500RadiusAvgSqM],[SalesIn200RadiusAvgSqM],[SalesIn100RadiusAvgSqM]
 	)
@@ -147,8 +148,8 @@ from
  address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
 			) s
 		where [Intersects] = 1) prox100, 
-		--Webanalyzer.dbo.SpatialAnalysis
-		@temp t
+		Webanalyzer.dbo.SpatialAnalysis t
+		--@temp t
 		where prox.id = t.Saleid and prox1.id = t.Saleid and prox100.id = t.Saleid and prox1k.id = t.Saleid
 		--inner join Webanalyzer.dbo.sale r on  prox.id = r.id
 	--	group by s.Id

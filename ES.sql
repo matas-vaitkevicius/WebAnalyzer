@@ -41,6 +41,7 @@ title, sum(price)/sum(LivingArea) r_sq ,RoomCount, count(1) cnt, sum(case when D
  --and local_years is not null
  and ads.Price < 56000
  and case when sa.Salesin100radiusCount>=4 then (ads.price/ads.LivingArea)/sa.Salesin100radiusAvgSqM else (ads.price/ads.LivingArea)/sa.Salesin200radiusAvgSqM  end <=0.7
+ and ads.DateLastProcessed > '2019-05-25'
  --and ads.DateAdded < '2019-05-10'
   --Subtitle like '%Rott%'
   --and
