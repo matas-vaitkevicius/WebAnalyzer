@@ -938,8 +938,7 @@ namespace Funda
             return new Rent
             {
                 Url = url,
-                //Title = title,
-                //  Subtitle = subTitle,
+
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice <= 2 ? parsedPrice * 1000 : parsedPrice : (decimal?)null,
                 LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
