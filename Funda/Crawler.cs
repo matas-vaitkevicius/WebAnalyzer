@@ -220,7 +220,32 @@ namespace Funda
             public string CombinedLocationIds { get; set; }
 
         }
+        public class PisosSearch : Search
+        {
+            public override string Url
+            {
+                get
+                {
+                    var url = "https://www.pisos.com/";
 
+
+
+
+
+                    url += this.Text + "/hasta-" + this.PriceMax + "/asc/";
+                    if (this.PaginationNumber.HasValue)
+                    {
+                        url += string.Format("{0}", this.PaginationNumber.Value);
+                    }
+
+
+                    return url;
+                }
+            }
+
+            public string Extras { get; set; }
+
+        }
         public class Search
         {
             public int? MinRooms { get; set; }
@@ -818,6 +843,157 @@ namespace Funda
             {
                 Url = url,
                 Title = title,
+                //   Subtitle = subTitle,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice <= 2 ? parsedPrice * 1000 : parsedPrice : (decimal?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                DateAdded = dateAdded
+            };
+
+        }
+        public List<Rent> AddPisosRents()
+        {
+            var list = new List<Rent>();
+            //(this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); " +
+            //            "(async () => {" +
+            //            "    while (document.documentElement.scrollTop <= document.body.scrollHeight - 500)" +
+            //            "    {" +
+            //            "        window.scrollTo(0, document.documentElement.scrollTop + 500);" +
+            //            "        await delay(300);" +
+            //            "    }" +
+            //            "})(); ");
+            //Thread.Sleep(5500);
+
+            var adds = this.Driver.FindElements(By.CssSelector(".row-to-hide")).Where(o => o.Text != "");
+            var title = this.Driver.FindElements(By.CssSelector("b"))[0].Text;
+            foreach (var advert in adds)
+            {
+
+                try
+                {
+                    var ad = this.GetPisosRents(advert);
+                    ad.Title = title;
+                    list.Add(ad);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+
+            return list;
+        }
+
+        private Rent GetPisosRents(IWebElement element)
+        {
+
+            var url = element.FindElements(By.CssSelector("meta[itemprop = url]")).First().GetAttribute("content");
+            //var title = string.Join(" ", url.Split('/')[6].Split('-'));
+
+
+            var price = element.FindElement(By.CssSelector(".price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0];
+            var roomsAndArea = element.FindElements(By.CssSelector(".item"));
+            var roomCountChildElement = element.FindElement(By.CssSelector(".icoBed"));
+
+            var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
+            var roomCountElement = roomCountChildElement.FindElement(By.XPath("..")); // roomsAndArea.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
+
+            var roomCount = roomCountElement != null ? roomCountElement.Text.Split(' ')[0] : null;
+
+
+
+
+            var dateAdded = DateTime.Now;
+
+
+            var parsedPrice = 0M;
+            var parsedLivingArea = 0M;
+            var parsedRoomCount = 0;
+
+            return new Rent
+            {
+                Url = url,
+                //Title = title,
+                //  Subtitle = subTitle,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice <= 2 ? parsedPrice * 1000 : parsedPrice : (decimal?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                DateAdded = dateAdded
+            };
+
+        }
+
+        public List<Sale> AddPisosSales()
+        {
+            var list = new List<Sale>();
+            //(this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); " +
+            //            "(async () => {" +
+            //            "    while (document.documentElement.scrollTop <= document.body.scrollHeight - 500)" +
+            //            "    {" +
+            //            "        window.scrollTo(0, document.documentElement.scrollTop + 500);" +
+            //            "        await delay(300);" +
+            //            "    }" +
+            //            "})(); ");
+            //Thread.Sleep(5500);
+
+            var adds = this.Driver.FindElements(By.CssSelector(".row-to-hide")).Where(o => o.Text != "");
+            var title = this.Driver.FindElements(By.CssSelector("b"))[0].Text;
+            foreach (var advert in adds)
+            {
+
+                try
+                {
+                    var ad = this.GetPisosSales(advert);
+                    ad.Title = title;
+                    list.Add(ad);
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+
+            return list;
+        }
+
+        private Sale GetPisosSales(IWebElement element)
+        {
+
+            var url = element.FindElements(By.CssSelector("meta[itemprop = url]")).First().GetAttribute("content");
+            //var title = string.Join(" ", url.Split('/')[6].Split('-'));
+
+
+
+            var price1 = element.FindElement(By.CssSelector(".price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Split('.')[0];
+            var price2 = element.FindElement(By.CssSelector(".price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0].Split('.')[1];
+            var price = price1 + "" + price2;
+
+            var roomsAndArea = element.FindElements(By.CssSelector(".item"));
+            var roomCountChildElement = element.FindElement(By.CssSelector(".icoBed"));
+
+            var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
+            var roomCountElement = roomCountChildElement.FindElement(By.XPath("..")); // roomsAndArea.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
+
+            var roomCount = roomCountElement != null ? roomCountElement.Text.Split(' ')[0] : null;
+
+
+
+
+            var dateAdded = DateTime.Now;
+
+
+            var parsedPrice = 0M;
+            var parsedLivingArea = 0M;
+            var parsedRoomCount = 0;
+
+            return new Sale
+            {
+                Url = url,
+                //Title = title,
                 //   Subtitle = subTitle,
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice <= 2 ? parsedPrice * 1000 : parsedPrice : (decimal?)null,
                 LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,

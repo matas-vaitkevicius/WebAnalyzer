@@ -165,7 +165,50 @@ namespace WebAnalyzer.Controllers
 
             };
     }
+        public List<Funda.Crawler.PisosSearch> PisosSearchList()
+        {
+            return new List<Crawler.PisosSearch> {
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-el_puerto_de_santa_maria",PriceMax=1500, IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-huelva",PriceMax=1500, IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-algeciras",PriceMax=1500, IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-estepona", PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-marbella",PriceMax = 1500,  IsSale = false  },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-malaga",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-motril",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-roquetas_de_mar",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-almeria",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-aguilas",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-los_alcazares",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-torrevieja",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-alicante",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-benidorm",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-denia",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-gandia",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-cullera",PriceMax = 1500,  IsSale = false },
+                 new Crawler.PisosSearch { Text = "alquiler/pisos-valencia",PriceMax =1500,  IsSale = false },
 
+
+                 new Crawler.PisosSearch { Text = "venta/pisos-el_puerto_de_santa_maria",PriceMax=120000, IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-huelva",PriceMax=120000, IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-algeciras",PriceMax=120000, IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-estepona", PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-marbella",PriceMax = 120000,  IsSale = true  },
+                 new Crawler.PisosSearch { Text = "venta/pisos-malaga",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-motril",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-roquetas_de_mar",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-almeria",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-aguilas",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-los_alcazares",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-torrevieja",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-alicante",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-benidorm",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-denia",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-gandia",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-cullera",PriceMax = 120000,  IsSale = true },
+                 new Crawler.PisosSearch { Text = "venta/pisos-valencia",PriceMax =120000,  IsSale = true },
+
+            };
+        }
         public List<Funda.Crawler.MestoUaSearch> MestoUaSearchList()
         {
             return new List<Crawler.MestoUaSearch> {
@@ -441,25 +484,60 @@ namespace WebAnalyzer.Controllers
             {
                 using (var db = new Funda.WebAnalyzerEntities())
                 {
-                    foreach (var search in FotoCasaSearchList())
+                    //foreach (var search in FotoCasaSearchList())
+                    //{
+                    //    // SetMinMax(search);
+                    //    for (int i = 1; i < 5; i++)
+                    //    {
+                    //        try
+                    //        {
+                    //            search.PaginationNumber = i;
+                    //            crawler.Navigate(search);
+                    //            var adverts = Enumerable.Empty<IRecord>();
+                    //            if (search.IsSale)
+                    //            {
+                    //                adverts = crawler.AddFotoCasaSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                    //                db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                    //            }
+                    //            else
+                    //            {
+                    //                adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                    //                db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                    //            }
+
+                    //            if (!adverts.Any())
+                    //            {
+                    //                break;
+                    //            }
+
+                    //            db.SaveChanges();
+                    //        }
+                    //        catch
+                    //        {
+                    //        }
+                    //    }
+                    //}
+                    foreach (var search in PisosSearchList())
                     {
                         // SetMinMax(search);
-                        for (int i = 1; i < 15; i++)
+                        for (int i = 1; i < 3; i++)
                         {
                             try
                             {
                                 search.PaginationNumber = i;
                                 crawler.Navigate(search);
+
                                 var adverts = Enumerable.Empty<IRecord>();
                                 if (search.IsSale)
                                 {
-                                    adverts = crawler.AddFotoCasaSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                    adverts = crawler.AddPisosSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
                                     db.Sale.AddRange(adverts.Cast<Sale>().ToList());
                                 }
                                 else
                                 {
-                                    adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                                db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                                    adverts = crawler.AddPisosRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+
+                                    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
                                 }
 
                                 if (!adverts.Any())
@@ -474,17 +552,13 @@ namespace WebAnalyzer.Controllers
                             }
                         }
                     }
+
                 }
             }
 
-            return RedirectToAction("UpdateFotoCasa");
+            return RedirectToAction("UpdateExistingLt");
         }
 
 
-        public ActionResult UpdateFotoCasa()
-        {
-            DoUpdate("fotocasa",null);
-            return View("Index");
-        }
     }
 }
