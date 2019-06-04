@@ -616,7 +616,8 @@ namespace Funda
                 {
                     dateRemoved = DateTime.Now;
                 }
-                else {
+                else
+                {
                     try
                     {
                         var dateRemovedElement = this.Driver.FindElementByCssSelector(".error-div.error2");
