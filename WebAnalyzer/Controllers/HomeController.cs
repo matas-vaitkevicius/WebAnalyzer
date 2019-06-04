@@ -41,7 +41,9 @@ namespace WebAnalyzer.Controllers
                         new Funda.Crawler.AruodasSearch { Text="namu-nuoma/panevezyje/", FDistrict=10, FRegion=205, PriceMin=0, PriceMax=1000, MinRooms=1, MaxRooms =4 },
                     };
                 }
-                return _aroudasSearches; } }
+                return _aroudasSearches;
+            }
+        }
 
         public List<Funda.Crawler.Search> Searches
         {
@@ -164,7 +166,7 @@ namespace WebAnalyzer.Controllers
                  new Crawler.FotoCasaSearch { Text = "comprar/viviendas/valencia-provincia/todas-las-zonas", LatitudeAndLongitude = "latitude=39.4699&longitude=-0.375811", PriceMax = 150000, CombinedLocationIds ="724,19,46,0,0,0,0,0,0" , IsSale = true },
 
             };
-    }
+        }
         public List<Funda.Crawler.PisosSearch> PisosSearchList()
         {
             return new List<Crawler.PisosSearch> {
@@ -359,15 +361,15 @@ namespace WebAnalyzer.Controllers
         {
             DoUpdate("funda", isSale);
 
-                    return View("Index"); 
+            return View("Index");
         }
 
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";
 
-       
-                return View();
+
+            return View();
         }
 
         public ActionResult Contact()
@@ -378,15 +380,15 @@ namespace WebAnalyzer.Controllers
 
         public ActionResult CollectNewLt()
         {
-           using (var crawler = new Funda.Crawler())
+            using (var crawler = new Funda.Crawler())
             {
                 using (var db = new Funda.WebAnalyzerEntities())
                 {
-                   foreach (var search in AruodasSearches)
+                    foreach (var search in AruodasSearches)
                     {
-                       // SetMinMax(search);
-                       for (int i = 1; i < 15; i++)
-                       {
+                        // SetMinMax(search);
+                        for (int i = 1; i < 15; i++)
+                        {
                             try
                             {
                                 search.PaginationNumber = i;
@@ -414,11 +416,11 @@ namespace WebAnalyzer.Controllers
                             {
                             }
                         }
-                   }
-               }
-          }
+                    }
+                }
+            }
 
-           return RedirectToAction("UpdateExistingLt");
+            return RedirectToAction("UpdateExistingLt");
         }
 
         public ActionResult UpdateExistingLt(bool? isSale)
@@ -519,7 +521,7 @@ namespace WebAnalyzer.Controllers
                     //}
                     foreach (var search in PisosSearchList())
                     {
-                      
+
                         for (int i = 1; i < 3; i++)
                         {
                             try
@@ -556,13 +558,9 @@ namespace WebAnalyzer.Controllers
                 }
             }
 
-            return RedirectToAction("UpdateFotoCasa");
+            return RedirectToAction("UpdateExistingLt");
         }
 
-        public ActionResult UpdateFotoCasa()
-        {
-            DoUpdate("fotocasa", null);
-            return View("Index");
-        }
+
     }
 }

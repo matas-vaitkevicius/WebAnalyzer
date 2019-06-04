@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace Funda
 {
-    public class Crawler :IDisposable
+    public class Crawler : IDisposable
     {
         public Crawler()
         {
@@ -22,9 +22,9 @@ namespace Funda
 
             options.AddArguments("excludeSwitches", "ignore-certificate-errors", "safebrowsing-disable-download-protection", "safebrowsing-disable-auto-update", "disable-client-side-phishing-detection");
             // options.Arguments
-            this.Driver = AppDomain.CurrentDomain.BaseDirectory.Contains("ConsoleLauncher") ? 
+            this.Driver = AppDomain.CurrentDomain.BaseDirectory.Contains("ConsoleLauncher") ?
                    new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory, options)
-               : new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Funda\bin\Debug"),options) ;
+               : new ChromeDriver(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\Funda\bin\Debug"), options);
 
         }
 
@@ -41,12 +41,12 @@ namespace Funda
 
         public List<Sale> AddNewSales()
         {
-                var list = new List<Sale>();
-                var adds = this.Driver.FindElementsByCssSelector(".search-result");
-                foreach (var advert in adds)
-                {
-                    list.Add(this.GetSale(advert));
-                }
+            var list = new List<Sale>();
+            var adds = this.Driver.FindElementsByCssSelector(".search-result");
+            foreach (var advert in adds)
+            {
+                list.Add(this.GetSale(advert));
+            }
 
             return list;
         }
@@ -63,7 +63,8 @@ namespace Funda
             return list;
         }
 
-        public Regex NumberRegex {
+        public Regex NumberRegex
+        {
             get { return new Regex("([0-9.]*)"); }
         }
 
@@ -118,10 +119,10 @@ namespace Funda
                     url += this.Sorting;
                     if (this.PaginationNumber.HasValue)
                     {
-                    url += string.Format("&Page={0}", this.PaginationNumber.Value);
-                }
-                    
-                 
+                        url += string.Format("&Page={0}", this.PaginationNumber.Value);
+                    }
+
+
                     return url;
                 }
             }
@@ -130,7 +131,7 @@ namespace Funda
         public class FundaSearch : Search
         {
             public override string Sorting { get { return "sorteer-datum-af/"; } }
-            
+
             public override string Url
             {
                 get
@@ -195,8 +196,8 @@ namespace Funda
                 get
                 {
                     var url = "https://www.fotocasa.es/es/" + this.Text + "/l";
-         
-                        if (this.PaginationNumber.HasValue)
+
+                    if (this.PaginationNumber.HasValue)
                     {
                         url += string.Format("/{0}", this.PaginationNumber.Value);
                     }
@@ -207,7 +208,7 @@ namespace Funda
                     }
                     if (!string.IsNullOrWhiteSpace(this.CombinedLocationIds))
                     {
-                       this.CombinedLocationIds = "&combinedLocationIds=" + this.CombinedLocationIds;
+                        this.CombinedLocationIds = "&combinedLocationIds=" + this.CombinedLocationIds;
                     }
 
                     url += "&minPrice=" + this.PriceMin + "&maxPrice=" + this.PriceMax + "&propertySubtypeIds=1;2;5;7;6;8;52;54" + this.CombinedLocationIds + "&gridType=3;";
@@ -252,7 +253,7 @@ namespace Funda
             public int? MaxRooms { get; set; }
             public int? PriceMin { get; set; }
             public int? PriceMax { get; set; }
-            public virtual string Sorting             {                get;            }
+            public virtual string Sorting { get; }
             public virtual bool IsSale { get; set; }
             public int? PaginationNumber { get; set; }
             public string Text { get; set; }
@@ -322,23 +323,25 @@ namespace Funda
                 }
                 catch { }
 
-                try {
+                try
+                {
                     var IsFurnishedSekcijos = this.Driver.FindElementsByCssSelector(".object-kenmerken-body .object-kenmerken-list");
-                    var IsFurnishedSekcija =  IsFurnishedSekcijos.FirstOrDefault(o => o.Text.Contains("Specifiek"));
+                    var IsFurnishedSekcija = IsFurnishedSekcijos.FirstOrDefault(o => o.Text.Contains("Specifiek"));
                     if (IsFurnishedSekcija != null)
                     {
                         var isFurishedElementai = IsFurnishedSekcija.FindElements(By.CssSelector("dt"));
                         var isFurnishedElementas = isFurishedElementai.FirstOrDefault(o => o.Text.Contains("Specifiek"));
                         var isFurnishedText = IsFurnishedSekcija.FindElements(By.CssSelector("dd"))[isFurishedElementai.IndexOf(isFurnishedElementas)];
-                            ((Rent)fundaRecord).IsFurnished = isFurnishedText.Text == "Gemeubileerd";
+                        ((Rent)fundaRecord).IsFurnished = isFurnishedText.Text == "Gemeubileerd";
                     }
 
-                } catch { }
+                }
+                catch { }
             }
 
             fundaRecord.DateLastProcessed = DateTime.Now;
             // initialCostToRentOutElement != null && decimal.TryParse(numberRegex.Matches(initialCostToRentOutElement.Text)[0].Value, out initialCostToRentOut) ? initialCostToRentOut : (decimal?)null
-          
+
             if (!fundaRecord.RoomCount.HasValue)
             {
                 var roomCountRegex = new Regex("([1-9]{1}) kamer(.*)");
@@ -373,11 +376,11 @@ namespace Funda
 
         public Sale GetSale(IWebElement element)
         {
-        var url = element.FindElements(By.CssSelector(".search-result-header a"));
-        var title = element.FindElement(By.CssSelector(".search-result-title"));
-        var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
-        var price = element.FindElement(By.CssSelector(".search-result-price"));
-        var livingArea = element.FindElement(By.CssSelector("[title='Woonoppervlakte']"));
+            var url = element.FindElements(By.CssSelector(".search-result-header a"));
+            var title = element.FindElement(By.CssSelector(".search-result-title"));
+            var subTitle = element.FindElement(By.CssSelector(".search-result-subtitle"));
+            var price = element.FindElement(By.CssSelector(".search-result-price"));
+            var livingArea = element.FindElement(By.CssSelector("[title='Woonoppervlakte']"));
             var totalArea = element.FindElement(By.CssSelector("[title='Perceeloppervlakte']"));
             var roomCount = livingArea.FindElement(By.XPath(".."));
             var parsedPrice = 0M;
@@ -415,8 +418,9 @@ namespace Funda
             var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
             var numberRegex = this.NumberRegex;
             decimal? initialCostToRentOut = null;
-            try {
-               var initialCostToRentOutElement = element.FindElement(By.CssSelector(".search-result-info-small"));
+            try
+            {
+                var initialCostToRentOutElement = element.FindElement(By.CssSelector(".search-result-info-small"));
                 initialCostToRentOut = 0m;
             }
             catch { }
@@ -432,7 +436,7 @@ namespace Funda
                 RoomCount = int.TryParse(roomCount.Text.Split(new string[] { "\r\n", "\n", "•", "kamers" }, StringSplitOptions.None)[1].Trim(), out parsedRoomCount) ? parsedRoomCount : (int?)null,
                 Address = title.Text.Replace("\r\n", ""),
                 PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null,
-                InitialCostToRentOut = initialCostToRentOut 
+                InitialCostToRentOut = initialCostToRentOut
             };
         }
 
@@ -481,19 +485,19 @@ namespace Funda
             var parsedLivingArea = 0M;
             var parsedTotalArea = 0M;
             var parsedRoomCount = 0;
-         //   var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
+            //   var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
             return new Sale
             {
                 Url = url,
                 Title = title,
-               // Subtitle = subTitle.Text,
+                // Subtitle = subTitle.Text,
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
-                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea,0) : (int?)null,
-                TotalArea = decimal.TryParse(totalArea, out parsedTotalArea) ? (int?)(parsedTotalArea*1000) : (int?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                TotalArea = decimal.TryParse(totalArea, out parsedTotalArea) ? (int?)(parsedTotalArea * 1000) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
                 //  Address = title.Text.Replace("\r\n", ""),
                 //   PostCode = postCodeRegex.Count != 0 ? postCodeRegex[0].Value : null
-//"1233"
+                //"1233"
             };
         }
 
@@ -581,7 +585,7 @@ namespace Funda
             var lon = coords[3].Split(',')[0];
             record.Address = lat + ',' + lon;
             record.DateLastProcessed = DateTime.Now;
-            return record; 
+            return record;
         }
 
         public IRecord GetRecordDataFromItsPageLt(IRecord record)
@@ -589,7 +593,7 @@ namespace Funda
             if (!record.DateAdded.HasValue)
             {
                 DateTime? dateAdded = null;
-             //   DateTime date = DateTime.Parse("yyyy-MM-dd");
+                //   DateTime date = DateTime.Parse("yyyy-MM-dd");
                 var dateAddedElement = this.Driver.FindElementsByCssSelector(".obj-stats.obj-stats-border dd");
 
                 if (dateAddedElement.Count > 1)
@@ -620,7 +624,7 @@ namespace Funda
                     }
                     catch
                     {
-                            dateRemoved = null;
+                        dateRemoved = null;
                     }
                 }
 
@@ -634,26 +638,31 @@ namespace Funda
                 if (sildymasElementas != null)
                 {
                     var heatingType = this.Driver.FindElementsByCssSelector(".obj-details dd")[sildymasElementai.IndexOf(sildymasElementas)];
-                    if(heatingType.Text.Length < 50)
-                     record.HeatingType = heatingType.Text;
+                    if (heatingType.Text.Length < 50)
+                        record.HeatingType = heatingType.Text;
                 }
             }
 
-            try {
+            try
+            {
                 var priceElement = this.Driver.FindElementByCssSelector(".obj-price");
                 var price = int.Parse(priceElement.Text.Split('€')[0]);
-                    if (record.Price != price) {
+                if (record.Price != price)
+                {
                     record.Price = price;
                 }
 
-            } catch { }
+            }
+            catch { }
 
-            if (!record.IsBendrabutis.HasValue) {
+            if (!record.IsBendrabutis.HasValue)
+            {
                 var mainText = this.Driver.FindElementsByClassName("obj-comment");
-                if (mainText.Any()) {
+                if (mainText.Any())
+                {
                     record.IsBendrabutis = mainText[0].Text.ToLower().Contains("bendrabu");
-                    }
                 }
+            }
 
             record.DateLastProcessed = DateTime.Now;
             return record;
@@ -688,10 +697,10 @@ namespace Funda
             //}
             //else
             //{
-                price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ", "").Replace("€", "");
-                livingArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
-                roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
-          //  }
+            price = element.FindElement(By.CssSelector(".list-item-price")).Text.Replace(" ", "").Replace("€", "");
+            livingArea = element.FindElements(By.CssSelector(".list-row td"))[3].Text;
+            roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
+            //  }
 
             var parsedPrice = 0M;
             var parsedLivingArea = 0M;
@@ -717,8 +726,8 @@ namespace Funda
         public List<Rent> AddFotoCasaRents()
         {
             var list = new List<Rent>();
-            (this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); "+
-                        "(async () => {"+
+            (this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); " +
+                        "(async () => {" +
                         "    while (document.documentElement.scrollTop <= document.body.scrollHeight - 500)" +
                         "    {" +
                         "        window.scrollTo(0, document.documentElement.scrollTop + 500);" +
@@ -733,54 +742,54 @@ namespace Funda
                 try
                 {
                     list.Add(this.GetFotoCasaRents(advert));
-                }  
-            catch (Exception e)
-            {
+                }
+                catch (Exception e)
+                {
 
+                }
             }
-        }
 
             return list;
         }
 
         private Rent GetFotoCasaRents(IWebElement element)
         {
-            
-                var url = element.FindElement(By.CssSelector(".re-Card-link")).GetAttribute("href").Split('?')[0];
-                var title = string.Join(" ", url.Split('/')[6].Split('-'));
-               // var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
-                var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0];
-                var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
-                var roomCountRegex = new Regex("([1-9]{1}) hab(s)\\.");
-                var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
-                var roomCountElement = roomsAndArea.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
-                var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
-                var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
+            var url = element.FindElement(By.CssSelector(".re-Card-link")).GetAttribute("href").Split('?')[0];
+            var title = string.Join(" ", url.Split('/')[6].Split('-'));
+            // var subTitle = string.Join(" ", url.Split('/')[7].Split('-'));
 
-                var roomCount = roomCountElement != null ? roomCountElement.Text.Split(' ')[0] : null;
-                var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
+            var price = element.FindElement(By.CssSelector(".re-Card-price")).Text.Split(new[] { "<span" }, StringSplitOptions.None)[0].Split(' ')[0];
+            var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
+            var roomCountRegex = new Regex("([1-9]{1}) hab(s)\\.");
+            var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
+            var roomCountElement = roomsAndArea.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
+            var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
 
-                int parsedDateAdded = 0;
-                int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
-                var dateAdded = dateAddedText.Split(' ')[2].StartsWith("d", StringComparison.CurrentCultureIgnoreCase)
-                                ? DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0)) : DateTime.Now;
+            var roomCount = roomCountElement != null ? roomCountElement.Text.Split(' ')[0] : null;
+            var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
 
-                var parsedPrice = 0M;
-                var parsedLivingArea = 0M;
-                var parsedRoomCount = 0;
+            int parsedDateAdded = 0;
+            int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
+            var dateAdded = dateAddedText.Split(' ')[2].StartsWith("d", StringComparison.CurrentCultureIgnoreCase)
+                            ? DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0)) : DateTime.Now;
 
-                return new Rent
-                {
-                    Url = url,
-                    Title = title,
-                 //   Subtitle = subTitle,
-                    Price = decimal.TryParse(price, out parsedPrice) ?  parsedPrice <= 2 ? parsedPrice*1000 : parsedPrice : (decimal?)null,
-                    LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
-                    RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
-                    DateAdded = dateAdded
-                };
-          
+            var parsedPrice = 0M;
+            var parsedLivingArea = 0M;
+            var parsedRoomCount = 0;
+
+            return new Rent
+            {
+                Url = url,
+                Title = title,
+                //   Subtitle = subTitle,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice <= 2 ? parsedPrice * 1000 : parsedPrice : (decimal?)null,
+                LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                DateAdded = dateAdded
+            };
+
         }
         public List<Sale> AddFotoCasaSales()
         {
@@ -876,34 +885,34 @@ namespace Funda
         public List<Rent> AddPisosRents()
         {
             var list = new List<Rent>();
-            //(this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); " +
-            //            "(async () => {" +
-            //            "    while (document.documentElement.scrollTop <= document.body.scrollHeight - 500)" +
-            //            "    {" +
-            //            "        window.scrollTo(0, document.documentElement.scrollTop + 500);" +
-            //            "        await delay(300);" +
-            //            "    }" +
-            //            "})(); ");
-            //Thread.Sleep(5500);
 
-            var adds = this.Driver.FindElements(By.CssSelector(".row-to-hide")).Where(o => o.Text != "");
-            var title = this.Driver.FindElements(By.CssSelector("b"))[0].Text;
-            foreach (var advert in adds)
+            for (int i = 0; i < 20; i++)
             {
 
-                try
-                {
-                    var ad = this.GetPisosRents(advert);
 
-                    ad.Title = ChangePisosTitle(title);
-                    list.Add(ad);
-                }
-                catch (Exception e)
+                var adds = this.Driver.FindElements(By.CssSelector(".row-to-hide")).Where(o => o.Text != "");
+                var title = this.Driver.FindElements(By.CssSelector("b"))[0].Text;
+                foreach (var advert in adds)
                 {
 
+                    try
+                    {
+                        var ad = this.GetPisosRents(advert);
+
+                        ad.Title = ChangePisosTitle(title);
+                        if (list.All(a => a.Url != ad.Url))
+                        {
+                            list.Add(ad);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 }
+                    (this.Driver as IJavaScriptExecutor).ExecuteScript(" window.scrollTo(0, document.documentElement.scrollTop + 500);");
+                Thread.Sleep(500);
             }
-
             return list;
         }
 
@@ -938,7 +947,8 @@ namespace Funda
             return new Rent
             {
                 Url = url,
-
+                //Title = title,
+                //  Subtitle = subTitle,
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice <= 2 ? parsedPrice * 1000 : parsedPrice : (decimal?)null,
                 LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
@@ -960,24 +970,33 @@ namespace Funda
             //            "})(); ");
             //Thread.Sleep(5500);
 
-            var adds = this.Driver.FindElements(By.CssSelector(".row-to-hide")).Where(o => o.Text != "");
-            var title = this.Driver.FindElements(By.CssSelector("b"))[0].Text;
-            foreach (var advert in adds)
+            for (int i = 0; i < 20; i++)
             {
 
-                try
-                {
-                    var ad = this.GetPisosSales(advert);
-                    
-                    ad.Title = ChangePisosTitle(title);
-                    list.Add(ad);
-                }
-                catch (Exception e)
+
+                var adds = this.Driver.FindElements(By.CssSelector(".row-to-hide")).Where(o => o.Text != "");
+                var title = this.Driver.FindElements(By.CssSelector("b"))[0].Text;
+                foreach (var advert in adds)
                 {
 
+                    try
+                    {
+                        var ad = this.GetPisosSales(advert);
+
+                        ad.Title = ChangePisosTitle(title);
+                        if (list.All(a => a.Url != ad.Url))
+                        {
+                            list.Add(ad);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
                 }
+                             (this.Driver as IJavaScriptExecutor).ExecuteScript(" window.scrollTo(0, document.documentElement.scrollTop + 500);");
+                Thread.Sleep(500);
             }
-
             return list;
         }
 
