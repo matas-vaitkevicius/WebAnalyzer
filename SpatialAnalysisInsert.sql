@@ -6,7 +6,7 @@
 --            convert( nvarchar(20), Latitude)+')', 4326)
 --        .STBuffer(Radius * 1000).STIntersects(@p) as [Intersects]
 
-DECLARE  @i int = (SELECT min(id)   FROM [WebAnalyzer].[dbo].[Sale] s   where not exists(select 1 from SpatialAnalysis sa where sa.SaleId = s.Id))
+DECLARE  @i int = (SELECT min(id)   FROM [WebAnalyzer].[dbo].[Sale] s   where   url  like '%fotocasa%' and not exists(select 1 from SpatialAnalysis sa where sa.SaleId = s.Id))
 --print @i
 declare @temp table(
 [Id] [int] IDENTITY(1,1)  NOT NULL,
@@ -27,14 +27,14 @@ declare @temp table(
 	[SalesIn200RadiusAvgSqM] [decimal](12, 6) NULL,
 	[RentsIn100RadiusCount] [int] NULL,
 	[SalesIn100RadiusCount] [int] NULL,
-	[RentsIn100RadiusAvgSqM] [decimal](12, 6) NULL,
+	[RentsIn100RadiusAvgSqM] [decimal](12, 6) NULL, 
 	[SalesIn100RadiusAvgSqM] [decimal](12, 6) NULL
 )
 
 declare @lat nvarchar(20)
 declare @lon nvarchar(20)
 declare @rooms int
-while @i <= (select max(id) from Webanalyzer.dbo.sale)
+while @i <=  (select max(id) from Webanalyzer.dbo.sale)
 begin
 
  select top 1 
