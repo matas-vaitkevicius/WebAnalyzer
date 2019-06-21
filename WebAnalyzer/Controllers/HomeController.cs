@@ -314,21 +314,21 @@ namespace WebAnalyzer.Controllers
                     {
                         var now = DateTime.Now;
                         var list = new List<IRecord>();
-                        if (!isSale.HasValue)
-                        {
-                            list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => o.DateRemoved == null && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
-                        }
-                        else
-                        {
-                            if (isSale.Value)
-                            {
-                                list = db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
-                            }
-                            else
-                            {
-                                list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
-                            }
-                        }
+                        //if (!isSale.HasValue)
+                        //{
+                            list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue)  /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
+                        //}
+                        //else
+                        //{
+                        //    if (isSale.Value)
+                        //    {
+                        //        list = db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
+                        //    }
+                        //    else
+                        //    {
+                        //        list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null && o.Url.Contains(systemName)).ToList();
+                        //    }
+                        //}
 
                         foreach (var rent in list)
                         {
@@ -342,6 +342,7 @@ namespace WebAnalyzer.Controllers
                                 else if (systemName == "fotocasa")
                                 {
                                     crawler.GetRecordDataFromFotoCasa(rent);
+                                   
                                 }
                                 else
                                 {
@@ -486,59 +487,24 @@ namespace WebAnalyzer.Controllers
             {
                 using (var db = new Funda.WebAnalyzerEntities())
                 {
-                    //foreach (var search in FotoCasaSearchList())
-                    //{
-                    //    // SetMinMax(search);
-                    //    for (int i = 1; i < 5; i++)
-                    //    {
-                    //        try
-                    //        {
-                    //            search.PaginationNumber = i;
-                    //            crawler.Navigate(search);
-                    //            var adverts = Enumerable.Empty<IRecord>();
-                    //            if (search.IsSale)
-                    //            {
-                    //                adverts = crawler.AddFotoCasaSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
-                    //                db.Sale.AddRange(adverts.Cast<Sale>().ToList());
-                    //            }
-                    //            else
-                    //            {
-                    //                adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-                    //                db.Rent.AddRange(adverts.Cast<Rent>().ToList());
-                    //            }
-
-                    //            if (!adverts.Any())
-                    //            {
-                    //                break;
-                    //            }
-
-                    //            db.SaveChanges();
-                    //        }
-                    //        catch
-                    //        {
-                    //        }
-                    //    }
-                    //}
-                    foreach (var search in PisosSearchList())
+                    foreach (var search in FotoCasaSearchList())
                     {
-
-                        for (int i = 1; i < 3; i++)
+                        // SetMinMax(search);
+                        for (int i = 1; i < 15; i++)
                         {
                             try
                             {
                                 search.PaginationNumber = i;
                                 crawler.Navigate(search);
-
                                 var adverts = Enumerable.Empty<IRecord>();
                                 if (search.IsSale)
                                 {
-                                    adverts = crawler.AddPisosSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                                    adverts = crawler.AddFotoCasaSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
                                     db.Sale.AddRange(adverts.Cast<Sale>().ToList());
                                 }
                                 else
                                 {
-                                    adverts = crawler.AddPisosRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
-
+                                    adverts = crawler.AddFotoCasaRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
                                     db.Rent.AddRange(adverts.Cast<Rent>().ToList());
                                 }
 
@@ -554,6 +520,41 @@ namespace WebAnalyzer.Controllers
                             }
                         }
                     }
+                    //foreach (var search in PisosSearchList())
+                    //{
+
+                    //    for (int i = 1; i < 3; i++)
+                    //    {
+                    //        try
+                    //        {
+                    //            search.PaginationNumber = i;
+                    //            crawler.Navigate(search);
+
+                    //            var adverts = Enumerable.Empty<IRecord>();
+                    //            if (search.IsSale)
+                    //            {
+                    //                adverts = crawler.AddPisosSales().Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+                    //                db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                    //            }
+                    //            else
+                    //            {
+                    //                adverts = crawler.AddPisosRents().Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+
+                    //                db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                    //            }
+
+                    //            if (!adverts.Any())
+                    //            {
+                    //                break;
+                    //            }
+
+                    //            db.SaveChanges();
+                    //        }
+                    //        catch
+                    //        {
+                    //        }
+                    //    }
+                    //}
 
                 }
             }
@@ -564,7 +565,48 @@ namespace WebAnalyzer.Controllers
         public ActionResult UpdateFotoCasa()
         {
             DoUpdate("fotocasa", null);
+            return View("MarkSoldFotoCasa");
+        }
+        public ActionResult MarkSoldFotoCasa()
+        {
+            MarkSold("fotocasa");
             return View("Index");
+        }
+
+        public void MarkSold(string systemName)
+        {
+            using (var crawler = new Crawler())
+            {
+                _lock = new object();
+                lock (_lock)
+                {
+                    using (var db = new Funda.WebAnalyzerEntities())
+                    {
+                        var now = DateTime.Now;
+                        var list = new List<IRecord>();
+
+                            list = db.Rent.Where<IRecord>(o => (!o.DateRemoved.HasValue) /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => (!o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()).ToList();
+          
+
+                        foreach (var rent in list)
+                        {
+                            try
+                            {
+                                crawler.Navigate(rent.Url);
+
+                                if (systemName == "fotocasa")
+                                {
+                                    crawler.MarkSoldFotoCasa(rent);
+                                }
+                               
+                                db.SaveChanges();
+
+                            }
+                            catch { }
+                        }
+                    }
+                }
+            }
         }
     }
 }

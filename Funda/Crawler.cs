@@ -578,6 +578,7 @@ namespace Funda
 
         public IRecord GetRecordDataFromFotoCasa(IRecord record)
         {
+            record = MarkSoldFotoCasa(record);
             var scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("window.__INITIAL_PROPS__")).First();
 
             var coords = scriptWithCoord.GetAttribute("innerHTML").Split(new[] { "coordinates", "accuracy" }, StringSplitOptions.None)[2].Split(':');
@@ -1045,5 +1046,13 @@ namespace Funda
             };
 
         }
+
+        public IRecord MarkSoldFotoCasa(IRecord record)
+        {
+            if(this.Driver.FindElementsByCssSelector(".re-Searchpage-propertyNotFound").Any())
+            record.DateRemoved = DateTime.Now;
+            return record;
+        }
+
     }
 }
