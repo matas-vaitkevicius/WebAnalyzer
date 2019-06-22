@@ -523,7 +523,7 @@ namespace Funda
             var roomCount = element.FindElements(By.CssSelector(".list-row td"))[2].Text;
             var parsedPrice = 0M;
             var parsedLivingArea = 0M;
-            var parsedTotalArea = 0;
+            //    var parsedTotalArea = 0;
             var parsedRoomCount = 0;
             //   var postCodeRegex = new Regex("([1-9][0-9]{3} ?(?!sa|sd|ss)[a-z]{2})", RegexOptions.IgnoreCase).Matches(subTitle.Text);
             return new Rent
@@ -1049,8 +1049,8 @@ namespace Funda
 
         public IRecord MarkSoldFotoCasa(IRecord record)
         {
-            if(this.Driver.FindElementsByCssSelector(".re-Searchpage-propertyNotFound").Any())
-            record.DateRemoved = DateTime.Now;
+            if (this.Driver.FindElementsByCssSelector(".re-Searchpage-propertyNotFound").Any())
+                record.DateRemoved = DateTime.Now;
             return record;
         }
 
@@ -1060,26 +1060,132 @@ namespace Funda
             {
                 get
                 {
-                    var url = "https://www.daft.ie";
-
-
-
-
-
+                    var url = "https://www.daft.ie/";
                     url += this.Text;
+                    url += IsSale? "/property-for-sale/?mxp=250000&advanced=1&pt_id%5B0%5D=2&pt_id%5B1%5D=3&pt_id%5B2%5D=6&sort_type=d&cc_id=ct2&s%5Bmxp%5D=250000&s%5Badvanced%5D=1&s%5Bpt_id%5D%5B0%5D=2&s%5Bpt_id%5D%5B1%5D=3&s%5Bpt_id%5D%5B2%5D=6&s%5Bsort_type%5D=d&s%5Bsort_by%5D=date&searchSource=sale":
+                        "/residential-property-for-rent/?ad_type=rental&advanced=1&s%5Bmxp%5D=2000&s%5Badvanced%5D=1&s%5Bpt_id%5D%5B0%5D=1&s%5Bpt_id%5D%5B1%5D=3&s%5Bpt_id%5D%5B2%5D=4&rental_tab_name=advanced-sf&searchSource=rental";
                     if (this.PaginationNumber.HasValue)
                     {
-                        url += "&offset=" + string.Format("{0}", this.PaginationNumber.Value);
+                        url += "&offset=" + string.Format("{0}", this.PaginationNumber.Value * 20);
                     }
-
 
                     return url;
                 }
             }
 
-
-
         }
 
+        public List<IRecord> AddDaft(bool isSale)
+        {
+            var list = new List<IRecord>();
+
+            var selectorClass = isSale ? "AdCard__adCardContainer" : "box";
+            var adds =  this.Driver.FindElements(By.CssSelector("."+selectorClass)).Where(o => o.Text != "") ;
+            foreach (var advert in adds)
+            {
+                try
+                {
+                    if (isSale)
+                    {
+                        list.Add(this.GetDaftSales(advert));
+                    }
+                    else {
+                        list.Add(this.GetDaftRents(advert));
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+
+
+            return list;
+        }
+        private Sale GetDaftSales(IWebElement element)
+        {
+
+            var url =  element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__propertyPrice--link")).GetAttribute("href");
+            //var title = string.Join(" ", url.Split('/')[6].Split('-'));
+            var subTitle = element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__addressCopy--link")).Text;
+
+
+            var price = element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__costAmountCopy")).Text.Replace("€", string.Empty).Replace(",", string.Empty);
+            //var roomsAndArea = element.FindElements(By.CssSelector(".re-Card-feature"));
+            //var roomCountRegex = new Regex("([1-9]{1}) hab(s)\\.");
+            //var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
+            var roomCountElement = element.FindElement(By.CssSelector(".QuickPropertyDetails__iconCopy"));
+            //var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
+            //var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
+
+            var roomCount = roomCountElement != null ? roomCountElement.Text : null;
+            //var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
+
+            //int parsedDateAdded = 0;
+            //int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
+            //var dateAdded = dateAddedText.Split(' ')[2].StartsWith("d", StringComparison.CurrentCultureIgnoreCase)
+            //                ? DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0)) : DateTime.Now;
+
+            var parsedPrice = 0M;
+            //  var parsedLivingArea = 0M;
+            var parsedRoomCount = 0;
+
+            return new Sale
+            {
+                Url = url,
+                //Title = title,
+                Subtitle = subTitle,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                //   LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                DateAdded = DateTime.Now
+            };
+
+        }
+        private Sale GetDaftRents(IWebElement element)
+        {
+
+            var url =  element.FindElement(By.CssSelector(".search_result_title_box h2 a")).GetAttribute("href");
+            //var title = string.Join(" ", url.Split('/')[6].Split('-'));
+            var subTitle = element.FindElement(By.CssSelector(".search_result_title_box h2 a")).Text.Split(new[] { " - " },StringSplitOptions.None)[0];
+
+
+            var price = element.FindElement(By.CssSelector(".price")).Text.Split(' ')[0].Replace("€", string.Empty).Replace(",", string.Empty);
+            var rooms = element.FindElements(By.CssSelector(".info li"));
+            var roomCountRegex = new Regex("([0-9] Bed(s)*)");
+            //var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
+            var roomCountElement = rooms.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
+            var roomCount = roomCountElement != null ? roomCountElement.Text.Trim().Split(' ')[0] : null;
+            if (roomCount == null && rooms.Any(o => o.Text.Contains("Studio")))
+            {
+                roomCount = "0";
+            }
+            //var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
+            //var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
+
+          
+            //var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
+
+            //int parsedDateAdded = 0;
+            //int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
+            //var dateAdded = dateAddedText.Split(' ')[2].StartsWith("d", StringComparison.CurrentCultureIgnoreCase)
+            //                ? DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0)) : DateTime.Now;
+
+            var parsedPrice = 0M;
+            //  var parsedLivingArea = 0M;
+            var parsedRoomCount = 0;
+
+            return new Sale
+            {
+                Url = url,
+                //Title = title,
+                Subtitle = subTitle,
+                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                //   LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
+                RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
+                DateAdded = DateTime.Now
+            };
+
+        }
     }
 }

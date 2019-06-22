@@ -614,9 +614,72 @@ namespace WebAnalyzer.Controllers
         {
             return new List<Crawler.DaftieSearch>
             {
-                new Crawler.DaftieSearch { Text = "/dublin-city/apartments-for-rent/?s%5Bignored_agents%5D%5B0%5D=1551&searchSource=rental", IsSale = false },
+                                new Crawler.DaftieSearch { Text = "dublin-city", IsSale = false },
+                 new Crawler.DaftieSearch { Text = "galway-city", IsSale = false },
+                  new Crawler.DaftieSearch { Text = "cork-city", IsSale = false },
+                   new Crawler.DaftieSearch { Text = "belfast-city", IsSale = false },
+                    new Crawler.DaftieSearch { Text = "limerick-city", IsSale = false },
+                     new Crawler.DaftieSearch { Text = "waterford-city", IsSale = false },
+                                new Crawler.DaftieSearch { Text = "dublin-city", IsSale = true },
+                 new Crawler.DaftieSearch { Text = "galway-city", IsSale = true },
+                  new Crawler.DaftieSearch { Text = "cork-city", IsSale = true },
+                   new Crawler.DaftieSearch { Text = "belfast-city", IsSale = true },
+                    new Crawler.DaftieSearch { Text = "limerick-city", IsSale = true },
+                     new Crawler.DaftieSearch { Text = "waterford-city", IsSale = true },
+
+
             };
         }
 
+
+        public ActionResult CollectNewIe()
+        {
+            using (var crawler = new Funda.Crawler())
+            {
+                using (var db = new Funda.WebAnalyzerEntities())
+                {
+                    foreach (var search in DaftieSearchList())
+                    {
+                        // SetMinMax(search);
+                        for (int i = 0; i < 30; i++)
+                        {
+                            try
+                            {
+                                search.PaginationNumber = i;
+                                crawler.Navigate(search);
+                                var adverts = Enumerable.Empty<IRecord>();
+                                if (search.IsSale)
+                                {
+                                    adverts = crawler.AddDaft(true).Where(o => o.Price != null).ExceptWhere(db.Sale, o => o.Url);
+
+                                    db.Sale.AddRange(adverts.Cast<Sale>().ToList());
+                                }
+                                else
+                                {
+                                    adverts = crawler.AddDaft(false).Where(o => o.Price != null).ExceptWhere(db.Rent, o => o.Url);
+                                    db.Rent.AddRange(adverts.Cast<Rent>().ToList());
+                                }
+
+                                foreach (var advert in adverts)
+                                {
+                                    advert.Title = search.Text.Split('-')[0];
+                                }
+
+                                if (!adverts.Any())
+                                {
+                                    break;
+                                }
+
+                                db.SaveChanges();
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+                }
+            }
+            return RedirectToAction("UpdateDaft");
+        }
     }
 }
