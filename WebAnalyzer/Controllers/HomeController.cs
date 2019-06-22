@@ -316,7 +316,7 @@ namespace WebAnalyzer.Controllers
                         var list = new List<IRecord>();
                         //if (!isSale.HasValue)
                         //{
-                            list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue)  /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
+                        list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue)  /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()).OrderBy(o => o.DateLastProcessed).ToList();
                         //}
                         //else
                         //{
@@ -342,7 +342,7 @@ namespace WebAnalyzer.Controllers
                                 else if (systemName == "fotocasa")
                                 {
                                     crawler.GetRecordDataFromFotoCasa(rent);
-                                   
+
                                 }
                                 else
                                 {
@@ -585,8 +585,8 @@ namespace WebAnalyzer.Controllers
                         var now = DateTime.Now;
                         var list = new List<IRecord>();
 
-                            list = db.Rent.Where<IRecord>(o => (!o.DateRemoved.HasValue) /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => (!o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()).ToList();
-          
+                        list = db.Rent.Where<IRecord>(o => (!o.DateRemoved.HasValue) /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(db.Sale.Where<IRecord>(o => (!o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()).ToList();
+
 
                         foreach (var rent in list)
                         {
@@ -598,7 +598,7 @@ namespace WebAnalyzer.Controllers
                                 {
                                     crawler.MarkSoldFotoCasa(rent);
                                 }
-                               
+
                                 db.SaveChanges();
 
                             }
@@ -608,5 +608,15 @@ namespace WebAnalyzer.Controllers
                 }
             }
         }
+
+
+        public List<Funda.Crawler.DaftieSearch> DaftieSearchList()
+        {
+            return new List<Crawler.DaftieSearch>
+            {
+                new Crawler.DaftieSearch { Text = "/dublin-city/apartments-for-rent/?s%5Bignored_agents%5D%5B0%5D=1551&searchSource=rental", IsSale = false },
+            };
+        }
+
     }
 }

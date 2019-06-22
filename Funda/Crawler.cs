@@ -1054,5 +1054,32 @@ namespace Funda
             return record;
         }
 
+        public class DaftieSearch : Search
+        {
+            public override string Url
+            {
+                get
+                {
+                    var url = "https://www.daft.ie";
+
+
+
+
+
+                    url += this.Text;
+                    if (this.PaginationNumber.HasValue)
+                    {
+                        url += "&offset=" + string.Format("{0}", this.PaginationNumber.Value);
+                    }
+
+
+                    return url;
+                }
+            }
+
+
+
+        }
+
     }
 }
