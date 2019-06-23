@@ -344,6 +344,11 @@ namespace WebAnalyzer.Controllers
                                     crawler.GetRecordDataFromFotoCasa(rent);
 
                                 }
+                                else if (systemName == "daft")
+                                {
+                                    crawler.GetRecordDataFromDaft(rent);
+
+                                }
                                 else
                                 {
                                     crawler.GetRecordDataFromItsPageLt(rent);
@@ -646,6 +651,7 @@ namespace WebAnalyzer.Controllers
                             try
                             {
                                 search.PaginationNumber = i;
+                               // crawler.Navigate($"https://www.myhome.ie/rentals/dublin/property-to-rent?page={i}&maxprice=2500");
                                 crawler.Navigate(search);
                                 var adverts = Enumerable.Empty<IRecord>();
                                 if (search.IsSale)
@@ -680,6 +686,12 @@ namespace WebAnalyzer.Controllers
                 }
             }
             return RedirectToAction("UpdateDaft");
+        }
+
+        public ActionResult UpdateDaft()
+        {
+            DoUpdate("daft", null);
+            return View("MarkSoldDaft");
         }
     }
 }

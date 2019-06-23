@@ -1187,5 +1187,24 @@ namespace Funda
             };
 
         }
+         public IRecord GetRecordDataFromDaft(IRecord record)
+        {
+            // record = MarkSoldFotoCasa(record);
+            // var scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("window.__INITIAL_PROPS__")).First();
+
+            //var coords = scriptWithCoord.GetAttribute("innerHTML").Split(new[] { "coordinates", "accuracy" }, StringSplitOptions.None)[2].Split(':');
+            //var lat = coords[2].Split(',')[0];
+            //var lon = coords[3].Split(',')[0];
+            //record.Address = lat + ',' + lon;
+            var livingAreaElement = this.Driver.FindElement(By.CssSelector("PropertyOverview__propertyOverviewDetails"));
+            var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(new[] { "Overall Floor Area: ", " "},StringSplitOptions.None)[1] : null;
+            var parsedLivingArea = 0M;
+            var addressElement = this.Driver.FindElement(By.CssSelector("PropertyMainInformation__eircode"));
+            record.Address = addressElement.Text.Split(new[] { "Eircode: " }, StringSplitOptions.None)[1];
+
+            record.LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null;
+            record.DateLastProcessed = DateTime.Now;
+            return record;
+        }
     }
 }
