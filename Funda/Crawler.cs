@@ -1142,7 +1142,7 @@ namespace Funda
             };
 
         }
-        private Sale GetDaftRents(IWebElement element)
+        private Rent GetDaftRents(IWebElement element)
         {
 
             var url =  element.FindElement(By.CssSelector(".search_result_title_box h2 a")).GetAttribute("href");
@@ -1175,7 +1175,7 @@ namespace Funda
             //  var parsedLivingArea = 0M;
             var parsedRoomCount = 0;
 
-            return new Sale
+            return new Rent
             {
                 Url = url,
                 //Title = title,
@@ -1196,11 +1196,12 @@ namespace Funda
             //var lat = coords[2].Split(',')[0];
             //var lon = coords[3].Split(',')[0];
             //record.Address = lat + ',' + lon;
-            var livingAreaElement = this.Driver.FindElement(By.CssSelector("PropertyOverview__propertyOverviewDetails"));
-            var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(new[] { "Overall Floor Area: ", " "},StringSplitOptions.None)[1] : null;
+            var livingAreaElement = this.Driver.FindElements(By.CssSelector(".PropertyOverview__propertyOverviewDetails")).FirstOrDefault();
+            var livingAreaText = livingAreaElement.Text.Split(new[] { "Overall Floor Area: " }, StringSplitOptions.None);
+            var livingArea = livingAreaElement != null ? livingAreaText.Length > 1 ? livingAreaText[1].Split(new[] { " m2" }, StringSplitOptions.None)[0] : null : null;
             var parsedLivingArea = 0M;
-            var addressElement = this.Driver.FindElement(By.CssSelector("PropertyMainInformation__eircode"));
-            record.Address = addressElement.Text.Split(new[] { "Eircode: " }, StringSplitOptions.None)[1];
+            var addressElement = this.Driver.FindElements(By.CssSelector(".PropertyMainInformation__eircode")).FirstOrDefault();
+            record.PostCode = addressElement !=null ? addressElement.Text.Split(new[] { "Eircode: " }, StringSplitOptions.None)[1] : null;
 
             record.LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null;
             record.DateLastProcessed = DateTime.Now;

@@ -619,18 +619,19 @@ namespace WebAnalyzer.Controllers
         {
             return new List<Crawler.DaftieSearch>
             {
+ new Crawler.DaftieSearch { Text = "dublin-city", IsSale = true },
+                 new Crawler.DaftieSearch { Text = "galway-city", IsSale = true },
+                  new Crawler.DaftieSearch { Text = "cork-city", IsSale = true },
+                   new Crawler.DaftieSearch { Text = "belfast-city", IsSale = true },
+                    new Crawler.DaftieSearch { Text = "limerick-city", IsSale = true },
+                     new Crawler.DaftieSearch { Text = "waterford-city", IsSale = true },
                                 new Crawler.DaftieSearch { Text = "dublin-city", IsSale = false },
                  new Crawler.DaftieSearch { Text = "galway-city", IsSale = false },
                   new Crawler.DaftieSearch { Text = "cork-city", IsSale = false },
                    new Crawler.DaftieSearch { Text = "belfast-city", IsSale = false },
                     new Crawler.DaftieSearch { Text = "limerick-city", IsSale = false },
                      new Crawler.DaftieSearch { Text = "waterford-city", IsSale = false },
-                                new Crawler.DaftieSearch { Text = "dublin-city", IsSale = true },
-                 new Crawler.DaftieSearch { Text = "galway-city", IsSale = true },
-                  new Crawler.DaftieSearch { Text = "cork-city", IsSale = true },
-                   new Crawler.DaftieSearch { Text = "belfast-city", IsSale = true },
-                    new Crawler.DaftieSearch { Text = "limerick-city", IsSale = true },
-                     new Crawler.DaftieSearch { Text = "waterford-city", IsSale = true },
+
 
 
             };
@@ -651,7 +652,6 @@ namespace WebAnalyzer.Controllers
                             try
                             {
                                 search.PaginationNumber = i;
-                               // crawler.Navigate($"https://www.myhome.ie/rentals/dublin/property-to-rent?page={i}&maxprice=2500");
                                 crawler.Navigate(search);
                                 var adverts = Enumerable.Empty<IRecord>();
                                 if (search.IsSale)
