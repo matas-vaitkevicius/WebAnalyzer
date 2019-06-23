@@ -1107,7 +1107,7 @@ namespace Funda
 
             var url =  element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__propertyPrice--link")).GetAttribute("href");
             //var title = string.Join(" ", url.Split('/')[6].Split('-'));
-            var subTitle = element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__addressCopy--link")).Text;
+            var address = element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__addressCopy--link")).Text;
 
 
             var price = element.FindElement(By.CssSelector(".PropertyInformationCommonStyles__costAmountCopy")).Text.Replace("€", string.Empty).Replace(",", string.Empty);
@@ -1134,7 +1134,7 @@ namespace Funda
             {
                 Url = url,
                 //Title = title,
-                Subtitle = subTitle,
+                Address = address,
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
                 //   LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
@@ -1147,7 +1147,7 @@ namespace Funda
 
             var url =  element.FindElement(By.CssSelector(".search_result_title_box h2 a")).GetAttribute("href");
             //var title = string.Join(" ", url.Split('/')[6].Split('-'));
-            var subTitle = element.FindElement(By.CssSelector(".search_result_title_box h2 a")).Text.Split(new[] { " - " },StringSplitOptions.None)[0];
+            var address = element.FindElement(By.CssSelector(".search_result_title_box h2 a")).Text.Split(new[] { " - " },StringSplitOptions.None)[0];
 
 
             var price = element.FindElement(By.CssSelector(".price")).Text.Split(' ')[0].Replace("€", string.Empty).Replace(",", string.Empty);
@@ -1179,7 +1179,7 @@ namespace Funda
             {
                 Url = url,
                 //Title = title,
-                Subtitle = subTitle,
+                Address = address,
                 Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
                 //   LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
