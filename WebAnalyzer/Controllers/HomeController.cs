@@ -702,7 +702,13 @@ namespace WebAnalyzer.Controllers
         public ActionResult UpdateDaft()
         {
             DoUpdate("daft", null);
-            return View("MarkSoldDaft");
+            return View("UpdateDaftWithGoogle");
+        }
+
+        public ActionResult UpdateDaftWithGoogle()
+        {
+
+            return View("index");
         }
     }
 }
