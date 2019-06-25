@@ -1146,33 +1146,21 @@ namespace Funda
         {
 
             var url =  element.FindElement(By.CssSelector(".search_result_title_box h2 a")).GetAttribute("href");
-            //var title = string.Join(" ", url.Split('/')[6].Split('-'));
             var address = element.FindElement(By.CssSelector(".search_result_title_box h2 a")).Text.Split(new[] { " - " },StringSplitOptions.None)[0];
 
 
             var price = element.FindElement(By.CssSelector(".price")).Text.Split(' ')[0].Replace("€", string.Empty).Replace(",", string.Empty);
             var rooms = element.FindElements(By.CssSelector(".info li"));
             var roomCountRegex = new Regex("([0-9] Bed(s)*)");
-            //var livingAreaRegex = new Regex("([1-9][0-9]{1,2}) m²");
             var roomCountElement = rooms.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
             var roomCount = roomCountElement != null ? roomCountElement.Text.Trim().Split(' ')[0] : null;
             if (roomCount == null && rooms.Any(o => o.Text.Contains("Studio")))
             {
                 roomCount = "0";
             }
-            //var livingAreaElement = roomsAndArea.Where(o => livingAreaRegex.IsMatch(o.Text)).FirstOrDefault();
-            //var livingArea = livingAreaElement != null ? livingAreaElement.Text.Split(' ')[0] : null;
-
-          
-            //var dateAddedText = element.FindElement(By.CssSelector(".re-Card-timeago")).Text;
-
-            //int parsedDateAdded = 0;
-            //int.TryParse(dateAddedText.Split(' ')[1], out parsedDateAdded);
-            //var dateAdded = dateAddedText.Split(' ')[2].StartsWith("d", StringComparison.CurrentCultureIgnoreCase)
-            //                ? DateTime.Now.Subtract(new TimeSpan(parsedDateAdded, 0, 0, 0)) : DateTime.Now;
 
             var parsedPrice = 0M;
-            //  var parsedLivingArea = 0M;
+
             var parsedRoomCount = 0;
 
             return new Rent
@@ -1187,15 +1175,9 @@ namespace Funda
             };
 
         }
-         public IRecord GetRecordDataFromDaft(IRecord record)
+         public IRecord GetRecordDataFromDaftSale(IRecord record)
         {
-            // record = MarkSoldFotoCasa(record);
-            // var scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("window.__INITIAL_PROPS__")).First();
 
-            //var coords = scriptWithCoord.GetAttribute("innerHTML").Split(new[] { "coordinates", "accuracy" }, StringSplitOptions.None)[2].Split(':');
-            //var lat = coords[2].Split(',')[0];
-            //var lon = coords[3].Split(',')[0];
-            //record.Address = lat + ',' + lon;
             var livingAreaElement = this.Driver.FindElements(By.CssSelector(".PropertyOverview__propertyOverviewDetails")).FirstOrDefault();
             var livingAreaText = livingAreaElement.Text.Split(new[] { "Overall Floor Area: " }, StringSplitOptions.None);
             var livingArea = livingAreaElement != null ? livingAreaText.Length > 1 ? livingAreaText[1].Split(new[] { " m2" }, StringSplitOptions.None)[0] : null : null;
@@ -1204,6 +1186,28 @@ namespace Funda
             record.PostCode = addressElement !=null ? addressElement.Text.Split(new[] { "Eircode: " }, StringSplitOptions.None)[1] : null;
 
             record.LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null;
+            record.DateLastProcessed = DateTime.Now;
+            return record;
+        }
+
+        public IRecord GetRecordDataFromDaftRent(IRecord record)
+        {
+            if (this.Driver.FindElementsByCssSelector(".warning").Any(o => o.Text.Contains("This Property Has been either let or withdrawn ")))
+            {
+                record.DateRemoved = DateTime.Now;
+            }
+
+            var areaRegex = new Regex("([0-9]{2,4}|[0-9,.]{5}) ?(square|sq)([. ]{1,2})?(meters|met|m|feet|ft|f)");
+            var areaElement = this.Driver.FindElementsByCssSelector(".smi-tab-content").FirstOrDefault(o => areaRegex.IsMatch(o.Text));
+            if (areaElement != null)
+            {
+                decimal parsedArea = 0M;
+                if (decimal.TryParse(areaRegex.Matches(areaElement.Text)[0].Groups[1].Value.Replace(",",string.Empty), out parsedArea))
+                {
+                    record.LivingArea =  new[] { "feet", "ft", "f" }.Any(o=> areaRegex.Matches(areaElement.Text)[0].Value.Contains(o)) ? (int?)(parsedArea/(10.764m)) : (int?)parsedArea;
+                }
+            }
+
             record.DateLastProcessed = DateTime.Now;
             return record;
         }
