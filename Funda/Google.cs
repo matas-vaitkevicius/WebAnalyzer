@@ -11,16 +11,16 @@ namespace Funda
 {
     public class Google
     {
-        public static void CallGooglePlacesAPIAndSetCallback()
+        public  void CallGooglePlacesAPIAndSetCallback()
         {
             // if (!File.Exists("results.csv")) { File.CreateText("results.csv"); }
             // var keywords = "(" + string.Join(") OR (", ConfigurationManager.AppSettings.Get("keywords").Split(new[] { ',' })) + ")";
-            var googlePlacesApiKey = ConfigurationManager.AppSettings.Get("googlePlacesApiKey");
+            var googlePlacesApiKey = "AIzaSyB81BD-GxRYR3MH3fcq51AWS5m0WDr7hjM";
             //  var radius = ConfigurationManager.AppSettings.Get("radius");
             //   string filename = ConfigurationManager.AppSettings.Get("coordinateSource");
             using (var db = new Funda.WebAnalyzerEntities())
             {
-                var addresseToBeSearched = db.Rent.Where<IRecord>(o => o.PostCode == null).Union(db.Rent.Where<IRecord>(oo => oo.PostCode == null)).Distinct();
+                var addresseToBeSearched = db.Rent.Where<IRecord>(o => o.PostCode == null && o.Url.Contains("daft")).Union(db.Rent.Where<IRecord>(oo => oo.PostCode == null && oo.Url.Contains("daft"))).Distinct();
 
                 foreach (var locationTobeSearched in addresseToBeSearched)
                 {
@@ -31,7 +31,7 @@ namespace Funda
                         {
                             while (res == null || HasProperty(res, "next_page_token"))
                             {
-                                var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={locationTobeSearched}&key={googlePlacesApiKey}&bounds=51.222,-11.0133788|55.636,-5.6582363";
+                                  var url = $"https://maps.googleapis.com/maps/api/geocode/json?address={locationTobeSearched.Address}&key={googlePlacesApiKey}&bounds=51.222,-11.0133788|55.636,-5.6582363";
                                 if (res != null && HasProperty(res, "next_page_token"))
                                     url += "&pagetoken=" + res["next_page_token"];
                                 var response = client.GetStringAsync(url).Result;
@@ -46,8 +46,10 @@ namespace Funda
                                         //  if (!File.ReadAllText("results.csv").Contains(match["place_id"]))
                                         //  {
                                         //      var placeResponse = client.GetStringAsync(string.Format("https://maps.googleapis.com/maps/api/place/details/json?placeid={0}&key={1}", match["place_id"], googlePlacesApiKey)).Result;
-                                        var getCoordinatesAndPostCode = ReadResponse(match);
-
+                                        var coordinatesAndPostCode = ReadResponse(match);
+                                        if (coordinatesAndPostCode != null) {
+//                                            locationTobeSearched.
+                                        }
                                         //        }
                                     }
                                 }
@@ -72,45 +74,39 @@ namespace Funda
 
      
 
-        public static Tuple<decimal,decimal,string> ReadResponse(string response)
+        public  Tuple<decimal,decimal,string> ReadResponse(dynamic res)
         {
-            JavaScriptSerializer json = new JavaScriptSerializer();
-            var res = json.Deserialize<dynamic>(response);
-            var postcode = string.Empty;
-            var latitude = 0m;
-            var longitude = 0m;
-            if (res["status"] == "OK")
-            {
-                var name = res["result"]["name"];
-                var types = string.Join(",", res["result"]["types"]);
-                string city = string.Empty;
-                string state = string.Empty;
-                foreach (var addressComponent in res["result"]["address_components"])
-                {
-                    foreach (var t in addressComponent["types"])
-                    {
-                        if (t == "locality")
-                        {
-                            city = addressComponent["long_name"];
-                        }
-                        if (t == "administrative_area_level_1")
-                        {
-                            state = addressComponent["long_name"];
-                        }
-                    }
-                }
 
-                var address = HasProperty(res["result"], "vicinity") ? res["result"]["vicinity"] : string.Empty;
-                var phone = HasProperty(res["result"], "international_phone_number") ? res["result"]["international_phone_number"] : string.Empty;
-                var website = HasProperty(res["result"], "website") ? res["result"]["website"] : string.Empty;
-                var placeid = res["result"]["place_id"];
-              
-             
+            try
+            {
+                var latitude = (decimal)res["geometry"]["location"]["lat"];
+                var longitude = (decimal)res["geometry"]["location"]["lng"];
+                var postcode = (string)GetPostalCode(res);
+
+                return new Tuple<decimal, decimal, string>(latitude, longitude, postcode);
             }
-            return new Tuple<decimal, decimal, string>(latitude, longitude, postcode);
+            catch (Exception e){
+                return null;
+            }
         }
 
-        public static bool HasProperty(dynamic obj, string name)
+        public string GetPostalCode(dynamic res)
+        {
+
+            foreach (var component in res["address_components"])
+            {
+                foreach (var type in component["types"])
+                {
+                        if (type == "postal_code")
+                            return type["long_name"];
+                }
+            }
+
+            return null;
+        }
+
+
+        public  bool HasProperty(dynamic obj, string name)
         {
             try
             {

@@ -707,7 +707,8 @@ namespace WebAnalyzer.Controllers
 
         public ActionResult UpdateDaftWithGoogle()
         {
-
+            var google = new Funda.Google();
+            google.CallGooglePlacesAPIAndSetCallback();
             return View("index");
         }
     }
