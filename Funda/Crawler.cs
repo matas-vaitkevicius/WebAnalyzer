@@ -1078,7 +1078,15 @@ namespace Funda
         public List<IRecord> AddDaft(bool isSale)
         {
             var list = new List<IRecord>();
-
+            (this.Driver as IJavaScriptExecutor).ExecuteScript("const delay = ms => new Promise(resolve => setTimeout(resolve, ms)); " +
+                        "(async () => {" +
+                        "    while (document.documentElement.scrollTop <= document.body.scrollHeight - 500)" +
+                        "    {" +
+                        "        window.scrollTo(0, document.documentElement.scrollTop + 500);" +
+                        "        await delay(300);" +
+                        "    }" +
+                        "})(); ");
+            Thread.Sleep(3000);
             var selectorClass = isSale ? "AdCard__adCardContainer" : "box";
             var adds =  this.Driver.FindElements(By.CssSelector("."+selectorClass)).Where(o => o.Text != "") ;
             foreach (var advert in adds)
@@ -1148,8 +1156,9 @@ namespace Funda
             var url =  element.FindElement(By.CssSelector(".search_result_title_box h2 a")).GetAttribute("href");
             var address = element.FindElement(By.CssSelector(".search_result_title_box h2 a")).Text.Split(new[] { " - " },StringSplitOptions.None)[0];
 
-
-            var price = element.FindElement(By.CssSelector(".price")).Text.Split(' ')[0].Replace("€", string.Empty).Replace(",", string.Empty);
+            var priceElement = element.FindElement(By.CssSelector(".price"));
+            var priceText = priceElement.Text.Split(' ')[0].Replace("€", string.Empty).Replace(",", string.Empty);
+            var priceIsInMonths = priceElement.Text.Contains("month");
             var rooms = element.FindElements(By.CssSelector(".info li"));
             var roomCountRegex = new Regex("([0-9] Bed(s)*)");
             var roomCountElement = rooms.Where(o => roomCountRegex.IsMatch(o.Text)).FirstOrDefault();
@@ -1168,7 +1177,7 @@ namespace Funda
                 Url = url,
                 //Title = title,
                 Address = address,
-                Price = decimal.TryParse(price, out parsedPrice) ? parsedPrice : (decimal?)null,
+                Price = decimal.TryParse(priceText, out parsedPrice) ? priceIsInMonths ? parsedPrice : (parsedPrice * 4.3452m) : (decimal?)null,
                 //   LivingArea = decimal.TryParse(livingArea, out parsedLivingArea) ? (int?)Math.Round(parsedLivingArea, 0) : (int?)null,
                 RoomCount = int.TryParse(roomCount, out parsedRoomCount) ? parsedRoomCount : (int?)null,
                 DateAdded = DateTime.Now
@@ -1195,6 +1204,14 @@ namespace Funda
             if (this.Driver.FindElementsByCssSelector(".warning").Any(o => o.Text.Contains("This Property Has been either let or withdrawn ")))
             {
                 record.DateRemoved = DateTime.Now;
+            }
+
+            var priceElement = this.Driver.FindElement(By.CssSelector("#smi-price-string"));
+            var priceText = priceElement.Text.Split(' ')[0].Replace("€", string.Empty).Replace(",", string.Empty);
+            var priceIsInMonths = priceElement.Text.Contains("month");
+            if (!priceIsInMonths) {
+                var parsedPrice = 0M;
+                record.Price = record.Price = decimal.TryParse(priceText, out parsedPrice) ? priceIsInMonths ? parsedPrice : (parsedPrice * 4.3452m) : (decimal?)null;
             }
 
             var areaRegex = new Regex("([0-9]{2,4}|[0-9,.]{5}) ?(square|sq)([. ]{1,2})?(meters|met|m|feet|ft|f)");
