@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Funda
 {
@@ -19,5 +20,6 @@ namespace Funda
          Nullable<System.DateTime> DateLastProcessed { get; set; }
          string HeatingType { get; set; }
         Nullable<bool> IsBendrabutis { get; set; }
+        ICollection<SpatialAnalysis> SpatialAnalysis { get; set; }
     }
 }

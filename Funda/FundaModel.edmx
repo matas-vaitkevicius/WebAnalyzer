@@ -48,9 +48,67 @@
           <Property Name="HeatingType" Type="varchar" MaxLength="50" />
           <Property Name="IsBendrabutis" Type="bit" />
         </EntityType>
+        <EntityType Name="SpatialAnalysis">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaleId" Type="int" />
+          <Property Name="RentId" Type="int" />
+          <Property Name="Point" Type="geography" />
+          <Property Name="RentsIn1kRadiusCount" Type="int" />
+          <Property Name="SalesIn1kRadiusCount" Type="int" />
+          <Property Name="RentsIn1kRadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn1kRadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="RentsIn500RadiusCount" Type="int" />
+          <Property Name="SalesIn500RadiusCount" Type="int" />
+          <Property Name="RentsIn500RadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn500RadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="RentsIn200RadiusCount" Type="int" />
+          <Property Name="SalesIn200RadiusCount" Type="int" />
+          <Property Name="RentsIn200RadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn200RadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="RentsIn100RadiusCount" Type="int" />
+          <Property Name="SalesIn100RadiusCount" Type="int" />
+          <Property Name="RentsIn100RadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn100RadiusAvgSqM" Type="decimal" Precision="12" Scale="6" />
+        </EntityType>
+        <Association Name="FK_SpatialAnalysis_Rent">
+          <End Role="Rent" Type="Self.Rent" Multiplicity="0..1" />
+          <End Role="SpatialAnalysis" Type="Self.SpatialAnalysis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rent">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SpatialAnalysis">
+              <PropertyRef Name="RentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SpatialAnalysis_Sale">
+          <End Role="Sale" Type="Self.Sale" Multiplicity="0..1" />
+          <End Role="SpatialAnalysis" Type="Self.SpatialAnalysis" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sale">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SpatialAnalysis">
+              <PropertyRef Name="SaleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="WebAnalyzerModelStoreContainer">
           <EntitySet Name="Rent" EntityType="Self.Rent" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sale" EntityType="Self.Sale" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SpatialAnalysis" EntityType="Self.SpatialAnalysis" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_SpatialAnalysis_Rent" Association="Self.FK_SpatialAnalysis_Rent">
+            <End Role="Rent" EntitySet="Rent" />
+            <End Role="SpatialAnalysis" EntitySet="SpatialAnalysis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpatialAnalysis_Sale" Association="Self.FK_SpatialAnalysis_Sale">
+            <End Role="Sale" EntitySet="Sale" />
+            <End Role="SpatialAnalysis" EntitySet="SpatialAnalysis" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -59,6 +117,15 @@
         <EntityContainer Name="WebAnalyzerEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Rent" EntityType="WebAnalyzerModel.Rent" />
           <EntitySet Name="Sale" EntityType="WebAnalyzerModel.Sale" />
+          <EntitySet Name="SpatialAnalysis" EntityType="WebAnalyzerModel.SpatialAnalysis" />
+          <AssociationSet Name="FK_SpatialAnalysis_Rent" Association="WebAnalyzerModel.FK_SpatialAnalysis_Rent">
+            <End Role="Rent" EntitySet="Rent" />
+            <End Role="SpatialAnalysis" EntitySet="SpatialAnalysis" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SpatialAnalysis_Sale" Association="WebAnalyzerModel.FK_SpatialAnalysis_Sale">
+            <End Role="Sale" EntitySet="Sale" />
+            <End Role="SpatialAnalysis" EntitySet="SpatialAnalysis" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Rent">
           <Key>
@@ -81,6 +148,7 @@
           <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsBendrabutis" Type="Boolean" />
           <Property Name="IsFurnished" Type="Boolean" />
+          <NavigationProperty Name="SpatialAnalysis" Relationship="WebAnalyzerModel.FK_SpatialAnalysis_Rent" FromRole="Rent" ToRole="SpatialAnalysis" />
         </EntityType>
         <EntityType Name="Sale">
           <Key>
@@ -102,7 +170,41 @@
           <Property Name="ServiceCosts" Type="Decimal" Precision="19" Scale="4" />
           <Property Name="HeatingType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsBendrabutis" Type="Boolean" />
+          <NavigationProperty Name="SpatialAnalysis" Relationship="WebAnalyzerModel.FK_SpatialAnalysis_Sale" FromRole="Sale" ToRole="SpatialAnalysis" />
         </EntityType>
+        <EntityType Name="SpatialAnalysis">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Point" Type="Geography" />
+          <Property Name="RentsIn1kRadiusCount" Type="Int32" />
+          <Property Name="SalesIn1kRadiusCount" Type="Int32" />
+          <Property Name="RentsIn1kRadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn1kRadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="RentsIn500RadiusCount" Type="Int32" />
+          <Property Name="SalesIn500RadiusCount" Type="Int32" />
+          <Property Name="RentsIn500RadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn500RadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="RentsIn200RadiusCount" Type="Int32" />
+          <Property Name="SalesIn200RadiusCount" Type="Int32" />
+          <Property Name="RentsIn200RadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn200RadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="RentsIn100RadiusCount" Type="Int32" />
+          <Property Name="SalesIn100RadiusCount" Type="Int32" />
+          <Property Name="RentsIn100RadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <Property Name="SalesIn100RadiusAvgSqM" Type="Decimal" Precision="12" Scale="6" />
+          <NavigationProperty Name="Rent" Relationship="WebAnalyzerModel.FK_SpatialAnalysis_Rent" FromRole="SpatialAnalysis" ToRole="Rent" />
+          <NavigationProperty Name="Sale" Relationship="WebAnalyzerModel.FK_SpatialAnalysis_Sale" FromRole="SpatialAnalysis" ToRole="Sale" />
+        </EntityType>
+        <Association Name="FK_SpatialAnalysis_Rent">
+          <End Type="WebAnalyzerModel.Rent" Role="Rent" Multiplicity="0..1" />
+          <End Type="WebAnalyzerModel.SpatialAnalysis" Role="SpatialAnalysis" Multiplicity="*" />
+        </Association>
+        <Association Name="FK_SpatialAnalysis_Sale">
+          <End Type="WebAnalyzerModel.Sale" Role="Sale" Multiplicity="0..1" />
+          <End Type="WebAnalyzerModel.SpatialAnalysis" Role="SpatialAnalysis" Multiplicity="*" />
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -154,6 +256,48 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="SpatialAnalysis">
+            <EntityTypeMapping TypeName="WebAnalyzerModel.SpatialAnalysis">
+              <MappingFragment StoreEntitySet="SpatialAnalysis">
+                <ScalarProperty Name="SalesIn100RadiusAvgSqM" ColumnName="SalesIn100RadiusAvgSqM" />
+                <ScalarProperty Name="RentsIn100RadiusAvgSqM" ColumnName="RentsIn100RadiusAvgSqM" />
+                <ScalarProperty Name="SalesIn100RadiusCount" ColumnName="SalesIn100RadiusCount" />
+                <ScalarProperty Name="RentsIn100RadiusCount" ColumnName="RentsIn100RadiusCount" />
+                <ScalarProperty Name="SalesIn200RadiusAvgSqM" ColumnName="SalesIn200RadiusAvgSqM" />
+                <ScalarProperty Name="RentsIn200RadiusAvgSqM" ColumnName="RentsIn200RadiusAvgSqM" />
+                <ScalarProperty Name="SalesIn200RadiusCount" ColumnName="SalesIn200RadiusCount" />
+                <ScalarProperty Name="RentsIn200RadiusCount" ColumnName="RentsIn200RadiusCount" />
+                <ScalarProperty Name="SalesIn500RadiusAvgSqM" ColumnName="SalesIn500RadiusAvgSqM" />
+                <ScalarProperty Name="RentsIn500RadiusAvgSqM" ColumnName="RentsIn500RadiusAvgSqM" />
+                <ScalarProperty Name="SalesIn500RadiusCount" ColumnName="SalesIn500RadiusCount" />
+                <ScalarProperty Name="RentsIn500RadiusCount" ColumnName="RentsIn500RadiusCount" />
+                <ScalarProperty Name="SalesIn1kRadiusAvgSqM" ColumnName="SalesIn1kRadiusAvgSqM" />
+                <ScalarProperty Name="RentsIn1kRadiusAvgSqM" ColumnName="RentsIn1kRadiusAvgSqM" />
+                <ScalarProperty Name="SalesIn1kRadiusCount" ColumnName="SalesIn1kRadiusCount" />
+                <ScalarProperty Name="RentsIn1kRadiusCount" ColumnName="RentsIn1kRadiusCount" />
+                <ScalarProperty Name="Point" ColumnName="Point" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <AssociationSetMapping Name="FK_SpatialAnalysis_Rent" TypeName="WebAnalyzerModel.FK_SpatialAnalysis_Rent" StoreEntitySet="SpatialAnalysis">
+            <EndProperty Name="SpatialAnalysis">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+            <EndProperty Name="Rent">
+              <ScalarProperty Name="Id" ColumnName="RentId" />
+            </EndProperty>
+            <Condition ColumnName="RentId" IsNull="false" />
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="FK_SpatialAnalysis_Sale" TypeName="WebAnalyzerModel.FK_SpatialAnalysis_Sale" StoreEntitySet="SpatialAnalysis">
+            <EndProperty Name="SpatialAnalysis">
+              <ScalarProperty Name="Id" ColumnName="Id" />
+            </EndProperty>
+            <EndProperty Name="Sale">
+              <ScalarProperty Name="Id" ColumnName="SaleId" />
+            </EndProperty>
+            <Condition ColumnName="SaleId" IsNull="false" />
+          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

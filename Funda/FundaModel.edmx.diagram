@@ -5,8 +5,11 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="d8b90a602d0948b5aa023ef6ee0678dd" Name="Diagram1">
-        <EntityTypeShape EntityType="WebAnalyzerModel.Rent" Width="1.5" PointX="0.75" PointY="0.75" />
-        <EntityTypeShape EntityType="WebAnalyzerModel.Sale" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="WebAnalyzerModel.Rent" Width="1.5" PointX="0.75" PointY="1.25" />
+        <EntityTypeShape EntityType="WebAnalyzerModel.Sale" Width="1.5" PointX="0.75" PointY="7.375" />
+        <EntityTypeShape EntityType="WebAnalyzerModel.SpatialAnalysis" Width="1.5" PointX="3" PointY="1.125" />
+        <AssociationConnector Association="WebAnalyzerModel.FK_SpatialAnalysis_Rent" />
+        <AssociationConnector Association="WebAnalyzerModel.FK_SpatialAnalysis_Sale" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

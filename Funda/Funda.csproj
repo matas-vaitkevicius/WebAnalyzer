@@ -90,6 +90,9 @@
     <Compile Include="Sale.cs">
       <DependentUpon>FundaModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="SpatialAnalysis.cs">
+      <DependentUpon>FundaModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

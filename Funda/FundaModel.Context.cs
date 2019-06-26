@@ -27,5 +27,6 @@ namespace Funda
     
         public virtual DbSet<Rent> Rent { get; set; }
         public virtual DbSet<Sale> Sale { get; set; }
+        public virtual DbSet<SpatialAnalysis> SpatialAnalysis { get; set; }
     }
 }
