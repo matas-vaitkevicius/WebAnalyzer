@@ -23,12 +23,12 @@ namespace Funda
            // System.Data.Entity.SqlServer.SqlProviderServices.SqlServerTypesAssemblyName = typeof(SqlGeography).Assembly.FullName;
             // if (!File.Exists("results.csv")) { File.CreateText("results.csv"); }
             // var keywords = "(" + string.Join(") OR (", ConfigurationManager.AppSettings.Get("keywords").Split(new[] { ',' })) + ")";
-            var googlePlacesApiKey = "AIzaSyA5m6qBfiijwxzTcRsuVmtL-1dMKm-cUWM";
+            var googlePlacesApiKey = "";
             //  var radius = ConfigurationManager.AppSettings.Get("radius");
             //   string filename = ConfigurationManager.AppSettings.Get("coordinateSource");
             using (var db = new Funda.WebAnalyzerEntities())
             {
-                IList<IRecord> addressesToBeSearched = db.Rent.Where<IRecord>(o => o.Url.Contains(websiteName) && !o.SpatialAnalysis.Any(x => x.Rent!=null)).Union(db.Rent.Where<IRecord>(oo => oo.Url.Contains(websiteName) && !oo.SpatialAnalysis.Any(xx => xx.Sale != null))).Distinct().ToList();
+                IList<IRecord> addressesToBeSearched = db.Rent.Where<IRecord>(o => o.Url.Contains(websiteName) && o.SpatialAnalysis.Count == 0).ToList().Union(db.Sale.Where<IRecord>(oo => oo.Url.Contains(websiteName) && oo.SpatialAnalysis.Count == 0)).ToList();
 
                 foreach (var locationTobeSearched in addressesToBeSearched)
                 {
@@ -49,19 +49,19 @@ namespace Funda
 
                                 if (res["status"] == "OK")
                                 {
-                                    foreach (var match in res["results"])
-                                    {
+                                   // foreach (var match in res["results"])
+                                  //  {
                                         //  if (!File.ReadAllText("results.csv").Contains(match["place_id"]))
                                         //  {
                                         //      var placeResponse = client.GetStringAsync(string.Format("https://maps.googleapis.com/maps/api/place/details/json?placeid={0}&key={1}", match["place_id"], googlePlacesApiKey)).Result;
-                                        Tuple<decimal?, decimal?, string> coordinatesAndPostCode = ReadResponse(match);
+                                        Tuple<decimal?, decimal?, string> coordinatesAndPostCode = ReadResponse(res["results"][0]);
                                         if (coordinatesAndPostCode != null && coordinatesAndPostCode.Item1.HasValue && coordinatesAndPostCode.Item2.HasValue)
                                         {
                                             locationTobeSearched.SpatialAnalysis.Add(new SpatialAnalysis() { Point = CreatePoint(coordinatesAndPostCode.Item1.Value, coordinatesAndPostCode.Item2.Value) });
                                             locationTobeSearched.PostCode = coordinatesAndPostCode.Item3;
                                         }
                                         //        }
-                                    }
+                                  //  }
                                 }
                                 else if (res["status"] == "OVER_QUERY_LIMIT")
                                 {
