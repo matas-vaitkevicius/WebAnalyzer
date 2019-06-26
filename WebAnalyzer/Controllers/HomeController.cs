@@ -580,12 +580,7 @@ namespace WebAnalyzer.Controllers
         public ActionResult UpdateFotoCasa()
         {
             DoUpdate("fotocasa", null);
-            return View("MarkSoldFotoCasa");
-        }
-        public ActionResult MarkSoldFotoCasa()
-        {
-            MarkSold("fotocasa");
-            return View("Index");
+            return View("CollectNewIe");
         }
 
         public void MarkSold(string systemName)
