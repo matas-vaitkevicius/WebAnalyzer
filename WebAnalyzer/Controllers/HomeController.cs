@@ -316,7 +316,7 @@ namespace WebAnalyzer.Controllers
                         var list = new List<IRecord>();
                         //if (!isSale.HasValue)
                         //{
-                        list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue)  /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(
+                        list = db.Rent.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue)   /* || o.DateLastProcessed.Value < DateTime.Today) && o.DateRemoved == null */ && o.Url.Contains(systemName)).ToList().Union(
                             db.Sale.Where<IRecord>(o => (!o.DateLastProcessed.HasValue || !o.DateRemoved.HasValue) && o.Url.Contains(systemName)).ToList()
                             )
                         .OrderBy(o => o.DateLastProcessed).ToList();

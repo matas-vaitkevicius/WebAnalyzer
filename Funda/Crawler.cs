@@ -579,12 +579,33 @@ namespace Funda
         public IRecord GetRecordDataFromFotoCasa(IRecord record)
         {
             record = MarkSoldFotoCasa(record);
-            var scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("window.__INITIAL_PROPS__")).First();
+            if (record.SpatialAnalysis.Count == 0)
+            {
+                var lat = string.Empty;
+                var lon = string.Empty;
+                var scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("window.__INITIAL_PROPS__"));
+                if (scriptWithCoord.Any())
+                {
+                    var coords = scriptWithCoord.First().GetAttribute("innerHTML").Split(new[] { "coordinates", "accuracy" }, StringSplitOptions.None)[2].Split(':');
+                    lat = coords[2].Split(',')[0];
+                    lon = coords[3].Split(',')[0];
+                }
+                else
+                {
+                    scriptWithCoord = this.Driver.FindElements(By.CssSelector("script")).Where(o => o.GetAttribute("innerHTML").Contains("\"Lat\""));
+                    if (scriptWithCoord.Any())
+                    {
+                        var coords = scriptWithCoord.First().GetAttribute("innerHTML").Split(new[] { "Lat\": ", ",\"oasGeoPostalCode" }, StringSplitOptions.None)[1].Split(new[] { ",\"Lng\": " }, StringSplitOptions.None);
+                        lat = coords[0].Trim('"');
+                        lon = coords[1].Trim('"');
+                    }
+                }
 
-            var coords = scriptWithCoord.GetAttribute("innerHTML").Split(new[] { "coordinates", "accuracy" }, StringSplitOptions.None)[2].Split(':');
-            var lat = coords[2].Split(',')[0];
-            var lon = coords[3].Split(',')[0];
-            record.Address = lat + ',' + lon;
+                if (!string.IsNullOrWhiteSpace(lat) && !string.IsNullOrWhiteSpace(lat))
+                {
+                    record.SpatialAnalysis.Add(new SpatialAnalysis() { Point = System.Data.Entity.Spatial.DbGeography.PointFromText($"POINT({lat} {lon})", 4326) });
+                }
+            }
             record.DateLastProcessed = DateTime.Now;
             return record;
         }
