@@ -41,60 +41,22 @@
 --GROUP BY sa.id
 select * from
 (select 
-baseid, count(RentId) rent1kCount,  sum(k1Rent.Price)/(avgRentSize.avgArea*count(RentId)) as rent1kAvgSqM, avgRentSize.avgArea, count(around1k.SaleId) sale1kCount
+baseid,  count(k1Rent.rentid) rent1kCount,  sum(k1Rent.RperSqM)/(count(k1Rent.rentid)) as rent1kAvgSqM,  count(around1k.SaleId) sale1kCount, (sum(k1sale.price)/sum(k1Sale.LivingArea)) sale1Avg,
+(sum(k1sale.price)/sum(k1Sale.LivingArea))/((sum(k1Rent.RperSqM)/(count(k1Rent.rentid)))*12) years
 --*
 from 
-(select  sa.id baseid, s.id saleid,s.RoomCount, point from SpatialAnalysis sa inner join Sale s on s.Id = SaleId where sa.SalesIn1kRadiusCount is null) as base
-join SpatialAnalysis around1k on base.Point.STBuffer(1000).STIntersects(around1k.Point) = 1 
-join Rent k1Rent on k1Rent.Id =around1k.RentId and base.RoomCount = k1Rent.RoomCount
-join Sale k1Sale on k1Sale.Id = around1k.SaleId and base.RoomCount = k1Sale.RoomCount
-join (select roomcount , avg(livingarea) avgArea, count(1) c from Rent where url like '%daft%' and LivingArea is not null
-group by RoomCount) avgRentSize on avgRentSize.RoomCount = k1Rent.RoomCount
-group by baseid, avgRentSize.avgArea) k1 
+(select  sa.id baseid, s.id saleid,s.RoomCount, point from webanalyzer.dbo.SpatialAnalysis sa inner join webanalyzer.dbo.Sale s on s.Id = SaleId where sa.SalesIn1kRadiusCount is null) as base
+join webanalyzer.dbo.SpatialAnalysis around1k on base.Point.STBuffer(1000).STIntersects(around1k.Point) = 1 
+left outer join (
+ select id rentid, rc, Price/avgRoomSize RperSqM from( select * from (select rc, sum(avgArea*c)/sum(c) avgRoomSize from (select roomcount rc , avg(livingarea) avgArea, count(1) c from webanalyzer.dbo.Rent where url like '%daft%' and LivingArea is not null
+group by RoomCount
+union (select roomcount rc , avg(livingarea) avgArea, count(1) c from webanalyzer.dbo.sale where url like '%daft%' and LivingArea is not null
+group by RoomCount)  )uni group by rc) avgRoom) avgrents
+join webanalyzer.dbo.rent r on r.RoomCount = avgrents.rc
+) k1Rent on k1Rent.rentid =around1k.RentId and base.RoomCount = k1Rent.rc
+left outer join webanalyzer.dbo.Sale k1Sale on k1Sale.Id = around1k.SaleId and base.RoomCount = k1Sale.RoomCount
 
+group by baseid) k1 
 
+order by  years
 
-select   @p, prox.cnt,   prox.avg_sq_m,prox500.cnt, prox200.cnt, prox100.cnt,prox500.avg_sq_m,prox200.avg_sq_m,prox100.avg_sq_m   from
-	(select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt from 
-			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
-            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
-            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
-				.STBuffer(1000).STIntersects(@p) as [Intersects]
-				from Webanalyzer.dbo.sale
-				  where --(Title = 'gandia' or Title = 'daimus')   and
- address is not null and LivingArea is not null and RoomCount = @rooms
-			) s
-		where [Intersects] = 1) prox, 
-		
-		 (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
-			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
-            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
-            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
-				.STBuffer(500).STIntersects(@p) as [Intersects]
-				from Webanalyzer.dbo.sale
-				  where --(Title = 'gandia' or Title = 'daimus')   and
- address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
-			) s
-		where [Intersects] = 1) prox500, 
-		
-		 (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
-			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
-            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
-            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
-				.STBuffer(200).STIntersects(@p) as [Intersects]
-				from Webanalyzer.dbo.sale
-				  where --(Title = 'gandia' or Title = 'daimus')   and
- address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
-			) s
-		where [Intersects] = 1) prox200, 
-		
-		 (select 	(sum(price)/sum(LivingArea)) avg_sq_m,  count(1) cnt, @i id from 
-			(select  *, GEOGRAPHY::STGeomFromText('POINT('+ 
-            convert(nvarchar(20), SUBSTRING(Address,0,CHARINDEX(',',Address,0)))+' '+
-            convert( nvarchar(20), SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)))+')', 4326)
-				.STBuffer(100).STIntersects(@p) as [Intersects]
-				from Webanalyzer.dbo.sale
-				  where --(Title = 'gandia' or Title = 'daimus')   and
- address is not null and LivingArea is not null and RoomCount is not null and RoomCount = @rooms
-			) s
-		where [Intersects] = 1) prox100 where prox500.id = prox.id and prox200.id = prox.id and prox100.id = prox.id 
