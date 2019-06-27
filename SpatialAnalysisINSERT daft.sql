@@ -39,7 +39,7 @@
 --JOIN [dbo].[SpatialAnalysis] around
 --ON sa.Point.STBuffer(1000).STIntersects(around.Point) = 1
 --GROUP BY sa.id
-select * from
+select adds.Url, adds.Price/adds.LivingArea Sqm, (adds.Price/adds.LivingArea)/k1.sale1Avg ratio , * from
 (select 
 baseid,  count(k1Rent.rentid) rent1kCount,  sum(k1Rent.RperSqM)/(count(k1Rent.rentid)) as rent1kAvgSqM,  count(around1k.SaleId) sale1kCount, (sum(k1sale.price)/sum(k1Sale.LivingArea)) sale1Avg,
 (sum(k1sale.price)/sum(k1Sale.LivingArea))/((sum(k1Rent.RperSqM)/(count(k1Rent.rentid)))*12) years
@@ -57,6 +57,8 @@ join webanalyzer.dbo.rent r on r.RoomCount = avgrents.rc
 left outer join webanalyzer.dbo.Sale k1Sale on k1Sale.Id = around1k.SaleId and base.RoomCount = k1Sale.RoomCount
 
 group by baseid) k1 
-
-order by  years
+left outer join webanalyzer.dbo.SpatialAnalysis sp on sp.Id = baseid
+left outer join WebAnalyzer.dbo.Sale adds on adds.Id = sp.SaleId
+where adds.Price < 100000
+order by  years, ratio
 
