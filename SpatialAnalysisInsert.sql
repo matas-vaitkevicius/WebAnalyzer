@@ -6,7 +6,24 @@
 --            convert( nvarchar(20), Latitude)+')', 4326)
 --        .STBuffer(Radius * 1000).STIntersects(@p) as [Intersects]
 
-DECLARE  @i int = 19011-- (SELECT min(id)   FROM [WebAnalyzer].[dbo].[Sale] s   where   url  like '%fotocasa%'  and DateLastProcessed > '2019-06-27'
+Declare @temp table(id int IDENTITY(1,1),
+saleid int ,
+point GEOGRAPHY,
+roomcount int
+)
+
+insert into @temp
+SELECT saleid, point, roomcount  FROM [WebAnalyzer].[dbo].[Sale] s left outer join 
+ [WebAnalyzer].[dbo].SpatialAnalysis sa on sa.SaleId = s.Id  
+  where   url  like '%fotocasa%' 
+  and SalesIn1kRadiusCount is null
+  and point is not null
+  -- and DateLastProcessed > '2019-06-27'
+  and RoomCount is not null
+  order by saleid
+
+
+ DECLARE  @id int= 0-- (SELECT min(id)   FROM [WebAnalyzer].[dbo].[Sale] s   where   url  like '%fotocasa%'  and DateLastProcessed > '2019-06-27'
 --and not exists(select 1 from [WebAnalyzer].[dbo].SpatialAnalysis sa where sa.SaleId = s.Id ))
 --print @i
 --declare @temp table(
@@ -34,26 +51,35 @@ DECLARE  @i int = 19011-- (SELECT min(id)   FROM [WebAnalyzer].[dbo].[Sale] s   
 
 --declare @lat nvarchar(20)
 --declare @lon nvarchar(20)
+DECLARE  @i int
 declare @rooms int
 declare @p GEOGRAPHY 
-while @i <= 20700 --  (select max(id) from Webanalyzer.dbo.sale)
+while @id <=   (select max(id) from @temp)
 begin
 
  select top 1 
  --@lat = SUBSTRING(Address,0,CHARINDEX(',',Address,0)), 
  --@lon = SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)),
- @p = sa.Point,
- @rooms = RoomCount from Webanalyzer.dbo.sale s
- inner join Webanalyzer.dbo.SpatialAnalysis sa on sa.SaleId = s.Id
-		where s.id  = @i; 
+ @i = saleid,
+ @p = Point,
+ @rooms = RoomCount from @temp
+ 
+		where id  = @id; 
+	--	print @id 
+	--	print  @i 
+	--	print @rooms
 
-
+	--	print '--------'
+	--	set @id = @id+1
+	--	--select 
+	--	--SUBSTRING(Address,0,CHARINDEX(',',Address,0)) lat, SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)) lon
+	--end	
 
 --=  GEOGRAPHY::STGeomFromText('POINT('+ @lat +' '+   @lon        +')', 4326)
 
 
 -------sales
-	print @i +' '+@rooms+' '+@p.Lat+' '+@p.Long
+	--print @i +' '+@rooms+' '+@p.Lat+' '+@p.Long
 		
 	update t set
  [SalesIn1kRadiusCount] = prox.cnt, [SalesIn1kRadiusAvgSqM] =		  prox.avg_sq_m,
@@ -167,7 +193,7 @@ begin
 --		where prox.id = t.Saleid and prox1.id = t.Saleid and prox100.id = t.Saleid and prox1k.id = t.Saleid
 		--inner join Webanalyzer.dbo.sale r on  prox.id = r.id
 	--	group by s.Id
-		set @i = @i+1
+		set @id = @id+1
 		--select 
 		--SUBSTRING(Address,0,CHARINDEX(',',Address,0)) lat, SUBSTRING(Address,CHARINDEX(',',Address)+1,LEN(Address)) lon
 	end	

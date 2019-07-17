@@ -1070,7 +1070,7 @@ namespace Funda
 
         public IRecord MarkSoldFotoCasa(IRecord record)
         {
-            if (this.Driver.FindElementsByCssSelector(".re-Searchpage-propertyNotFound").Any())
+            if (this.Driver.FindElementsByCssSelector(".re-Searchpage-propertyNotFound").Any() || this.Driver.Url!= record.Url)
                 record.DateRemoved = DateTime.Now;
             return record;
         }
